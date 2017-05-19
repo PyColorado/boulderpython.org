@@ -1,17 +1,53 @@
-# Flask GAE Skeleton
+# Boulder Python
 
-[![Build Status](https://travis-ci.org/iandouglas/flask-gae-skeleton.svg?branch=master)](https://travis-ci.org/iandouglas/flask-gae-skeleton)
+[![Build Status](https://travis-ci.org/svvitale/boulder-python.svg?branch=master)](https://travis-ci.org/svvitale/boulder-python)
 
-I often find myself starting new projects all the time with Python/Flask for Google App Engine, and wanted a skeleton
-project from which I could get started quickly.
+Our website grew out of @iandouglas's [Flask + Google App Engine template](https://github.com/iandouglas/flask-gae-skeleton).
+What kind of Python community would we be if our site wasn't also developed using Python?? :)
 
+## A Community in Progress
 
-## A work in progress
+We are a group of python developers, scientists, automators, and enthusiasts that gather once a month in Boulder,
+Colorado to discuss all things python.  We usually meet on the 2nd Tuesday of each month.  You can find and engage with 
+us on [Meetup](https://www.meetup.com/boulderpython/), [Twitter](https://twitter.com/boulderpython), and 
+[Slack](https://denver-dev-slack.herokuapp.com/) (#meetup-python) 
+and (#help-python).
 
-I'll be tweaking this over time. It's not perfect and there's still a lot I want to add, such as Javascript testing.
+### Speak at a Meetup
 
+We're always looking for speakers at our meetups.  Whether you have a short talk, long talk, or just an idea for a talk,
+we'd love to have you.  Submit your talk on [Papercall](https://papercall.io/boulder-python) to get the conversation
+going!
 
-## Google SDK Requirements
+### Organizers
+Ian Douglas, ian@iandouglas.com, @iandouglas on [Twitter](https://twitter.com/iandouglas), 
+[Github](https://github.com/iandouglas)
+
+Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale), 
+[Github](https://github.com/svvitale)
+
+### Sponsors
+
+[Galvanize Boulder](https://www.galvanize.com/boulder/campus) hosts our meetups and provides tasty food, beer, and 
+refreshments (along with full stack and data science bootcamp programs).  Contact xxx to learn more.
+
+[stream.io](https://getstream.io/) - Build Scalable Newsfeeds & Activity Streams
+
+[Spigot Labs](http://spigotlabs.com/) - Add RFID to your beer, wine, and food festivals to track tastes and interactions 
+between patrons and vendors.
+
+## Code of Conduct
+
+Our community has implemented the PyCon ["Code of Conduct"](https://us.pycon.org/2017/about/code-of-conduct/) for ensuring 
+all members attending our sessions, meetups, and events feel included and heard. Thanks for your mutual respect to one 
+another.
+
+## Website Contributions
+
+We welcome contributions, changes, and corrections to our website.  Please submit a pull request (with tests) as 
+outlined below.
+
+### Google SDK Requirements
 
 You'll need to install the Google Cloud SDK and the app-engine-python component:
 
@@ -23,20 +59,21 @@ curl https://sdk.cloud.google.com | bash
 gcloud components install app-engine-python
 ```
 
-## virtualenv
+### virtualenv
 
 I recommend installing an actual virtualenv for your project, but App Engine will also need your external packages
 installed in the /lib/ folder here. Remember that App Engine can only support 100% Python packages. Anything that
 compiles a C/C++ library cannot be used on GAE.
 
 ```bash
-virtualenv myproject
+# Create new virtualenv
+virtualenv boulder-python
 
 # linux/mac:
-myproject/bin/activate
+boulder-python/bin/activate
 
 # windows:
-myproject\scripts\activate
+boulder-python\scripts\activate
 
 # install all requirements into your virtualenv
 pip install -r requirements.txt
@@ -46,36 +83,9 @@ pip install -r requirements.txt
 pip install -r requirements.txt -t lib
 ```
 
-## app.yaml
-
-You'll need to register a project at Google App Engine and there you'll choose a unique project name which will be a
-prefixed subdomain to appspot.com, something like "myproject.appspot.com". In this example, I'd use "myproject" in the
-place of "your-unique-project-name-here" at the top of app.yaml
-
-
-## config.py
-
-You should change the values in config.py such as SECRET_KEY to something long and unique. I usually string several UUID
-strings together. I've got code in config.py right now that should alert you via Email when an error occurs on the site
-but this is untested at the moment. I recommend using SendGrid, though you'll want to use their web API instead of SMTP
-access, as App Engine gives you several hundred thousand web API calls to third party services per day as part of their
-quota, but their low-level socket connections may be more limited. SendGrid is a Google Cloud Platform partner, and
-also my former employer.
-
-You should also change the Google Analytics ID configuration setting if you want to gather data about who visits your
-site and generate reports, etc..
-
-You could inherit the AppConfig class and override certain settings for default (development), testing, and production
-modes.
-
-
-
-## tests
+### Testing
 
 Please consider developing your project using TDD principles, it will make your life so much easier.
-
-I've already got you started with a test-driven setup under /tests/ which will test that Flask starts up
-properly, and also tests static pages such as the 404 page. I've also added integration tests using Splinter.
 
 You can easily run the tests within PyCharm (my editor of choice), or you can run them from the command line:
 
@@ -92,7 +102,7 @@ Windows:
 
 ```set GOOGLE_APP_ENGINE_SDK=C:\Program Files\Google\App Engine```
 
-## What are the .haml files and .scss? Do I really need them?
+### What are the .haml files and .scss? Do I really need them?
 
 I use HAML as a shortcut to writing properly-formatted HTML. You're welcome to remove them, but once you understand
 the simplicity of HAML, I'm guessing you'll keep HAML around. While it's not very Pythonic, to get HAML working,
@@ -106,25 +116,3 @@ prompt you to add "watchers" which will run the HAML/SCSS compilers for you when
 changes you make to the .html or .css files will be lost when the compilers run.
 
 The .haml and .scss files are ignored via the app.yaml file so they won't end up on App Engine as part of your deploy.
-
-
-## How do I deploy to App Engine?
-
-`gcloud app deploy app.yaml --promote`
-
-
-## What about Continuous Integration?
-
-The [.travis.yml](.travis.yml) file contains a standard TravisCI configuration that includes
-installing all prerequisites, running the unit tests via `run_tests.py`, and deploying to GAE.
-
-You will need a Service Account for your App Engine project to do auto deployments like this.
-The account will require the "App Engine Deployer", "App Engine Service Admin" and "Storage Object
-Admin" roles.
-
-You can add a TravisCI Status Indicator to your README.md with the following markdown replacing
-`<my-github-username>` and `<my-travis-project-name>` with appropriate values:
-
-```
-[![Build Status](https://travis-ci.org/<my-github-username>/<my-travis-project-name>.svg?branch=master)](https://travis-ci.org/<my-github-username>/<my-travis-project-name>)
-```
