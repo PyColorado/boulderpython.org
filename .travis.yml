@@ -33,6 +33,7 @@ script:
   - python run_tests.py
 deploy:
   # Deploy the app
+  skip_cleanup: true
   provider: script
   script: gcloud -q app deploy app.yaml --promote --verbosity=info
   on:
