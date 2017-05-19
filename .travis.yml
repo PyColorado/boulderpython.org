@@ -24,6 +24,7 @@ install:
   - gcloud -q components update gae-python
   - gcloud -q components install app-engine-python
   # Compile templates
+  - rvm install 2.4.1
   - gem install sass haml
   - sass --update application/static/css
   - find application/templates -iname "*.haml" -exec sh -c 'haml $0 ${0%.haml}.html' {} \;
