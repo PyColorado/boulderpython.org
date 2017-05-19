@@ -3,9 +3,6 @@ from __future__ import print_function
 import sys
 import os
 import unittest
-# noinspection PyUnresolvedReferences
-import appengine_config
-
 
 sdk_base_path = os.environ.get('GOOGLE_APP_ENGINE_SDK')
 
@@ -26,6 +23,11 @@ for sdk_path in possible_paths:
 else:
     print("Google App Engine SDK not found at {}, please update GOOGLE_APP_ENGINE_SDK".format(sdk_base_path))
     sys.exit(1)
+
+# Now that the app engine SDK is configured and added to our path, import appengine_config for any additional
+# configuration
+# noinspection PyUnresolvedReferences
+import appengine_config
 
 # Run test suite
 test_suite = unittest.TestLoader().discover('tests')
