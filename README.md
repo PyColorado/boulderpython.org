@@ -20,7 +20,7 @@ we'd love to have you.  Submit your talk on [Papercall](https://papercall.io/bou
 going!
 
 ### Organizers
-Ian Douglas, ian@iandouglas.com, @iandouglas on [Twitter](https://twitter.com/iandouglas), 
+Ian Douglas, ian@iandouglas.com, @iandouglas on [Twitter](https://twitter.com/iandouglas736), 
 [Github](https://github.com/iandouglas)
 
 Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale), 
