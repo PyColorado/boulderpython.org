@@ -26,6 +26,9 @@ install:
 script:
   # Run the unit tests
   - python run_tests.py
-after_success:
+deploy:
   # Deploy the app
-  - gcloud -q app deploy app.yaml --promote
+  provider: script
+  script: gcloud -q app deploy app.yaml --promote
+  on:
+    branch: master
