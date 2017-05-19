@@ -16,3 +16,9 @@ google-cloud-sdk/
 
 # ignore the credentials file for google app engine
 client-secret.json
+
+# ignore output html and css
+.sass-cache/
+application/static/css/*.css
+application/static/css/*.css.map
+application/templates/*.html
