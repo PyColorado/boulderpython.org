@@ -1,15 +1,15 @@
 language: python
-# Cache our Gcloud SDK between commands
+# Cache our Gcloud SDK and pip-installed libraries between commands
 cache:
   directories:
     - "$HOME/google-cloud-sdk/"
+    - "$HOME/lib"
 env:
   # Make sure gcloud command is on our PATH and the App Engine SDK is in the Python path
   - GOOGLE_APP_ENGINE_SDK=${HOME}/google-cloud-sdk PATH=$PATH:${HOME}/google-cloud-sdk/bin PYTHONPATH=${PYTHONPATH}:${GOOGLE_APP_ENGINE_SDK} CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
   # If the SDK is not already cached, download it and unpack it
-  - rm -rf $HOME/google-cloud-sdk
-  - curl https://sdk.cloud.google.com | bash;
+  - if [ ! -d ${HOME}/google/cloud-sdk ]; then curl https://sdk.cloud.google.com | bash; fi
   # Decrypt the credentials we added to the repo using the key we added with the Travis command line tool
   - openssl aes-256-cbc -K $encrypted_3a75846c8fd3_key -iv $encrypted_3a75846c8fd3_iv -in client-secret.json.enc -out client-secret.json -d
   # Here we use the decrypted service account credentials to authenticate the command line tool
@@ -20,10 +20,11 @@ client-secret:
 install:
   # Install the Python dependencies
   - pip install -r requirements.txt -t lib
+  # Install and update additional GAE components
   - gcloud config set project boulder-python
-  - gcloud -q components update gae-python
   - gcloud -q components install app-engine-python
-  # Compile templates
+  - gcloud -q components update
+  # Compile HAML/SASS templates
   - rvm install 2.4.1
   - gem install sass haml
   - sass --update application/static/css

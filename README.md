@@ -1,6 +1,6 @@
-# Boulder Python
+# Boulder Python Website
 
-[![Build Status](https://travis-ci.org/svvitale/boulder-python.svg?branch=master)](https://travis-ci.org/svvitale/boulder-python)
+[![Build Status](https://travis-ci.org/boulder-python/boulderpython.org.svg?branch=master)](https://travis-ci.org/boulder-python/boulderpython.org)
 
 Our website grew out of @iandouglas's [Flask + Google App Engine template](https://github.com/iandouglas/flask-gae-skeleton).
 What kind of Python community would we be if our site wasn't also developed using Python?? :)
