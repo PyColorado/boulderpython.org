@@ -26,9 +26,14 @@ $green:     #859900;
     a, a:active, a:visited, code.url { color: $accent; }
     h1,h2,h3,h4,h5,h6 {color:$accent}
 }
-/* light is default mode, so pair with general html definition */
-html, .light { @include rebase($base3,$base2,$base1,$base0,$base00,$base01,$base02,$base03)}
-.dark  { @include rebase($base03,$base02,$base01,$base00,$base0,$base1,$base2,$base3)}
+.light {
+  @include rebase($base3,$base2,$base1,$base0,$base00,$base01,$base02,$base03);
+  @include accentize($orange);
+}
+.dark  {
+  @include rebase($base03,$base02,$base01,$base00,$base0,$base1,$base2,$base3);
+  @include accentize($orange);
+}
 html * {
     color-profile: sRGB;
     rendering-intent: auto;
@@ -43,6 +48,9 @@ body {
   font-family: 'Ubuntu Mono', monospace;
   font-weight: 400;
   overflow-y: scroll;
+  @media (max-width: 599px) {
+    font-size: 0.9em;
+  }
 }
 
 .footer {
@@ -55,15 +63,26 @@ body {
   padding: 5px;
 }
 
+ul {
+  padding-left: 10px;
+}
+
+li {
+  list-style-type: none;
+  margin: 10px 0;
+}
+
 .header {
   ul.nav-social {
     margin: 5px;
     float: right;
 
     li {
-      list-style-type: none;
       display: inline-block;
     }
+  }
+  @media (max-width: 599px) {
+    height: 50px;
   }
 }
 
@@ -77,6 +96,9 @@ body {
 
 .section-body {
   padding: 20px 10px 30px 10px;
+  img {
+    vertical-align: middle;
+  }
 }
 
 .spacer {

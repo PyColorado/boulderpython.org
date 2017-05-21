@@ -34,8 +34,9 @@
 
 .section-body
   We're always looking for speakers at our meetups.  Whether you have a short talk, long talk, or just an idea for a talk,
-  we'd love to have you.  Submit your talk on [Papercall](https://papercall.io/boulder-python) to get the conversation
-  going!
+  we'd love to have you.  Submit your talk on
+  %a(href="https://papercall.io/boulder-python")<Papercall
+  to get the conversation going!
 
 .section-header
   >>>
@@ -45,7 +46,23 @@
   %span> )
 
 .section-body
-  ['Ian Douglas &lt;ian@iandouglas.com&gt;', 'Scott Vitale &lt;scott@spigotlabs.com&gt;']
+  [
+  %ul
+    %li
+      'Ian Douglas &lt;ian@iandouglas.com&gt;
+      %a(href="https://twitter.com/iandouglas736")
+        %img(src="/img/twitter.png" height=20 width=20)>
+      %a(href="https://github.com/iandouglas")
+        %img(src="/img/github.png" height=20 width=20)>
+      ',
+    %li
+      'Scott Vitale &lt;scott@spigotlabs.com&gt;
+      %a(href="https://twitter.com/svvitale")
+        %img(src="/img/twitter.png" height=20 width=20)>
+      %a(href="https://github.com/svvitale")
+        %img(src="/img/github.png" height=20 width=20)>
+      '
+  ]
 
 .section-header
   >>>
@@ -55,13 +72,19 @@
   %span> )
 
 .section-body
-  [Galvanize Boulder](https://www.galvanize.com/boulder/campus) hosts our meetups and provides tasty food, beer, and
-  refreshments (along with full stack and data science bootcamp programs).  Contact xxx to learn more.
-
-  [stream.io](https://getstream.io/) - Build Scalable Newsfeeds & Activity Streams
-
-  [Spigot Labs](http://spigotlabs.com/) - Add RFID to your beer, wine, and food festivals to track tastes and interactions
-  between patrons and vendors.
+  {
+  %ul
+    %li
+      %a(href="https://www.galvanize.com/boulder/campus") "Galvanize Boulder"
+      \: "hosts our meetups and provides tasty food, beer, and refreshments (along with full stack and data science bootcamp
+      programs).  Contact xxx to learn more.",
+    %li
+      %a(href="https://getstream.io/") "stream.io"
+      \: "Build Scalable Newsfeeds & Activity Streams",
+    %li
+      %a(href="http://spigotlabs.com/") "Spigot Labs"
+      \: "Add RFID to your beer, wine, and food festivals to track tastes and interactions between patrons and vendors."
+  }
 
 .section-header
   >>>
@@ -71,9 +94,10 @@
   %span> )
 
 .section-body
-  Our community has implemented the PyCon ["Code of Conduct"](https://us.pycon.org/2017/about/code-of-conduct/) for ensuring
-  all members attending our sessions, meetups, and events feel included and heard. Thanks for your mutual respect to one
-  another.
+  Our community has implemented the PyCon
+  %a(href="https://us.pycon.org/2017/about/code-of-conduct/") Code of Conduct
+  for ensuring all members attending our sessions, meetups, and events feel included and heard. Thanks for your mutual
+  respect to one another.
 
 .section-header
   >>>
@@ -84,7 +108,9 @@
 
 .section-body
   We welcome contributions, changes, and corrections to our website.  Please submit a pull request (with tests) as
-  outlined below.
+  outlined on the
+  %a(href="https://github.com/boulder-python/boulderpython.org") Github
+  repo.
 
 {% endblock %}
 
