@@ -1,37 +1,31 @@
 !!!
-%html
+%html(class="dark")
   %head
     %meta(charset="utf-8")
     %meta(name="viewport" content="width=device-width, initial-scale=1.0")
     %meta(http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1")
     %title {% block title%}Boulder Python{% endblock %}
-    %link(href='http://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css')
+    %link(href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css')
     %link(href="/css/main.css" rel="stylesheet")
 
   %body
-    %header
-      %h1 Boulder Python
+    .header
       %ul.nav-social
         %li
           %a(href="http://twitter.com/boulderpython" title="BoulderPython at Twitter")
-            %img(src="/img/twitter-4-32.png" height=28 width=28)
-
-    .submenu
-      %ul
+            %img(src="/img/twitter.png" height=28 width=28)
         %li
-          %a(href='/') home
-        {% block submenu %}{% endblock %}
+          %a(href="http://meetup.com/boulderpython" title="BoulderPython at Meetup")
+            %img(src="/img/meetup.png" height=28 width=28)
 
     .body-content
       {% block content %}{% endblock %}
 
     .spacer
-    %footer
-      %ul
-        %li
-          %a(href='/privacy') privacy
+    .footer
+      %a(href='/privacy') privacy
       .copyright
-        {% block footer %}copyright &copy; 1996-{{ moment().format('YYYY') }} ian douglas{% endblock %}
+        {% block footer %}copyright &copy; 1996-{{ moment().format('YYYY') }} Boulder Python{% endblock %}
 
     {{ moment.include_jquery() }}
     {{ moment.include_moment() }}

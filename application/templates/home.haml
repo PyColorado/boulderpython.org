@@ -1,12 +1,90 @@
 {% extends 'base.html' %}
 
-{% block submenu %}
-.right
-  ramblings and musings of a senior webdev
-{% endblock %}
-
 {% block content %}
-%h1
-  Hello world!
+.section-header
+  %div BoulderPython 3.5.2 (v3.5.2:4def2a2901a5, Jun 26 2016, 10:47:25)
+  %div [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)] on darwin
+
+.spacer
+
+.section-header
+  >>>
+  %span.keyword repr
+  %span> (
+  %span.variable> Community
+  %span> )
+
+.section-body
+  We are a group of python developers, scientists, automators, and enthusiasts that gather once a month in Boulder,
+  Colorado to discuss all things python.  We usually meet on the 2nd Tuesday of each month.  You can find and engage with
+  us on
+  %a(href="https://www.meetup.com/boulderpython/")<Meetup
+  ,
+  %a(href="https://twitter.com/boulderpython")<Twitter
+  , and
+  %a(href="https://denver-dev-slack.herokuapp.com/")<Slack
+  in the (#meetup-python) and (#help-python) topics.
+
+.section-header
+  >>>
+  %span.keyword repr
+  %span> (
+  %span.variable> Speak
+  %span> )
+
+.section-body
+  We're always looking for speakers at our meetups.  Whether you have a short talk, long talk, or just an idea for a talk,
+  we'd love to have you.  Submit your talk on [Papercall](https://papercall.io/boulder-python) to get the conversation
+  going!
+
+.section-header
+  >>>
+  %span.keyword repr
+  %span> (
+  %span.variable> Organizers
+  %span> )
+
+.section-body
+  ['Ian Douglas &lt;ian@iandouglas.com&gt;', 'Scott Vitale &lt;scott@spigotlabs.com&gt;']
+
+.section-header
+  >>>
+  %span.keyword repr
+  %span> (
+  %span.variable> Sponsors
+  %span> )
+
+.section-body
+  [Galvanize Boulder](https://www.galvanize.com/boulder/campus) hosts our meetups and provides tasty food, beer, and
+  refreshments (along with full stack and data science bootcamp programs).  Contact xxx to learn more.
+
+  [stream.io](https://getstream.io/) - Build Scalable Newsfeeds & Activity Streams
+
+  [Spigot Labs](http://spigotlabs.com/) - Add RFID to your beer, wine, and food festivals to track tastes and interactions
+  between patrons and vendors.
+
+.section-header
+  >>>
+  %span.keyword repr
+  %span> (
+  %span.variable> CodeOfConduct
+  %span> )
+
+.section-body
+  Our community has implemented the PyCon ["Code of Conduct"](https://us.pycon.org/2017/about/code-of-conduct/) for ensuring
+  all members attending our sessions, meetups, and events feel included and heard. Thanks for your mutual respect to one
+  another.
+
+.section-header
+  >>>
+  %span.keyword repr
+  %span> (
+  %span.variable> Contribute
+  %span> )
+
+.section-body
+  We welcome contributions, changes, and corrections to our website.  Please submit a pull request (with tests) as
+  outlined below.
+
 {% endblock %}
 

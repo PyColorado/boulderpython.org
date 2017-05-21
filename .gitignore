@@ -21,4 +21,4 @@ client-secret.json
 .sass-cache/
 application/static/css/*.css
 application/static/css/*.css.map
-application/templates/*.html
+application/templates/**/*.html
