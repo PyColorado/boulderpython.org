@@ -1,5 +1,5 @@
 !!!
-%html(class="dark")
+%html(class="dark" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en")
   %head
     %meta(charset="utf-8")
     %meta(name="viewport" content="width=device-width, initial-scale=1.0")
@@ -9,30 +9,55 @@
     %link(href="/css/main.css" rel="stylesheet")
     %link(rel="icon" type="image/png" href="/img/favicon.png")
 
+    %script(src="https://use.fontawesome.com/8295aa01a7.js")
+
   %body
     .header
       %ul.nav-social
         %li
+          %a(href="#" title="Switch to light theme" class="switch-light")
+          %a(href="#" title="Switch to dark theme" class="switch-dark")
+        %li
           %a(href="http://twitter.com/boulderpython" title="BoulderPython at Twitter")
-            %img(src="/img/twitter.png" height=28 width=28)
+            %i(class="fa fa-twitter")
         %li
           %a(href="http://meetup.com/boulderpython" title="BoulderPython at Meetup")
-            %img(src="/img/meetup.png" height=28 width=28)
+            %i(class="fa fa-meetup")
         %li
           %a(href="http://github.com/boulder-python" title="BoulderPython at Github")
-            %img(src="/img/github.png" height=28 width=28)
+            %i(class="fa fa-github")
 
     .body-content
       {% block content %}{% endblock %}
 
     .spacer
     .footer
+      %a(href="https://us.pycon.org/2017/about/code-of-conduct/") Code of Conduct
       %a(href='/privacy') privacy
       .copyright
         {% block footer %}copyright &copy; 1996-{{ moment().format('YYYY') }} Boulder Python{% endblock %}
 
     {{ moment.include_jquery() }}
     {{ moment.include_moment() }}
+    :javascript
+      $(document).ready(function() {
+        $('.switch-dark').hide().click(function(evt) {
+          evt.preventDefault();
+
+          $('.switch-light').show();
+          $(this).hide();
+          $('html').removeClass('light').addClass('dark');
+        });
+
+        $('.switch-light').click(function(evt) {
+          evt.preventDefault();
+
+          $('.switch-dark').show();
+          $(this).hide();
+          $('html').removeClass('dark').addClass('light');
+        });
+      });
+
     %script
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

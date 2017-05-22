@@ -19,7 +19,7 @@ $green:     #859900;
     background-color:$rebase03;
     color:$rebase0;
     * { color:$rebase0; }
-    header, h1,h2,h3,h4,h5,h6 { background-color: $rebase02; color: $rebase1; border-color: $rebase0; }
+    .footer,h1,h2,h3,h4,h5,h6 { background-color: $rebase02; color: $rebase1; border-color: $rebase0; }
     a, a:active, a:visited { color: $rebase1; }
 }
 @mixin accentize($accent) {
@@ -54,7 +54,6 @@ body {
 }
 
 .footer {
-  background-color: $base02;
   position: fixed;
   left: 0;
   right: 0;
@@ -62,6 +61,13 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 10px 5px;
+  @media (max-width: 599px) {
+    flex-direction: column;
+    align-items: center;
+    & > * {
+      margin-top: 10px;
+    }
+  }
 }
 
 ul {
@@ -77,9 +83,11 @@ li {
   ul.nav-social {
     margin: 5px;
     float: right;
-
+    font-size: 1.5em;
     li {
       display: inline-block;
+      width: 25px;
+      height: 25px;
     }
   }
   @media (max-width: 599px) {
@@ -97,8 +105,9 @@ li {
 
 .section-body {
   padding: 20px 10px 30px 10px;
-  img {
-    vertical-align: middle;
+  .fa {
+    margin-left: 5px;
+    font-size: 1.2em;
   }
 }
 
@@ -112,4 +121,21 @@ li {
 
 .variable {
   color: $blue;
+}
+
+.switch-light, .switch-dark {
+  display: inline-block;
+  margin: 5px 5px 2px; 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 16px;
+
+}
+
+.switch-light {
+  background-color: $base3
+}
+
+.switch-dark {
+  background-color: $base03
 }
