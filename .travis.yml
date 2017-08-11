@@ -33,6 +33,6 @@ deploy:
   # Deploy the app
   skip_cleanup: true
   provider: script
-  script: scripts/deploy.sh
+  script: sh $TRAVIS_BUILD_DIR/scripts/deploy.sh
   on:
     branch: master
