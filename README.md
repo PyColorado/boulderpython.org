@@ -23,7 +23,7 @@ going!
 Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale),
 [Github](https://github.com/svvitale)
 
-Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.com/svvitale), @frankV on [Github](https://github.com/frankv)
+Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.com/fmdfrank), @frankV on [Github](https://github.com/frankv)
 
 ### Sponsors
 
@@ -34,6 +34,8 @@ refreshments (along with full stack and data science bootcamp programs).  Contac
 
 [Spigot Labs](http://spigotlabs.com/) - Add RFID to your beer, wine, and food festivals to track tastes and interactions
 between patrons and vendors.
+
+[Cuttlesoft](https://www.cuttlesoft.com/) - Cuttlesoft is a custom software agency. We craft beautifully designed and highly scalable web and mobile applications.
 
 ## Code of Conduct
 
