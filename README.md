@@ -23,7 +23,11 @@ going!
 Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale),
 [Github](https://github.com/svvitale)
 
-Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.com/fmdfrank), @frankV on [Github](https://github.com/frankv)
+Will Farmer, willzfarmer@gmail.com, @willzfarmer on [Twitter](https://twitter.com/willzfarmer),
+[Github](https://github.com/willzfarmer)
+
+Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.com/fmdfrank), @frankV on
+[Github](https://github.com/frankv)
 
 ### Sponsors
 
