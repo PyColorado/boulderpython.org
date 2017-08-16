@@ -8,9 +8,9 @@ What kind of Python community would we be if our site wasn't also developed usin
 ## A Community in Progress
 
 We are a group of python developers, scientists, automators, and enthusiasts that gather once a month in Boulder,
-Colorado to discuss all things python.  We usually meet on the 2nd Tuesday of each month.  You can find and engage with 
-us on [Meetup](https://www.meetup.com/boulderpython/), [Twitter](https://twitter.com/boulderpython), and 
-[Slack](https://denver-dev-slack.herokuapp.com/) (#meetup-python) 
+Colorado to discuss all things python.  We usually meet on the 2nd Tuesday of each month.  You can find and engage with
+us on [Meetup](https://www.meetup.com/boulderpython/), [Twitter](https://twitter.com/boulderpython), and
+[Slack](https://denver-dev-slack.herokuapp.com/) (#meetup-python)
 and (#help-python).
 
 ### Speak at a Meetup
@@ -20,34 +20,36 @@ we'd love to have you.  Submit your talk on [Papercall](https://papercall.io/bou
 going!
 
 ### Organizers
-Ian Douglas, ian@iandouglas.com, @iandouglas736 on [Twitter](https://twitter.com/iandouglas736), @iandouglas on
-[Github](https://github.com/iandouglas)
-
-Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale), 
+Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale),
 [Github](https://github.com/svvitale)
 
 Will Farmer, willzfarmer@gmail.com, @willzfarmer on [Twitter](https://twitter.com/willzfarmer),
 [Github](https://github.com/willzfarmer)
 
+Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.com/fmdfrank), @frankV on
+[Github](https://github.com/frankv)
+
 ### Sponsors
 
-[Galvanize Boulder](https://www.galvanize.com/boulder/campus) hosts our meetups and provides tasty food, beer, and 
+[Galvanize Boulder](https://www.galvanize.com/boulder/campus) hosts our meetups and provides tasty food, beer, and
 refreshments (along with full stack and data science bootcamp programs).  Contact xxx to learn more.
 
 [stream.io](https://getstream.io/) - Build Scalable Newsfeeds & Activity Streams
 
-[Spigot Labs](http://spigotlabs.com/) - Add RFID to your beer, wine, and food festivals to track tastes and interactions 
+[Spigot Labs](http://spigotlabs.com/) - Add RFID to your beer, wine, and food festivals to track tastes and interactions
 between patrons and vendors.
+
+[Cuttlesoft](https://www.cuttlesoft.com/) - Cuttlesoft is a custom software agency. We craft beautifully designed and highly scalable web and mobile applications.
 
 ## Code of Conduct
 
-Our community has implemented the PyCon ["Code of Conduct"](https://us.pycon.org/2017/about/code-of-conduct/) for ensuring 
-all members attending our sessions, meetups, and events feel included and heard. Thanks for your mutual respect to one 
+Our community has implemented the PyCon ["Code of Conduct"](https://us.pycon.org/2017/about/code-of-conduct/) for ensuring
+all members attending our sessions, meetups, and events feel included and heard. Thanks for your mutual respect to one
 another.
 
 ## Website Contributions
 
-We welcome contributions, changes, and corrections to our website.  Please submit a pull request (with tests) as 
+We welcome contributions, changes, and corrections to our website.  Please submit a pull request (with tests) as
 outlined below.
 
 ### Google SDK Requirements
