@@ -26,6 +26,9 @@ Ian Douglas, ian@iandouglas.com, @iandouglas736 on [Twitter](https://twitter.com
 Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale), 
 [Github](https://github.com/svvitale)
 
+Will Farmer, willzfarmer@gmail.com, @willzfarmer on [Twitter](https://twitter.com/willzfarmer),
+[Github](https://github.com/willzfarmer)
+
 ### Sponsors
 
 [Galvanize Boulder](https://www.galvanize.com/boulder/campus) hosts our meetups and provides tasty food, beer, and 
