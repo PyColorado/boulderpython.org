@@ -34,8 +34,6 @@ Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.co
 [Galvanize Boulder](https://www.galvanize.com/boulder/campus) hosts our meetups and provides tasty food, beer, and
 refreshments (along with full stack and data science bootcamp programs).  Contact xxx to learn more.
 
-[stream.io](https://getstream.io/) - Build Scalable Newsfeeds & Activity Streams
-
 [Spigot Labs](http://spigotlabs.com/) - Add RFID to your beer, wine, and food festivals to track tastes and interactions
 between patrons and vendors.
 
