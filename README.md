@@ -23,8 +23,8 @@ going!
 Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale),
 [Github](https://github.com/svvitale)
 
-Will Farmer, willzfarmer@gmail.com, @willzfarmer on [Twitter](https://twitter.com/willzfarmer),
-[Github](https://github.com/willzfarmer)
+Zoë Farmer, zoe@dataleek.io, @TheDataLeek on [Twitter](https://twitter.com/TheDataLeek),
+[Github](https://github.com/thedataleek)
 
 Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.com/fmdfrank), @frankV on
 [Github](https://github.com/frankv)
