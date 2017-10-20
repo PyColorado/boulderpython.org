@@ -139,3 +139,15 @@ li {
 .switch-dark {
   background-color: $base03
 }
+
+.content {
+  display: inline-flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.embed {
+  display: inline-flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}

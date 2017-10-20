@@ -1,21 +1,83 @@
-# coding=utf-8
+#!/usr/bin/env python3.6
+
+
+# stdlib
 import os
 import sys
-# from werkzeug.debug import DebuggedApplication
+import argparse
+import signal
+import time
 
-sys.path.insert(1, os.path.join(os.path.abspath('.'), 'lib'))
+# 3rd
+from gevent.wsgi import WSGIServer
+import livereload
 
-COV = None
-if os.environ.get('FLASK_COVERAGE'):
-    import coverage
-    COV = coverage.coverage(branch=True, include='application/*')
-    COV.start()
+# local
+from application import app, configure
 
-from application import create_app
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
-from application.routes import create_routes
-create_routes(app)
+PORT = os.environ.get('PORT') or '9999'
+HOST = os.environ.get('HOST') or 'localhost'
 
-# if app.debug:
-#     app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True)
+
+def main(args):
+    configure(os.getenv('FLASK_CONFIG') or 'default')
+
+    if args.test is True:
+        pid = os.fork()
+        if pid == 0:
+            run_server(mode='debug')
+        else:
+            os.system(f'py.test')
+            os.kill(pid, signal.SIGINT)
+    elif (args is not None) and (args.debug or app.debug):
+        run_server(mode='debug')
+    else:
+        run_server(mode='prod')
+
+
+def run_server(mode='debug'):
+    if mode == 'debug':
+        # DEBUG (livereload) MODE
+        configure('testing')
+        app.jinja_env.auto_reload = True
+        app.debug                 = True
+        server                    = livereload.Server(app.wsgi_app)
+        server.watch('.', ignore=lambda x: ('log' in x or
+                                            '.idea' in x))
+        server.serve(
+            port=PORT,
+            host=HOST
+        )
+    elif mode == 'prod':
+        # Pseduo Prod Mode
+        pid = os.fork()
+        if pid == 0:
+            while True:
+                try:
+                    time.sleep(1)
+                except KeyboardInterrupt:
+                    os.kill(pid, signal.SIGINT)
+                    break
+        else:
+            os.system(f'gunicorn -b :{PORT} application:app')
+
+
+
+def get_args():
+    parser = argparse.ArgumentParser(
+        description='Run the Boulder Python Website'
+    )
+    parser.add_argument('-d', '--debug', default=False, action='store_true',
+                        help='Run in DEBUG mode.')
+    parser.add_argument('-t', '--test', default=False, action='store_true',
+                        help='Run in TEST mode.')
+    args = parser.parse_args()
+    return args
+
+
+if __name__ == '__main__':
+    args = get_args()
+    sys.exit(main(args))
+
+
