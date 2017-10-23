@@ -26,20 +26,27 @@ PORT = os.environ.get('PORT') or '9999'
 HOST = os.environ.get('HOST') or 'localhost'
 
 
-def main(args: argparse.Namespace) -> None:
+def main(args: argparse.Namespace) -> int:
     configure(os.getenv('FLASK_CONFIG') or 'default')
 
     if args.test is True:
         pid = os.fork()
         if pid == 0:
             run_server(mode='debug')
+            return True
         else:
-            pytest.main()
+            result = False
+            try:
+                result = pytest.main(['tests'])
+            except:  # trust me this is ok
+                pass
             os.kill(pid, signal.SIGINT)
+            return result
     elif (args is not None) and (args.debug or app.debug):
         run_server(mode='debug')
     else:
         run_server(mode='prod')
+    return True
 
 
 def run_server(mode: Optional[str]='debug') -> None:

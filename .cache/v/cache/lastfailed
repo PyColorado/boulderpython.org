@@ -1,5 +1,4 @@
 {
-  "tests/e2e/test_static_content.py::TestStaticContent::()": true,
   "tests/integration/static/test_social_github.py": true,
   "tests/integration/static/test_social_google_plus.py": true,
   "tests/integration/static/test_social_linkedin.py": true,
