@@ -1,31 +1,6 @@
-runtime: python27
-api_version: 1
-threadsafe: yes
+runtime: python
+env: flex
+entrypoint: gunicorn -b :$PORT application:app
 
-handlers:
-- url: /css
-  static_dir: application/static/css
-- url: /js
-  static_dir: application/static/js
-- url: /img
-  static_dir: application/static/img
-- url: .*  # This regex directs all routes to main.app
-  script: run.app
-
-skip_files:
-- ^(.*/)?app\.ya?ml
-- ^(.*/)?index\.ya?ml
-- ^(.*/)?#.*#
-- ^(.*/)?.*~
-- ^(.*/)?.*\.py[co]
-- ^(.*/)?.*/RCS/.*
-- ^(.*/)?\..*
-- ^(.*/)?.*\.haml
-- ^(.*/)?.*\.scss
-- ^(.*/)?.*\.less
-- ^/docs*
-- ^/tests*
-
-libraries:
-- name: jinja2
-  version: latest
+runtime_config:
+  python_version: 3.6
