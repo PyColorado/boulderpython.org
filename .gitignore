@@ -1,3 +1,6 @@
+# ignore PyCharm files
+.idea
+
 # ignore the ds_store files from mac systems
 .DS_Store
 
