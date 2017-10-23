@@ -1,4 +1,6 @@
 language: python
+python:
+  - "3.6"
 # Cache our Gcloud SDK and pip-installed libraries between commands
 cache:
   directories:
@@ -23,7 +25,7 @@ install:
   - gcloud -q components update
 script:
   # Run the unit tests
-  - py.test
+  - ./run.py -t
 deploy:
   # Deploy the app
   skip_cleanup: true
