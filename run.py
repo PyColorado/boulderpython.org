@@ -16,6 +16,7 @@ import time
 # 3rd
 import livereload
 from typing import Optional
+import pytest
 
 # local
 from application import app, configure
@@ -33,7 +34,7 @@ def main(args: argparse.Namespace) -> None:
         if pid == 0:
             run_server(mode='debug')
         else:
-            os.system(f'py.test')
+            pytest.main()
             os.kill(pid, signal.SIGINT)
     elif (args is not None) and (args.debug or app.debug):
         run_server(mode='debug')
