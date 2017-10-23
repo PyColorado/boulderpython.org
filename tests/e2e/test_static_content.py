@@ -26,7 +26,11 @@ class TestStaticContent(object):
         assert self.driver.title == 'Boulder Python'
 
     def test_maintainers(self, site):
-        organizers = self.driver.find_element_by_xpath("/html[@class='dark fa-events-icons-ready']/body/div[@class='body-content']/div[@class='content']/div[@class='section-body'][3]")
+        organizers = self.driver.find_element_by_xpath(
+            "/html[@class='dark fa-events-icons-ready']/"
+            "body/div[@class='body-content']/div[@class='content']"
+            "/div[@class='section-body'][3]"
+        )
         assert 'Scott Vitale' in organizers.text
         assert 'Zoë Farmer' in organizers.text
         assert 'Frank Valcarcel' in organizers.text
@@ -34,5 +38,7 @@ class TestStaticContent(object):
     def test_privacy(self):
         self.driver.get(f'{SITE_URL}/privacy')
 
-        header = self.driver.find_element_by_xpath("/html[@class='dark fa-events-icons-ready']/body/div[@class='body-content']/h1")
+        header = self.driver.find_element_by_xpath(
+            "/html[@class='dark fa-events-icons-ready']/body/div[@class='body-content']/h1"
+        )
         assert header.text == 'Privacy Notice'

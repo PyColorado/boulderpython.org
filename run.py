@@ -1,6 +1,11 @@
 #!/usr/bin/env python3.6
 
 
+"""
+Runs the boulderpython website
+"""
+
+
 # stdlib
 import os
 import sys
@@ -9,8 +14,8 @@ import signal
 import time
 
 # 3rd
-from gevent.wsgi import WSGIServer
 import livereload
+from typing import Optional
 
 # local
 from application import app, configure
@@ -20,7 +25,7 @@ PORT = os.environ.get('PORT') or '9999'
 HOST = os.environ.get('HOST') or 'localhost'
 
 
-def main(args):
+def main(args: argparse.Namespace) -> None:
     configure(os.getenv('FLASK_CONFIG') or 'default')
 
     if args.test is True:
@@ -36,13 +41,19 @@ def main(args):
         run_server(mode='prod')
 
 
-def run_server(mode='debug'):
+def run_server(mode: Optional[str]='debug') -> None:
+    """
+    Runs the server in either debug or prod mode
+
+    :param mode: mode to run in
+    :return: None
+    """
     if mode == 'debug':
         # DEBUG (livereload) MODE
         configure('testing')
         app.jinja_env.auto_reload = True
-        app.debug                 = True
-        server                    = livereload.Server(app.wsgi_app)
+        app.debug = True
+        server = livereload.Server(app.wsgi_app)
         server.watch('.', ignore=lambda x: ('log' in x or
                                             '.idea' in x))
         server.serve(
@@ -63,8 +74,11 @@ def run_server(mode='debug'):
             os.system(f'gunicorn -b :{PORT} application:app')
 
 
-
 def get_args():
+    """
+    Get command line arguments
+    :return: arguments
+    """
     parser = argparse.ArgumentParser(
         description='Run the Boulder Python Website'
     )
@@ -79,5 +93,3 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
     sys.exit(main(args))
-
-
