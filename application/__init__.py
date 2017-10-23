@@ -1,5 +1,3 @@
-from .routes import *
-
 from flask import Flask
 from flask_moment import Moment
 from flask_cache import Cache
@@ -21,3 +19,5 @@ cache = Cache(app, config={
 })
 moment = Moment(app)
 moment.init_app(app)
+
+from .routes import *
