@@ -32,7 +32,7 @@ def main(args: argparse.Namespace) -> int:
     if args.test is True:
         pid = os.fork()
         if pid == 0:
-            run_server(mode='debug')
+            run_server(mode='prod')
             return True
         else:
             result = False
