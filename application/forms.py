@@ -17,17 +17,17 @@ Make it exciting.')
 
 talkFormats = [
     (0, "-- select --"),
-    ("In-Depth", "In-Depth Talk (~20-30 minutes, 5-10 minute Q&A)"),
-    ("Lightning", "Lightning Talk (~5-10 minutes, no Q&A)"),
-    ("Demo", "Short Demo (~15-20 minutes, &lt; 5 minute Q&A)"),
-    ("Beginner", "Beginner Track (20 minutes, 5 minute Q&A)")
+    ("IN-DEPTH", "In-Depth Talk (~20-30 minutes, 5-10 minute Q&A)"),
+    ("LIGHTNING", "Lightning Talk (~5-10 minutes, no Q&A)"),
+    ("DEMO", "Short Demo (~15-20 minutes, &lt; 5 minute Q&A)"),
+    ("BEGINNER", "Beginner Track (20 minutes, 5 minute Q&A)")
 ]
 
 audienceLevels = [
     (0, "-- select --"),
-    ("Beginner", "Beginner"),
-    ("Intermediate", "Intermediate"),
-    ("Advanced", "Advanced")
+    ("BEGINNER", "Beginner"),
+    ("INTERMEDIATE", "Intermediate"),
+    ("ADVANCED", "Advanced")
 ]
 
 descPlaceholder = (

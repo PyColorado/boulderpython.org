@@ -153,7 +153,8 @@ class Base(db.Model):
 
 
 class Submission(Base):
-    email = Column(db.String(255), nullable=False, unique=True)
+    email = Column(db.String(255), nullable=False)
     card_id = Column(db.String(255), nullable=False, unique=True)
     card_url = Column(db.String(255), nullable=False, unique=True)
     status = Column(db.String(255), nullable=False)
+    hook = Column(db.String(255))

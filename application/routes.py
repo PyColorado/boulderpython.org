@@ -22,6 +22,7 @@ from flask import (
 
 from . import app
 from .models import Submission
+from .tasks import create_hook
 from .utils import TrelloClient
 from .extensions import cache
 from .forms import SubmissionForm
@@ -59,8 +60,8 @@ def submit():
             name=form.data['title'],
             desc=form.data['description'],
             labels=[
-                labels['FORMAT'][form.data['FORMAT']],
-                labels['AUDIENCE'][form.data['AUDIENCE']]
+                labels['FORMAT'][form.data['format']],
+                labels['AUDIENCE'][form.data['audience']]
             ],
             position='top',
             assign=[app.config['TRELLO_ASSIGNEE']]
@@ -72,7 +73,37 @@ def submit():
             card_url=card.url,
             status='NEW')
 
+        create_hook.apply_async(args=[submission.id, submission.card_id])
+
     return render_template('submit.html', form=form)
+
+
+# ngrok http --subdomain=boulderpython 5000
+@app.route('/trello/hook', methods=['GET', 'POST'])
+def hook():
+    if request.method == 'HEAD':
+        return 'OK', 200
+
+    data = request.get_json()
+    action = data["action"]
+    cards = app.config["TRELLO_CARDS"]
+
+    if action["display"]["translationKey"] == "action_move_card_from_list_to_list":
+        print('card has moved')
+
+        if action["data"]["listAfter"]["id"] == cards["REVIEW"]["id"] \
+                and action["data"]["listBefore"]["id"] == cards["NEW"]["id"]:
+            print('talk is in review')
+            submission = Submission().first(card_id=data['model']['id'])
+            Submission().update(submission, status='IN-REVIEW')
+
+        elif action["data"]["listAfter"]["id"] == cards["SCHEDULED"]["id"] \
+                and action["data"]["listBefore"]["id"] == cards["REVIEW"]["id"]:
+            print('talk has been accepted')
+            submission = Submission().first(card_id=data['model']['id'])
+            Submission().update(submission, status='SCHEDULED')
+
+    return '', 200
 
 
 @app.route('/robots.txt')

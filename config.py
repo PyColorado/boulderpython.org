@@ -18,6 +18,9 @@ class Config:
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://localhost/boulderpython'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    CELERY_BROKER_URL = 'amqp://localhost//'
+    CELERY_RESULT_BACKEND = 'amqp://localhost//'
+
     SSL_DISABLE = True
     MAIL_SERVER = 'smtp.sendgrid.com'
     MAIL_PORT = 587

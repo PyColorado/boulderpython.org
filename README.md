@@ -97,17 +97,8 @@ As of 2018, the Flask application features a few new integrations. Notably, they
 and [MailChimp](https://mailchimp.com/) integrations. We want to keep this project public, so we have to be careful with
 our API keys. To get around this, we use a simple config file, here's how we set it up:
 
- 1. Create a file called `local.cfg` in the application package root.
- 2. Add the following to it with your API keys.
- 3. **DON'T** commit this file
-
-```
-SECRET_KEY = 'your-secret-key'
-MEETUP_KEY = 'your-meetup-api-key'
-MAILCHIMP_USERNAME = 'mc-username'
-MAILCHIMP_API_KEY = 'mc-api-key'
-MAILCHIMP_LIST_ID = 'mc-list-id'
-```
+ 1. Copy the `local-example.cfg` and fill it with your API Keys and settings.
+ 2. Be careful **NOT** to commit this file
 
 To run the application now, use:
 
@@ -148,3 +139,15 @@ $ gulp
 
 The default gulp command builds scss and concatenates scripts into `app.css`, and `app.js`, respectively. It will also
 begin the gulp watch command so if you save any changes in your scss and js files, gulp rebuilds them automatically.
+
+
+### Celery
+
+We now use Celery to handle Trello webhooks and send out emails to speakers.
+
+Celery requires a task broker. Either RabbitMQ or Redis are good choices.
+
+To run Celery, use the following command:
+```
+$ APP_CONFIG=local.cfg celery worker -A application.celery --loglevel=info
+```

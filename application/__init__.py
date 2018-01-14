@@ -9,10 +9,11 @@ import os
 from datetime import datetime as dt
 
 from flask import Flask
+from celery import Celery
 
 from config import config
 # from .utils import configure
-from .extensions import db, cache, moment
+from .extensions import db, cache, moment, celery
 from .filters import autoversion, current_route
 
 
@@ -30,6 +31,7 @@ configure()
 db.init_app(app)
 cache.init_app(app)
 moment.init_app(app)
+celery.init_app(app)
 
 
 @app.template_filter('convert_ms')
@@ -47,3 +49,4 @@ app.jinja_env.globals.update(current_route=current_route)
 
 from .routes import *  # noqa
 from .models import *  # noqa
+from .tasks import *  # noqa
