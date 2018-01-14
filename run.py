@@ -14,12 +14,13 @@ import signal
 import time
 
 # 3rd
-import livereload
+import pytest, livereload
+from sqlalchemy import exc
 from typing import Optional
-import pytest
 
 # local
 from application import app, configure
+from application.extensions import db
 
 
 PORT = os.environ.get('PORT') or '9999'
@@ -42,11 +43,39 @@ def main(args: argparse.Namespace) -> int:
                 pass
             os.kill(pid, signal.SIGINT)
             return result
+    elif (args is not None) and (args.db):
+        initdb()
     elif (args is not None) and (args.debug or app.debug):
         run_server(mode='debug')
     else:
         run_server(mode='prod')
     return True
+
+
+def initdb():
+    """initialize database"""
+
+    with app.app_context():
+        # database_type = app.config['SQLALCHEMY_DATABASE_URI'].split(':')[0].upper()
+
+        try:
+            # Clear out our SQL database
+            print(' * Clearing database...')
+            db.drop_all()
+
+        except exc.OperationalError as e:
+            print(e)
+
+        print(' * Creating database tables...')
+        db.create_all()
+
+        # print(' * Creating admin user in %s...' % database_type)
+        # User().create(
+        #     fullname=u'Administrator',
+        #     email=u'admin@boulderpython.org',
+        #     password=u'123456',
+        #     role_code=ADMIN,
+        #     status_code=ACTIVE)
 
 
 def run_server(mode: Optional[str]='debug') -> None:
@@ -62,12 +91,9 @@ def run_server(mode: Optional[str]='debug') -> None:
         app.jinja_env.auto_reload = True
         app.debug = True
         server = livereload.Server(app.wsgi_app)
-        server.watch('.', ignore=lambda x: ('log' in x or
-                                            '.idea' in x))
-        server.serve(
-            port=PORT,
-            host=HOST
-        )
+        server.watch('.', ignore=lambda x: ('log' in x or '.idea' in x))
+        server.serve(port=PORT, host=HOST)
+
     elif mode == 'prod':
         # Pseduo Prod Mode
         pid = os.fork()
@@ -87,13 +113,17 @@ def get_args():
     Get command line arguments
     :return: arguments
     """
-    parser = argparse.ArgumentParser(
-        description='Run the Boulder Python Website'
-    )
-    parser.add_argument('-d', '--debug', default=False, action='store_true',
-                        help='Run in DEBUG mode.')
-    parser.add_argument('-t', '--test', default=False, action='store_true',
-                        help='Run in TEST mode.')
+    parser = argparse.ArgumentParser(description='Run the Boulder Python Website')
+
+    parser.add_argument(
+        '-d', '--debug', default=False, action='store_true', help='Run in DEBUG mode.')
+
+    parser.add_argument(
+        '-t', '--test', default=False, action='store_true', help='Run in TEST mode.')
+
+    parser.add_argument(
+        '-db', '--db', default=False, action='store_true', help='Init db.')
+
     args = parser.parse_args()
     return args
 

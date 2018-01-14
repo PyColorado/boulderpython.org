@@ -1,10 +1,23 @@
+# -*- coding: utf-8 -*-
+"""
+    config.py
+    ~~~~~~~~~
+    base application config
+"""
+
 import os
+
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or \
         'be1e74ae-a040-48e9-84bf-42d5e96e6363-dd1b82a0-43ca-40ff-96c3-1535eecd0fc5'
+
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://localhost/boulderpython'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
     SSL_DISABLE = True
     MAIL_SERVER = 'smtp.sendgrid.com'
     MAIL_PORT = 587
@@ -15,7 +28,7 @@ class Config:
     MAIL_SENDER = 'admin@site.com'
 
     SITE_ADMIN = os.environ.get('SITE_ADMIN') or 'recipient@site.com'
-    CACHE_TYPE = 'gaememcached'
+    CACHE_TYPE = 'simple'
     GOOGLE_ANALYTICS_ID = 'UA-123456-78'
 
     @staticmethod

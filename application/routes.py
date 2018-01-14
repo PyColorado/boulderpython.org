@@ -11,9 +11,20 @@ from datetime import datetime as dt
 import meetup.api
 from requests.exceptions import HTTPError
 from mailchimp3 import MailChimp
-from flask import current_app, jsonify, render_template, request, make_response, send_from_directory
+from flask import (
+    current_app,
+    jsonify,
+    render_template,
+    request,
+    make_response,
+    send_from_directory
+)
 
-from . import app, cache
+from . import app
+from .models import Submission
+from .utils import TrelloClient
+from .extensions import cache
+from .forms import SubmissionForm
 
 
 @cache.cached(timeout=60)
@@ -35,25 +46,45 @@ def privacy():
     return render_template('privacy.html')
 
 
-@app.route('/submit', methods=['GET'])
+@app.route('/submit', methods=['GET', 'POST'])
 def submit():
-    return render_template('submit.html')
+
+    form = SubmissionForm()
+    labels = app.config['TRELLO_LABELS']
+
+    if form.validate_on_submit():
+        client, newSubmissionsList = TrelloClient()
+
+        card = newSubmissionsList.add_card(
+            name=form.data['title'],
+            desc=form.data['description'],
+            labels=[
+                labels['FORMAT'][form.data['FORMAT']],
+                labels['AUDIENCE'][form.data['AUDIENCE']]
+            ],
+            position='top',
+            assign=[app.config['TRELLO_ASSIGNEE']]
+        )
+
+        submission = Submission().create(
+            email=form.data['email'],
+            card_id=card.id,
+            card_url=card.url,
+            status='NEW')
+
+    return render_template('submit.html', form=form)
 
 
 @app.route('/robots.txt')
 def robots():
-    # removed sitemap link cause useless
-    return (
-        'User-agent: *'
-    )
+    return ('User-agent: *')
 
 
 @cache.cached(timeout=60)
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory('./static/img/favicon/',
-                               'favicon.ico',
-                               mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(
+        './static/img/favicon/', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/subscribe', methods=['GET', 'POST'])

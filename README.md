@@ -122,7 +122,7 @@ Please consider developing your project using TDD principles, it will make your 
 
 You can easily run the tests within PyCharm (my editor of choice), or you can run them from the command line:
 
-```python run_tests.py```
+```python run.py -t```
 
 The tests require access to the Google App Engine SDK.  You can specify the location of your installed SDK with an
 environment variable:

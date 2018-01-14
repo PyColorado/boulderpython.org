@@ -9,11 +9,12 @@ import os
 from datetime import datetime as dt
 
 from flask import Flask
-from flask_moment import Moment
-from flask_cache import Cache
 
 from config import config
+# from .utils import configure
+from .extensions import db, cache, moment
 from .filters import autoversion, current_route
+
 
 app = Flask(__name__)
 
@@ -25,14 +26,9 @@ def configure(config_name='default'):
     if os.environ.get('APP_CONFIG'):
         app.config.from_envvar('APP_CONFIG')
 
-
 configure()
-
-cache = Cache(app, config={
-    'CACHE_TYPE': 'simple'
-})
-
-moment = Moment(app)
+db.init_app(app)
+cache.init_app(app)
 moment.init_app(app)
 
 
@@ -50,3 +46,4 @@ app.jinja_env.globals.update(current_route=current_route)
 
 
 from .routes import *  # noqa
+from .models import *  # noqa
