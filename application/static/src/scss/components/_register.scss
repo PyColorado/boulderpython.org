@@ -1,0 +1,76 @@
+/**
+ * register styles
+ */
+
+#register-now {
+  background: url(../img/group-photo.jpg) no-repeat center center fixed;
+  background-size: cover;
+  padding: 120px 0;
+  .section-title h1 {
+    color: $white;
+  }
+  ul {
+    background: $white;
+    padding: 40px 80px;
+    margin-top: 55px;
+    li {
+      width: 20%;
+      float: left;
+      .input-wrap {
+        display: block;
+        padding: 0 20px;
+        &:focus label, &:hover label {
+          color: $accent1;
+        }
+        label {
+          display: block;
+          font-size: 16px;
+          font-weight: bold;
+          color: $font-dark;
+          transition: all .3s ease;
+          img {
+            margin-right: 10px;
+          }
+        }
+        input {
+          height: 40px;
+          line-height: 40px;
+          color: $font-light;
+          outline: none;
+          border: none;
+          border-bottom: 1px solid #E3E3E3;
+          padding: 0 5px;
+          width: 100%;
+          transition: all .3s ease;
+          &:focus, &:hover {
+            border-color: #7E54AD;
+          }
+        }
+        button {
+          display: inline-block;
+          line-height: 42px;
+          border-radius: 5px;
+          font-size: 12px;
+          font-weight: 800;
+          color: $white;
+          border: 2px solid transparent;
+          padding: 8px 0px;
+          width: 100%;
+          outline: none;
+          text-transform: uppercase;
+          background: $accent1;
+          vertical-align: bottom;
+          transition: all .3s ease;
+          &:hover {
+            border-color: $accent1;
+            color: $accent1;
+          }
+          &:before {
+            border-radius: 5px;
+            background: $white;
+          }
+        }
+      }
+    }
+  }
+}

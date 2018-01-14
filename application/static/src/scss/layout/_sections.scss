@@ -1,0 +1,32 @@
+/**
+ * sections styles
+ */
+
+.section-title {
+  h1 {
+    color: $font-dark;
+    margin: 0;
+    margin-bottom: 15px;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 30px;
+    padding-bottom: 20px;
+    text-transform: uppercase;
+    position: relative;
+    &:before {
+      content: ' ';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 3px;
+      background: $accent2;
+    }
+  }
+  p {
+    color: $font-light;
+  }
+  &.text-center h1:before {
+    left: 48%;
+  }
+}

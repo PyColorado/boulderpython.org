@@ -1,0 +1,48 @@
+/**
+ * main sass entrypoint
+ */
+
+@charset 'UTF-8';
+
+// 1. Configuration and helpers
+@import
+  'vars',
+  'mixins';
+  // 'functions';
+
+// 2. Vendors
+@import
+  'vendor/imports';
+  // 'vendor/normalize';
+
+// 3. Base stuff
+@import
+  'base/base',
+  'base/typography',
+  'base/helpers';
+
+// 4. Layout-related sections
+@import
+  'layout/header',
+  'layout/sections',
+  'layout/footer';
+
+// 5. Components
+@import
+  'components/overlay',
+  'components/banner',
+  'components/information-bar',
+  'components/upcoming-event',
+  'components/register',
+  'components/sponsors',
+  'components/subscribe';
+
+// 6. Page-specific styles
+@import
+  'pages/errors',
+  'pages/single',
+  'pages/submit';
+
+// 7. Modifiers
+@import
+  'modify/responsive';

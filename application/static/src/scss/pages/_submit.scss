@@ -1,0 +1,64 @@
+/**
+ * submit page styles
+ */
+
+
+#submit {
+  overflow: hidden;
+  padding: 120px 0;
+  ul li {
+    margin-bottom: 30px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .box {
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    padding: 24px 0;
+    float: left;
+    &.gradient-overlay:before {
+      z-index: -1;
+      transform: rotate(180deg);
+      border-radius: 5px;
+    }
+  }
+  .content {
+    float: left;
+    margin-left: 20px;
+    width: 60%;
+    h3 {
+      margin: 0;
+      color: $font-dark;
+      font-size: 18px;
+      line-height: 28px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    p {
+      margin: 0;
+    }
+  }
+  .banner img {
+    max-width: none;
+    width: auto;
+    max-height: 560px;
+  }
+  h2 {
+    font-size: 30px;
+    line-height: 26px;
+    color: $font-dark;
+    font-weight: 800;
+    margin-bottom: 25px;
+  }
+  p {
+    color: $font-light;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 45px;
+  }
+  .about-text {
+    padding: 88px 0;
+  }
+}

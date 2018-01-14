@@ -1,0 +1,41 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+
+    <!-- #page-title -->
+    <section id="page-title" class="gradient-overlay">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>404: Not Found</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /#page-title -->
+
+    <!-- #error -->
+    <section id="error">
+        <div class="container">
+            <div class="row">
+                <!-- .error-text -->
+                <div class="col-lg-6  col-md-6 col-sm-8 col-lg-offset-0 col-md-offset-0 col-sm-offset-2 error-text">
+                    <h2>Not Found!</h2>
+                    <p>
+                        Did we misplace our <code>__init__</code> file? <br>
+                        Maybe try the <a href="/">HOME PAGE</a>?
+                    </p>
+                </div>
+                <!-- /.error-text -->
+
+                <!-- .banner -->
+                <div class="col-lg-6 col-md-6 col-sm-12  banner wow slideInRight">
+                    <img src="{{ url_for('static', filename='img/404-error.gif') }}">
+                </div>
+                <!-- /.banner -->
+            </div>
+        </div>
+    </section>
+    <!-- /#error -->
+
+{% endblock %}

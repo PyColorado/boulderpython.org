@@ -1,0 +1,114 @@
+/**
+ * footer styles
+ */
+
+footer {
+  background: #29363E;
+  padding: 100px 0 85px;
+  .footer-widget {
+    h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: $white;
+      text-transform: uppercase;
+      margin: 0;
+      margin-bottom: 30px;
+    }
+    p {
+      color: #A4B0B6;
+      font-weight: 500;
+    }
+    a {
+      color: #A4B0B6;
+      font-weight: 600;
+      transition: all .3s ease;
+      &:hover {
+        color: $accent1;
+      }
+    }
+    .bx-wrapper .bx-viewport {
+      background: none;
+      border: none;
+      left: 0;
+      box-shadow: none;
+    }
+    .photo-gallery {
+      margin-left: -1.5px;
+      margin-right: -1.5px;
+      li {
+        float: left;
+        width: 75px;
+        margin: 1.5px 1.5px;
+        img {
+          opacity: 1;
+          transition: all .3s ease;
+          &:hover {
+            opacity: .55;
+          }
+        }
+      }
+    }
+    &.twitter-feed {
+      a {
+        color: #F2F2F2;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all .3s ease;
+        &:hover {
+          color: $accent1;
+        }
+      }
+      .themex_twt_date {
+        color: #576673;
+        font-weight: normal;
+        font-size: 14px;
+      }
+    }
+    &.menu-widget ul li {
+      margin-bottom: 10px;
+      a i {
+        color: $white;
+        margin-right: 10px;
+      }
+    }
+    &.about-widget img {
+      margin-bottom: 40px;
+    }
+    .social-icons {
+      margin-top: 30px;
+      a {
+        color: $white;
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+        text-align: center;
+        display: inline-block;
+        background: url(../img/resources/social-icon-bg.png) center center no-repeat;
+        margin-right: 5px;
+        transition: all .3s ease;
+        &:hover {
+          color: $accent1;
+          transform: rotate(360deg);
+        }
+      }
+    }
+  }
+}
+
+#bottom-bar {
+  background: #273138;
+  color: #A4B0B6;
+  text-transform: uppercase;
+  font-weight: normal;
+  padding: 20px 0px;
+  p {
+    margin-bottom: 0;
+    a {
+      color: $white;
+      transition: all .3s ease;
+      &:hover {
+        color: $accent1;
+      }
+    }
+  }
+}

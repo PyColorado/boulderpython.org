@@ -5,6 +5,7 @@
 Our website grew out of @iandouglas's [Flask + Google App Engine template](https://github.com/iandouglas/flask-gae-skeleton).
 What kind of Python community would we be if our site wasn't also developed using Python?? :)
 
+
 ## A Community in Progress
 
 We are a group of python developers, scientists, automators, and enthusiasts that gather once a month in Boulder,
@@ -13,11 +14,12 @@ us on [Meetup](https://www.meetup.com/boulderpython/), [Twitter](https://twitter
 [Slack](https://denver-dev-slack.herokuapp.com/) (#meetup-python)
 and (#help-python).
 
+
 ### Speak at a Meetup
 
 We're always looking for speakers at our meetups.  Whether you have a short talk, long talk, or just an idea for a talk,
-we'd love to have you.  Submit your talk on [Papercall](https://papercall.io/boulder-python) to get the conversation
-going!
+we'd love to have you.  Submit your talk directly on [boulderpython.org](https://boulderpython.org/submit).
+
 
 ### Organizers
 Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale),
@@ -29,6 +31,7 @@ Zoë Farmer, zoe@dataleek.io, @TheDataLeek on [Twitter](https://twitter.com/TheD
 Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.com/fmdfrank), @frankV on
 [Github](https://github.com/frankv)
 
+
 ### Sponsors
 
 [Galvanize Boulder](https://www.galvanize.com/boulder/campus) hosts our meetups and provides tasty food, beer, and
@@ -37,7 +40,9 @@ refreshments (along with full stack and data science bootcamp programs).  Contac
 [Spigot Labs](http://spigotlabs.com/) - Add RFID to your beer, wine, and food festivals to track tastes and interactions
 between patrons and vendors.
 
-[Cuttlesoft](https://www.cuttlesoft.com/) - Cuttlesoft is a custom software agency. We craft beautifully designed and highly scalable web and mobile applications.
+[Cuttlesoft](https://www.cuttlesoft.com/) - Cuttlesoft is a custom software agency. They craft beautifully designed and
+highly scalable solutions for web, mobile, IoT, and the cloud.
+
 
 ## Code of Conduct
 
@@ -86,6 +91,31 @@ pip install -r requirements.txt
 pip install -r requirements.txt -t lib
 ```
 
+### Running
+
+As of 2018, the Flask application features a few new integrations. Notably, they're the [Meetup API](https://www.meetup.com/meetup_api/)
+and [MailChimp](https://mailchimp.com/) integrations. We want to keep this project public, so we have to be careful with
+our API keys. To get around this, we use a simple config file, here's how we set it up:
+
+ 1. Create a file called `local.cfg` in the application package root.
+ 2. Add the following to it with your API keys.
+ 3. **DON'T** commit this file
+
+```
+SECRET_KEY = 'your-secret-key'
+MEETUP_KEY = 'your-meetup-api-key'
+MAILCHIMP_USERNAME = 'mc-username'
+MAILCHIMP_API_KEY = 'mc-api-key'
+MAILCHIMP_LIST_ID = 'mc-list-id'
+```
+
+To run the application now, use:
+
+```
+$ APP_CONFIG=local.cfg python run.py
+```
+
+
 ### Testing
 
 Please consider developing your project using TDD principles, it will make your life so much easier.
@@ -105,17 +135,16 @@ Windows:
 
 ```set GOOGLE_APP_ENGINE_SDK=C:\Program Files\Google\App Engine```
 
-### What are the .haml files and .scss? Do I really need them?
 
-I use HAML as a shortcut to writing properly-formatted HTML. You're welcome to remove them, but once you understand
-the simplicity of HAML, I'm guessing you'll keep HAML around. While it's not very Pythonic, to get HAML working,
-you'll need Ruby installed on your system and a simple "gem install haml" (possibly with sudo) should be all you need.
+### Building Static Assets
 
-Likewise with the .scss files, they allow for writing nested CSS which them compiles down into semantically-correct
-CSS files. You'll need to "gem install sass" (possibly with sudo)
+With the new redesign, our static asset files (js and css) have changed. We're still using SASS, but now the project
+relies on gulp and npm to build and minify both scss files, but also JavaScript.
 
-I use PyCharm as my preferred Python editor, and the professional edition will detect the HAML and SCSS files and
-prompt you to add "watchers" which will run the HAML/SCSS compilers for you whenever your files get saved. Any manual
-changes you make to the .html or .css files will be lost when the compilers run.
+With npm and gulp installed, simply run:
+```
+$ gulp
+```
 
-The .haml and .scss files are ignored via the app.yaml file so they won't end up on App Engine as part of your deploy.
+The default gulp command builds scss and concatenates scripts into `app.css`, and `app.js`, respectively. It will also
+begin the gulp watch command so if you save any changes in your scss and js files, gulp rebuilds them automatically.
