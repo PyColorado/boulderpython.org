@@ -5,7 +5,6 @@
     application routes
 """
 
-import logging
 from datetime import datetime as dt
 
 import meetup.api
@@ -32,6 +31,15 @@ from .forms import SubmissionForm
 @cache.cached(timeout=60)
 @app.route('/', methods=['GET'])
 def index():
+    """Application index.
+
+    Home page for web application. Pulls data from Meetup.
+
+    Todo:
+        * move Meetup Client to `utils` and have it return a tuple.
+        Example: `client, group, events, upcoming = MeetupClient()`
+        * Meetup occasionally responds with an empty JSON, so we should cache this to avoid that.
+    """
     client = meetup.api.Client(app.config.get('MEETUP_KEY'))
     group = client.GetGroup({'urlname': 'BoulderPython'})
     events = client.GetEvents({'group_urlname': 'BoulderPython'}).__dict__['results']
@@ -50,7 +58,18 @@ def privacy():
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
+    """Submission form page.
 
+    Renders the submission application form and handles form POSTs as well.
+
+    Returns:
+        render_template: if page is being called by GET, or form had errors
+        redirect: when form is sucessfully ingested (this redirects and clears form)
+
+    Todo:
+        * add Title to Submission object (waiting on update to model)
+        * need simple notification for successful form POST, currently no feedback
+    """
     form = SubmissionForm()
     labels = app.config['TRELLO_LABELS']
 
@@ -84,12 +103,15 @@ def submit():
 
 @app.route('/trello/hook', methods=['GET', 'POST'])
 def hook(send=False):
-    """
-        Trello hook endpoint. Submission cards are fit with a webhook back to our application.
+    """Trello hook endpoint. Submission cards are fit with a webhook back to our application.
 
-        A great tool for testing this locally is ngrok. Remember to update the value of
-        TRELLO_HOOK in app config.
-         -  example: ``ngrok http --subdomain=boulderpython 5000``
+    A great tool for testing this locally is ngrok. Remember to update the value of
+    TRELLO_HOOK in app config.
+        * example: `ngrok http --subdomain=boulderpython 5000`
+
+    Todo:
+        * handle due date updated, this should send a calendar invite
+        * handle card moved to Archive list, hsould update submission status
     """
 
     # this needs to be here so Trello can validate the URL
@@ -132,19 +154,21 @@ def hook(send=False):
 
 @app.route('/robots.txt')
 def robots():
+    '''Tell robots what to do.'''
     return ('User-agent: *')
 
 
 @cache.cached(timeout=60)
 @app.route('/favicon.ico')
 def favicon():
+    '''sends the favicon, this should be replaced with a `url_for` the static file'''
     return send_from_directory(
         './static/img/favicon/', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/subscribe', methods=['GET', 'POST'])
 def subscribe():
-    """Adds user to Mailchimp mailing list."""
+    """Subscribe email address to the Boulder Python newsletter"""
     data = request.get_json()
     try:
         client = MailChimp(
@@ -163,24 +187,27 @@ def subscribe():
             json = e.response.json()
             resp = json.get('errors') or json.get('detail') or json
             print(json.get('errors') or json.get('detail') or json)
+            app.logger.error(
+                'An HTTPError occurred subscribing email to MailChimp: {}'.format(
+                    json.get('errors') or json.get('detail') or json))
 
     except Exception as e:
-        print('An error occurred: {} - {}'.format(e.__class__, e))
+        app.logger.error(
+            'An {} occurred subscribing email to MailChimp: {}'.format(e.__class__, e))
         resp = 'An error occurred: {} - {}'.format(e.__class__, e)
 
     return jsonify({'result': resp}), 500
 
 
-# ERRORS ######################################################################
-# Handle 404 errors
 @app.errorhandler(404)
 def page_not_found(e=Exception):  # pragma: no cover
-    logging.debug(e)
+    '''Simple 404 error handler'''
+    app.logger.debug(e)
     return render_template('errors/404.html', e=e), 404
 
 
-# Handle 500 errors
 @app.errorhandler(500)
 def server_error(e=Exception):  # pragma: no cover
-    logging.debug(e)
+    '''Simple 500 error handler'''
+    app.logger.error(e)
     return render_template('errors/500.html', e=e), 500

@@ -8,18 +8,66 @@
 import os
 
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or \
-        'be1e74ae-a040-48e9-84bf-42d5e96e6363-dd1b82a0-43ca-40ff-96c3-1535eecd0fc5'
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'shhh_its_secret')
 
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://localhost/boulderpython'
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        'DATABASE_URL', 'postgresql+psycopg2://localhost/boulderpython')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    CELERY_BROKER_URL = 'amqp://localhost//'
-    CELERY_RESULT_BACKEND = 'amqp://localhost//'
+    CELERY_BROKER_URL = os.environ.get('RABBITMQ_BIGWIG_URL', 'amqp://localhost//')
+    CELERY_RESULT_BACKEND = os.environ.get('RABBITMQ_BIGWIG_URL', 'amqp://localhost//')
+
+    SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', None)
+    SENDGRID_DEFAULT_FROM = 'Boulder Python <hi@boulderpython.org>'
+
+    CACHE_TYPE = 'simple'
+    GOOGLE_ANALYTICS_ID = 'UA-123456-78'
+
+    MEETUP_KEY = os.environ.get('MEETUP_KEY', None)
+
+    MAILCHIMP_USERNAME = os.environ.get('MAILCHIMP_USERNAME', None)
+    MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', None)
+    MAILCHIMP_LIST_ID = os.environ.get('MAILCHIMP_LIST_ID', None)
+
+    TRELLO_API_KEY = os.environ.get('TRELLO_API_KEY', None)
+    TRELLO_API_SECRET = os.environ.get('TRELLO_API_SECRET', None)
+    TRELLO_TOKEN = os.environ.get('TRELLO_TOKEN', None)
+    TRELLO_TOKEN_SECRET = os.environ.get('TRELLO_TOKEN_SECRET', None)
+    TRELLO_ASSIGNEE = os.environ.get('TRELLO_ASSIGNEE', None)
+    TRELLO_HOOK = os.environ.get('TRELLO_HOOK', 'https://boulderpython.ngrok.io/trello/hook')
+
+    # this is public anyway (used in their URLs)
+    TRELLO_BOARD = 'wm8hatnW'
+    TRELLO_LIST = '5a0091836c98d9743f94b363'
+    TRELLO_CARDS = {
+        'NEW': {
+            "id": "5a0091836c98d9743f94b363",
+            "text": "New"
+        },
+        'REVIEW': {
+            "id": "5a0091836c98d9743f94b364",
+            "text": "In Review"
+        },
+        'SCHEDULED': {
+            "id": "5a0091836c98d9743f94b365",
+            "text": "Scheduled"
+        }
+    }
+
+    TRELLO_LABELS = {
+        "FORMAT": {
+            "IN-DEPTH": "5a0094fca8e476f047706616",
+            "LIGHTNING": "5a00950b73846ef08844501e",
+            "DEMO": "5a0095201f007932c3ea53d0",
+            "BEGINNER": "5a0095307b5c511544f1447b"
+        },
+        "AUDIENCE": {
+            "BEGINNER": "5a0091839ae3d60b0c9e04af",
+            "INTERMEDIATE": "5a0091839ae3d60b0c9e04b1",
+            "ADVANCED": "5a0091839ae3d60b0c9e04b0"
+        }
+    }
 
     SSL_DISABLE = True
     MAIL_SERVER = 'smtp.sendgrid.com'
@@ -29,13 +77,7 @@ class Config:
     MAIL_PASSWORD = 'sendgrid_password'
     MAIL_SUBJECT_PREFIX = '[site.com]'
     MAIL_SENDER = 'admin@site.com'
-
-    SENDGRID_API_KEY = ''
-    SENDGRID_DEFAULT_FROM = 'Boulder Python <hi@boulderpython.org>'
-
-    SITE_ADMIN = os.environ.get('SITE_ADMIN') or 'recipient@site.com'
-    CACHE_TYPE = 'simple'
-    GOOGLE_ANALYTICS_ID = 'UA-123456-78'
+    SITE_ADMIN = os.environ.get('SITE_ADMIN', 'hi@boulderpython.com')
 
     @staticmethod
     def init_app(app):

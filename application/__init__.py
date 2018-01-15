@@ -12,7 +12,6 @@ from flask import Flask
 from celery import Celery
 
 from config import config
-# from .utils import configure
 from .extensions import db, cache, moment, celery, mail
 from .filters import autoversion, current_route
 

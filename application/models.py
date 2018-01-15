@@ -15,10 +15,11 @@ from .extensions import db
 
 
 class Base(db.Model):
-    """
-    Convenience base DB model class. Makes sure tables in MySQL are created as InnoDB.
-    This is to enforce foreign key constraints (MyISAM doesn't support constraints)
-    outside of production. Tables are also named to avoid collisions.
+    """Convenience base DB model class. Extends `db.Model`
+
+    Helper class to inherit in database models that adds a set of helpful methods
+    and automation steps like conventional table names, primary keys, and utility
+    columns for created and updated timestamps.
     """
 
     @declared_attr
@@ -26,7 +27,6 @@ class Base(db.Model):
         return '{}'.format(self.__name__.lower())
 
     __abstract__ = True
-    __table_args__ = dict(mysql_charset='utf8', mysql_engine='InnoDB')
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=True)
     created_at = db.Column(db.DateTime, default=lambda: dt.utcnow(), nullable=False)
@@ -154,6 +154,16 @@ class Base(db.Model):
 
 
 class Status(Enum):
+    '''Status class, extends `enum`
+
+    Simple enumerable of submission statuses.
+
+    Attributes:
+        NEW         (int) = submission status is new (1)
+        INREVIEW    (int) = submission status is in-review (2)
+        SCHEDULED   (int) = submission status is scheduled (3)
+        ARCHIVED    (int) = submission status is archived (4)
+    '''
     NEW = 1
     INREVIEW = 2
     SCHEDULED = 3
@@ -161,6 +171,21 @@ class Status(Enum):
 
 
 class Submission(Base):
+    '''Submission class
+
+    Stores a talk submission and it's Trello card's identifiers
+
+    Attributes:
+        email    (str): email of the submitter
+        card_id  (str): the Trello Card ID
+        card_url (str): the Trello Card URL
+        status   (int): the submission status, Int maps to the Status enum class.
+        hook     (str): the ID for the Trello Card's webhook
+
+    Todo:
+        * This should hold the name of the talk, though if we change on Trello
+        it should update via webhook
+    '''
     email = Column(db.String(255), nullable=False)
     card_id = Column(db.String(255), nullable=False, unique=True)
     card_url = Column(db.String(255), nullable=False, unique=True)

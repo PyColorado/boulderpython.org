@@ -13,16 +13,13 @@ from trello import TrelloClient as Trello
 from config import config
 
 
-def configure(app, config_name='default'):
-    app.config.from_object(config[config_name])
-    config[config_name].init_app(app)
-
-    if os.environ.get('APP_CONFIG'):
-        app.config.from_envvar('APP_CONFIG')
-
-
 def TrelloClient():
-    """return an instance of the Trello client and the new submissions list"""
+    '''Return an instance of the Trello client and the new submissions list
+
+    Returns:
+        TrelloClient:   an instance of the Trello API client
+        TrelloList:     the new submissions list from our Trello board
+    '''
     with app.app_context():
         client = Trello(
             api_key=app.config['TRELLO_API_KEY'],

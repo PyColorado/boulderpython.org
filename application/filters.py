@@ -11,7 +11,17 @@ from flask import request
 
 
 def autoversion(filename):
-    """appends file's modified time as query param"""
+    ''' Returns a string matching the filename and a query param of the file's
+    last modification time in milliseconds
+
+    Useful for agressive caching of static assets like app JavaScript and CSS.
+
+        Args:
+            filename (str): the name of the file receiving a
+
+        Returns:
+            string: a filename plus it's version number query param
+    '''
     fullpath = os.path.join(pathlib.Path(__file__).parent, filename[1:])
     try:
         timestamp = str(os.path.getmtime(fullpath))
@@ -21,9 +31,16 @@ def autoversion(filename):
 
 
 def current_route(value, *args):
-    """
-        Returns 'current', if value matches current url,
-        used to set class on current route in nav
-    """
+    ''' Returns the a string `current` if URL matches value.
+
+    Useful for navigation elements in templates to add a class name if the current
+    page matches the nav element's target href.
+
+        Args:
+            value (str): value passed in by filter method
+
+        Returns:
+            string: 'current' if conditional is met, otherwise nothing
+    '''
     if value == str(request.url_rule):
         return 'current'
