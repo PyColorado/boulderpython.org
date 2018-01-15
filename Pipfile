@@ -44,3 +44,4 @@ flask-sqlalchemy = "*"
 py-trello = {ref = "b929721397077f31a06603d7bb7843526d2a926b", git = "https://github.com/boulder-python/py-trello.git", editable = true}
 celery = "==4.1.0"
 flask-celery-helper = "*"
+flask-sendgrid = "*"

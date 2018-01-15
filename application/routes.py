@@ -16,13 +16,14 @@ from flask import (
     jsonify,
     render_template,
     request,
+    redirect,
     make_response,
     send_from_directory
 )
 
 from . import app
-from .models import Submission
-from .tasks import create_hook
+from .models import Status, Submission
+from .tasks import create_hook, send_email
 from .utils import TrelloClient
 from .extensions import cache
 from .forms import SubmissionForm
@@ -54,11 +55,13 @@ def submit():
     labels = app.config['TRELLO_LABELS']
 
     if form.validate_on_submit():
-        client, newSubmissionsList = TrelloClient()
+        client, lst = TrelloClient()
 
-        card = newSubmissionsList.add_card(
+        card = lst.add_card(
             name=form.data['title'],
-            desc=form.data['description'],
+            desc="#DESCRIPTION \n{} \n\n#NOTES \n{}".format(
+                form.data['description'],
+                form.data['notes']),
             labels=[
                 labels['FORMAT'][form.data['format']],
                 labels['AUDIENCE'][form.data['audience']]
@@ -68,19 +71,28 @@ def submit():
         )
 
         submission = Submission().create(
-            email=form.data['email'],
-            card_id=card.id,
-            card_url=card.url,
-            status='NEW')
+            email=form.data['email'], card_id=card.id, card_url=card.url)
 
+        # message Celery to create the webhook
         create_hook.apply_async(args=[submission.id, submission.card_id])
+
+        # reset form by redirecting back
+        return redirect('submit')
 
     return render_template('submit.html', form=form)
 
 
-# ngrok http --subdomain=boulderpython 5000
 @app.route('/trello/hook', methods=['GET', 'POST'])
-def hook():
+def hook(send=False):
+    """
+        Trello hook endpoint. Submission cards are fit with a webhook back to our application.
+
+        A great tool for testing this locally is ngrok. Remember to update the value of
+        TRELLO_HOOK in app config.
+         -  example: ``ngrok http --subdomain=boulderpython 5000``
+    """
+
+    # this needs to be here so Trello can validate the URL
     if request.method == 'HEAD':
         return 'OK', 200
 
@@ -88,20 +100,32 @@ def hook():
     action = data["action"]
     cards = app.config["TRELLO_CARDS"]
 
+    # if card has moved
     if action["display"]["translationKey"] == "action_move_card_from_list_to_list":
-        print('card has moved')
 
-        if action["data"]["listAfter"]["id"] == cards["REVIEW"]["id"] \
-                and action["data"]["listBefore"]["id"] == cards["NEW"]["id"]:
-            print('talk is in review')
-            submission = Submission().first(card_id=data['model']['id'])
-            Submission().update(submission, status='IN-REVIEW')
+        submission = Submission().first(card_id=data['model']['id'])
+        if submission:
+            # if card moved from NEW to IN-REVIEW
+            if action["data"]["listAfter"]["id"] == cards["REVIEW"]["id"] \
+                    and action["data"]["listBefore"]["id"] == cards["NEW"]["id"] \
+                    and submission.status == Status.NEW.value:
+                Submission().update(submission, status=Status.INREVIEW.value)
+                app.logger.info("Submission {submission.id} is now IN-REVIEW")
+                send = True
 
-        elif action["data"]["listAfter"]["id"] == cards["SCHEDULED"]["id"] \
-                and action["data"]["listBefore"]["id"] == cards["REVIEW"]["id"]:
-            print('talk has been accepted')
-            submission = Submission().first(card_id=data['model']['id'])
-            Submission().update(submission, status='SCHEDULED')
+            # if card moved from IN-REVIEW to SCHEDULED
+            elif action["data"]["listAfter"]["id"] == cards["SCHEDULED"]["id"] \
+                    and action["data"]["listBefore"]["id"] == cards["REVIEW"]["id"] \
+                    and submission.status == Status.INREVIEW.value:
+                Submission().update(submission, status=Status.SCHEDULED.value)
+                app.logger.info("Submission {submission.id} is now SCHEDULED")
+                send = True
+
+            # if the card has been updated, send an email
+            if send:
+                send_email.apply_async(args=[submission.id, submission.email])
+        else:
+            app.logger.error('Submission not found for Card: {}'.format(data['model']['id']))
 
     return '', 200
 

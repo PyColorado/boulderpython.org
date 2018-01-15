@@ -13,7 +13,7 @@ from celery import Celery
 
 from config import config
 # from .utils import configure
-from .extensions import db, cache, moment, celery
+from .extensions import db, cache, moment, celery, mail
 from .filters import autoversion, current_route
 
 
@@ -32,6 +32,7 @@ db.init_app(app)
 cache.init_app(app)
 moment.init_app(app)
 celery.init_app(app)
+mail.init_app(app)
 
 
 @app.template_filter('convert_ms')

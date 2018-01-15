@@ -30,6 +30,9 @@ class Config:
     MAIL_SUBJECT_PREFIX = '[site.com]'
     MAIL_SENDER = 'admin@site.com'
 
+    SENDGRID_API_KEY = ''
+    SENDGRID_DEFAULT_FROM = 'Boulder Python <hi@boulderpython.org>'
+
     SITE_ADMIN = os.environ.get('SITE_ADMIN') or 'recipient@site.com'
     CACHE_TYPE = 'simple'
     GOOGLE_ANALYTICS_ID = 'UA-123456-78'

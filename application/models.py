@@ -5,6 +5,7 @@
     application data models
 """
 
+from enum import Enum
 from datetime import datetime as dt
 
 from sqlalchemy import Column, Integer
@@ -152,9 +153,16 @@ class Base(db.Model):
         return d
 
 
+class Status(Enum):
+    NEW = 1
+    INREVIEW = 2
+    SCHEDULED = 3
+    ARCHIVED = 4
+
+
 class Submission(Base):
     email = Column(db.String(255), nullable=False)
     card_id = Column(db.String(255), nullable=False, unique=True)
     card_url = Column(db.String(255), nullable=False, unique=True)
-    status = Column(db.String(255), nullable=False)
+    status = Column(db.Integer, nullable=False, default=Status.NEW.value)
     hook = Column(db.String(255))
