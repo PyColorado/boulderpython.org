@@ -168,7 +168,7 @@ def favicon():
 
 @app.route('/subscribe', methods=['GET', 'POST'])
 def subscribe():
-    """Subscribe email address to the Boulder Python newsletter"""
+    '''Subscribe email address to the Boulder Python newsletter'''
     data = request.get_json()
     try:
         client = MailChimp(
