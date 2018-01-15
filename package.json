@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "Boulder Python website",
   "main": "index.js",
+  "engines": {
+    "node": "6.9.3"
+  },
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "gulp build"
+    "heroku-postbuild": "gulp build"
   },
   "repository": {
     "type": "git",
