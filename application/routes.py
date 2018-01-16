@@ -36,13 +36,12 @@ def index():
     Home page for web application. Pulls data from Meetup.
 
     Todo:
-        * move Meetup Client to `utils` and have it return a tuple.
-        Example: `client, group, events, upcoming = MeetupClient()`
+        * move Meetup Client to `utils` and have it return a tuple. Example: `client, group, events, upcoming = MeetupClient()`
         * Meetup occasionally responds with an empty JSON, so we should cache this to avoid that.
     """
     client = meetup.api.Client(app.config.get('MEETUP_KEY'))
     group = client.GetGroup({'urlname': 'BoulderPython'})
-    events = client.GetEvents({'group_urlname': 'BoulderPython'}).__dict__['results']
+    events = client.GetEvents({'group_urlname': app.config['MEETUP_GROUP']}).__dict__['results']
     upcoming = dict(
         **{'date': dt.fromtimestamp(
             group.next_event['time'] / 1000.00).strftime('%B %d, %Y %-I:%M%p')},
@@ -107,7 +106,7 @@ def hook(send=False):
 
     A great tool for testing this locally is ngrok. Remember to update the value of
     TRELLO_HOOK in app config.
-        * example: `ngrok http --subdomain=boulderpython 5000`
+    * example: `ngrok http --subdomain=boulderpython 5000`
 
     Todo:
         * handle due date updated, this should send a calendar invite
@@ -120,7 +119,7 @@ def hook(send=False):
 
     data = request.get_json()
     action = data["action"]
-    cards = app.config["TRELLO_CARDS"]
+    lists = app.config["TRELLO_LISTS"]
 
     # if card has moved
     if action["display"]["translationKey"] == "action_move_card_from_list_to_list":
@@ -128,16 +127,16 @@ def hook(send=False):
         submission = Submission().first(card_id=data['model']['id'])
         if submission:
             # if card moved from NEW to IN-REVIEW
-            if action["data"]["listAfter"]["id"] == cards["REVIEW"]["id"] \
-                    and action["data"]["listBefore"]["id"] == cards["NEW"]["id"] \
+            if action["data"]["listAfter"]["id"] == lists["REVIEW"]["id"] \
+                    and action["data"]["listBefore"]["id"] == lists["NEW"]["id"] \
                     and submission.status == Status.NEW.value:
                 Submission().update(submission, status=Status.INREVIEW.value)
                 app.logger.info("Submission {submission.id} is now IN-REVIEW")
                 send = True
 
             # if card moved from IN-REVIEW to SCHEDULED
-            elif action["data"]["listAfter"]["id"] == cards["SCHEDULED"]["id"] \
-                    and action["data"]["listBefore"]["id"] == cards["REVIEW"]["id"] \
+            elif action["data"]["listAfter"]["id"] == lists["SCHEDULED"]["id"] \
+                    and action["data"]["listBefore"]["id"] == lists["REVIEW"]["id"] \
                     and submission.status == Status.INREVIEW.value:
                 Submission().update(submission, status=Status.SCHEDULED.value)
                 app.logger.info("Submission {submission.id} is now SCHEDULED")

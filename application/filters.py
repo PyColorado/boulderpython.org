@@ -16,11 +16,11 @@ def autoversion(filename):
 
     Useful for agressive caching of static assets like app JavaScript and CSS.
 
-        Args:
-            filename (str): the name of the file receiving a
+    Args:
+        filename (str): the name of the file receiving a
 
-        Returns:
-            string: a filename plus it's version number query param
+    Returns:
+        string: a filename plus it's version number query param
     '''
     fullpath = os.path.join(pathlib.Path(__file__).parent, filename[1:])
     try:
@@ -36,11 +36,11 @@ def current_route(value, *args):
     Useful for navigation elements in templates to add a class name if the current
     page matches the nav element's target href.
 
-        Args:
-            value (str): value passed in by filter method
+    Args:
+        value (str): value passed in by filter method
 
-        Returns:
-            string: 'current' if conditional is met, otherwise nothing
+    Returns:
+        string: 'current' if conditional is met, otherwise nothing
     '''
     if value == str(request.url_rule):
         return 'current'
