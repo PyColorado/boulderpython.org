@@ -5,12 +5,8 @@
     utility function
 """
 
-import os
-
 from flask import current_app as app
 from trello import TrelloClient as Trello
-
-from config import config
 
 
 def TrelloClient():

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
+'''
     routes.py
     ~~~~~~~~~
     application routes
-"""
+'''
 
 from datetime import datetime as dt
 
@@ -11,16 +11,15 @@ import meetup.api
 from requests.exceptions import HTTPError
 from mailchimp3 import MailChimp
 from flask import (
+    Blueprint,
     current_app,
     jsonify,
     render_template,
     request,
     redirect,
-    make_response,
     send_from_directory
 )
 
-from . import app
 from .models import Status, Submission
 from .tasks import create_hook, send_email
 from .utils import TrelloClient
@@ -28,36 +27,34 @@ from .extensions import cache
 from .forms import SubmissionForm
 
 
+bp = Blueprint('bp', __name__)
+
+
 @cache.cached(timeout=60)
-@app.route('/', methods=['GET'])
+@bp.route('/', methods=['GET'])
 def index():
-    """Application index.
+    '''Application index.
 
     Home page for web application. Pulls data from Meetup.
 
     Todo:
-        * move Meetup Client to `utils` and have it return a tuple. Example: `client, group, events, upcoming = MeetupClient()`
+        * move Meetup Client to `utils` and have it return a tuple
         * Meetup occasionally responds with an empty JSON, so we should cache this to avoid that.
-    """
-    client = meetup.api.Client(app.config.get('MEETUP_KEY'))
+    '''
+    client = meetup.api.Client(current_app.config.get('MEETUP_KEY'))
     group = client.GetGroup({'urlname': 'BoulderPython'})
-    events = client.GetEvents({'group_urlname': app.config['MEETUP_GROUP']}).__dict__['results']
+    events = client.GetEvents({'group_urlname': current_app.config['MEETUP_GROUP']}).__dict__['results']  # noqa
     upcoming = dict(
-        **{'date': dt.fromtimestamp(
-            group.next_event['time'] / 1000.00).strftime('%B %d, %Y %-I:%M%p')},
-        **next((event for event in events if event['id'] == group.next_event['id']), None))
+        **{'date': dt.fromtimestamp(group.next_event['time'] / 1000.00).strftime('%B %d, %Y %-I:%M%p')},  # noqa
+        **next((event for event in events if event['id'] == group.next_event['id']), None)
+    )
 
     return render_template('index.html', group=group, upcoming=upcoming, events=events)
 
 
-@app.route('/privacy', methods=['GET'])
-def privacy():
-    return render_template('privacy.html')
-
-
-@app.route('/submit', methods=['GET', 'POST'])
+@bp.route('/submit', methods=['GET', 'POST'])
 def submit():
-    """Submission form page.
+    '''Submission form page.
 
     Renders the submission application form and handles form POSTs as well.
 
@@ -68,9 +65,9 @@ def submit():
     Todo:
         * add Title to Submission object (waiting on update to model)
         * need simple notification for successful form POST, currently no feedback
-    """
+    '''
     form = SubmissionForm()
-    labels = app.config['TRELLO_LABELS']
+    labels = current_app.config['TRELLO_LABELS']
 
     if form.validate_on_submit():
         client, lst = TrelloClient()
@@ -85,7 +82,7 @@ def submit():
                 labels['AUDIENCE'][form.data['audience']]
             ],
             position='top',
-            assign=[app.config['TRELLO_ASSIGNEE']]
+            assign=[current_app.config['TRELLO_ASSIGNEE']]
         )
 
         submission = Submission().create(
@@ -100,9 +97,9 @@ def submit():
     return render_template('submit.html', form=form)
 
 
-@app.route('/trello/hook', methods=['GET', 'POST'])
+@bp.route('/trello/hook', methods=['GET', 'POST'])
 def hook(send=False):
-    """Trello hook endpoint. Submission cards are fit with a webhook back to our application.
+    '''Trello hook endpoint. Submission cards are fit with a webhook back to our application.
 
     A great tool for testing this locally is ngrok. Remember to update the value of
     TRELLO_HOOK in app config.
@@ -111,7 +108,7 @@ def hook(send=False):
     Todo:
         * handle due date updated, this should send a calendar invite
         * handle card moved to Archive list, hsould update submission status
-    """
+    '''
 
     # this needs to be here so Trello can validate the URL
     if request.method == 'HEAD':
@@ -119,7 +116,7 @@ def hook(send=False):
 
     data = request.get_json()
     action = data["action"]
-    lists = app.config["TRELLO_LISTS"]
+    lists = current_app.config["TRELLO_LISTS"]
 
     # if card has moved
     if action["display"]["translationKey"] == "action_move_card_from_list_to_list":
@@ -131,7 +128,7 @@ def hook(send=False):
                     and action["data"]["listBefore"]["id"] == lists["NEW"]["id"] \
                     and submission.status == Status.NEW.value:
                 Submission().update(submission, status=Status.INREVIEW.value)
-                app.logger.info("Submission {submission.id} is now IN-REVIEW")
+                current_app.logger.info("Submission {submission.id} is now IN-REVIEW")
                 send = True
 
             # if card moved from IN-REVIEW to SCHEDULED
@@ -139,33 +136,26 @@ def hook(send=False):
                     and action["data"]["listBefore"]["id"] == lists["REVIEW"]["id"] \
                     and submission.status == Status.INREVIEW.value:
                 Submission().update(submission, status=Status.SCHEDULED.value)
-                app.logger.info("Submission {submission.id} is now SCHEDULED")
+                current_app.logger.info("Submission {submission.id} is now SCHEDULED")
                 send = True
 
             # if the card has been updated, send an email
             if send:
                 send_email.apply_async(args=[submission.id, submission.email])
         else:
-            app.logger.error('Submission not found for Card: {}'.format(data['model']['id']))
+            current_app.logger.error(
+                'Submission not found for Card: {}'.format(data['model']['id']))
 
     return '', 200
 
 
-@app.route('/robots.txt')
+@bp.route('/robots.txt')
 def robots():
     '''Tell robots what to do.'''
     return ('User-agent: *')
 
 
-@cache.cached(timeout=60)
-@app.route('/favicon.ico')
-def favicon():
-    '''sends the favicon, this should be replaced with a `url_for` the static file'''
-    return send_from_directory(
-        './static/img/favicon/', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
-
-@app.route('/subscribe', methods=['GET', 'POST'])
+@bp.route('/subscribe', methods=['GET', 'POST'])
 def subscribe():
     '''Subscribe email address to the Boulder Python newsletter'''
     data = request.get_json()
@@ -186,27 +176,32 @@ def subscribe():
             json = e.response.json()
             resp = json.get('errors') or json.get('detail') or json
             print(json.get('errors') or json.get('detail') or json)
-            app.logger.error(
+            current_app.logger.error(
                 'An HTTPError occurred subscribing email to MailChimp: {}'.format(
                     json.get('errors') or json.get('detail') or json))
 
     except Exception as e:
-        app.logger.error(
+        current_app.logger.error(
             'An {} occurred subscribing email to MailChimp: {}'.format(e.__class__, e))
         resp = 'An error occurred: {} - {}'.format(e.__class__, e)
 
     return jsonify({'result': resp}), 500
 
 
-@app.errorhandler(404)
+@bp.route('/privacy', methods=['GET'])
+def privacy():
+    return render_template('privacy.html')
+
+
+@bp.errorhandler(404)
 def page_not_found(e=Exception):  # pragma: no cover
     '''Simple 404 error handler'''
-    app.logger.debug(e)
+    current_app.logger.debug(e)
     return render_template('errors/404.html', e=e), 404
 
 
-@app.errorhandler(500)
+@bp.errorhandler(500)
 def server_error(e=Exception):  # pragma: no cover
     '''Simple 500 error handler'''
-    app.logger.error(e)
+    current_app.logger.error(e)
     return render_template('errors/500.html', e=e), 500

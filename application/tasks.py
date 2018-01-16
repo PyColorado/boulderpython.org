@@ -7,14 +7,13 @@
 
 import random
 
-from flask import render_template
+from flask import current_app, render_template
 from celery.utils.log import get_task_logger
 from python_http_client.exceptions import BadRequestsError
 
-from . import app, celery
 from .utils import TrelloClient
 from .models import Submission, Status
-from .extensions import mail
+from .extensions import mail, celery
 
 
 def exponential_backoff(task_self):
@@ -28,7 +27,7 @@ def exponential_backoff(task_self):
         task_self (Celery.task): an instance of the celery task being retried
 
     Todo:
-        * Need a way to cancel after n retries, but this is best handled by `max_retries` and ideally, we should log when a task's retries expire.
+        * maybe it's best left to task max_retries but need a way to cancel after n failuers
 
     '''
     minutes = task_self.default_retry_delay / 60
@@ -48,12 +47,12 @@ def create_hook(_id, card):
 
     Todo:
         * No Exception handling!
-        * `max_retries` was conflicting with the hook param of ``client.create_hook`` need to handle retries somehow or determine why there was a conflict
+        * `max_retries` was conflicting with the hook param of ``client.create_hook``
         * should this handle submission not found?
     '''
     client, lst = TrelloClient()
     submission = Submission().get_by_id(_id)
-    webhook = client.create_hook(app.config['TRELLO_HOOK'], card)
+    webhook = client.create_hook(current_app.config['TRELLO_HOOK'], card)
     Submission().update(submission, hook=webhook.id)
 
     # send confirmation email

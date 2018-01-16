@@ -190,7 +190,7 @@ class Submission(Base):
         hook     (str): the ID for the Trello Card's webhook
 
     Todo:
-        * This should hold the name of the talk, though if we change on Trello it should update via webhook
+        * Should store name of talk, though if we change on Trello it should update via webhook
     '''
     email = Column(db.String(255), nullable=False)
     card_id = Column(db.String(255), nullable=False, unique=True)

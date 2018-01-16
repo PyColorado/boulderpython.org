@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title%}Boulder Python{% endblock %}</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico')|autoversion }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')|autoversion }}">
 
 </head>
@@ -98,9 +98,9 @@
                 <div class="col-lg-2 col-md-2 col-sm-6 footer-widget menu-widget">
                     <h3>QUICK LINKS</h3>
                     <ul>
-                        <li><a href="https://us.pycon.org/2016/about/code-of-conduct/"><i class="fa fa-angle-right"></i> Code of Conduct</a></li>
+                        <li><a href="https://us.pycon.org/2018/about/code-of-conduct/"><i class="fa fa-angle-right"></i> Code of Conduct</a></li>
                         <li><a href="https://www.meetup.com/boulderpython/"><i class="fa fa-angle-right"></i> Meetup</a></li>
-                        <li><a href="https://twitter.com/boulderpython"><i class="fa fa-angle-right"></i> Twiiter</a></li>
+                        <li><a href="https://twitter.com/boulderpython"><i class="fa fa-angle-right"></i> Twitter</a></li>
                         <li><a href="https://github.com/boulder-python"><i class="fa fa-angle-right"></i> GitHub</a></li>
                         <li><a href="/privacy"><i class="fa fa-angle-right"></i> Privacy</a></li>
                     </ul>
@@ -108,7 +108,7 @@
                 <!-- /.footer-widget -->
 
                 <!-- .footer-widget -->
-                <div class="col-lg-6 col-md-6 col-sm-12 footer-widget twitter-feed " >
+                <div class="col-lg-6 col-md-6 col-sm-12 footer-widget twitter-feed">
                     <h3>TWITTER</h3>
                     <div class="twitter">
                         <a class="twitter-timeline" data-lang="en" data-height="280" data-theme="dark" href="https://twitter.com/BoulderPython?ref_src=twsrc%5Etfw">Tweets by BoulderPython</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
