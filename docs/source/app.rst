@@ -11,5 +11,4 @@ The application's design encourages repeatable patterns, and best practices.
 
    config
    gunicorn
-   tests
    api
