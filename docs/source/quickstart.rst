@@ -79,7 +79,7 @@ Running App
 
 .. code-block:: bash
 
-    $ python run.py
+    $ flask runserver
 
 
 Running Celery

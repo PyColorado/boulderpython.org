@@ -10,5 +10,6 @@ The application's design encourages repeatable patterns, and best practices.
    :maxdepth: 2
 
    config
+   management
    gunicorn
    api
