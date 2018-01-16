@@ -20,16 +20,16 @@ from .extensions import mail
 def exponential_backoff(task_self):
     '''Exponentially increase delay of task retry.
 
-    Helper function that can be used in task `eta` or `self.retry` for bound tasks.
+    Helper function that can be used in task ``eta`` or ``self.retry`` for bound tasks.
     It begins with 60 seconds, but exponentially increases the delay so that tasks
-    aren't just being retired feverishly by Celery.
+    aren't just being retried feverishly by Celery.
 
     Args:
         task_self (Celery.task): an instance of the celery task being retried
 
     Todo:
-        * Need a way to cancel after n retries, but this is best handled by `max_retries`
-        and ideally, we should log when a task's retries expire.
+        * Need a way to cancel after n retries, but this is best handled by `max_retries` and ideally, we should log when a task's retries expire.
+
     '''
     minutes = task_self.default_retry_delay / 60
     rand = random.uniform(minutes, minutes * 1.3)
@@ -48,8 +48,7 @@ def create_hook(_id, card):
 
     Todo:
         * No Exception handling!
-        * `max_retries` was conflicting with the hook param of `client.create_hook`
-        need to handle retries somehow or determine why there was a conflict
+        * `max_retries` was conflicting with the hook param of ``client.create_hook`` need to handle retries somehow or determine why there was a conflict
         * should this handle submission not found?
     '''
     client, lst = TrelloClient()

@@ -9,6 +9,8 @@ import os
 
 
 class Config:
+    SITE_NAME = os.environ.get('SITE_NAME', 'boulderpython.org')
+    SITE_ADMIN = os.environ.get('SITE_ADMIN', 'hi@boulderpython.com')
     SECRET_KEY = os.environ.get('SECRET_KEY', 'shhh_its_secret')
 
     SQLALCHEMY_DATABASE_URI = os.environ.get(
@@ -22,9 +24,11 @@ class Config:
     SENDGRID_DEFAULT_FROM = 'Boulder Python <hi@boulderpython.org>'
 
     CACHE_TYPE = 'simple'
-    GOOGLE_ANALYTICS_ID = 'UA-123456-78'
+
+    GOOGLE_ANALYTICS_ID = os.environ.get('GOOGLE_ANALYTICS_ID', 'UA-123456-78')
 
     MEETUP_KEY = os.environ.get('MEETUP_KEY', None)
+    MEETUP_GROUP = os.environ.get('MEETUP_KEY', 'BoulderPython')
 
     MAILCHIMP_USERNAME = os.environ.get('MAILCHIMP_USERNAME', None)
     MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', None)
@@ -39,8 +43,7 @@ class Config:
 
     # this is public anyway (used in their URLs)
     TRELLO_BOARD = 'wm8hatnW'
-    TRELLO_LIST = '5a0091836c98d9743f94b363'
-    TRELLO_CARDS = {
+    TRELLO_LISTS = {
         'NEW': {
             "id": "5a0091836c98d9743f94b363",
             "text": "New"
@@ -77,7 +80,6 @@ class Config:
     MAIL_PASSWORD = 'sendgrid_password'
     MAIL_SUBJECT_PREFIX = '[site.com]'
     MAIL_SENDER = 'admin@site.com'
-    SITE_ADMIN = os.environ.get('SITE_ADMIN', 'hi@boulderpython.com')
 
     @staticmethod
     def init_app(app):

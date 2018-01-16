@@ -29,6 +29,6 @@ def TrelloClient():
         )
 
         board = client.get_board(app.config['TRELLO_BOARD'])
-        newSubmissionsList = board.get_list(app.config['TRELLO_LIST'])
+        newSubmissionsList = board.get_list(app.config['TRELLO_LISTS']['NEW']['id'])
 
         return client, newSubmissionsList
