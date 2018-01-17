@@ -10,11 +10,11 @@ from datetime import datetime as dt
 from flask import Flask
 
 from config import config
-from .extensions import db, cache, moment, celery, mail
-from .filters import autoversion, current_route
-from .models import *  # noqa
-from .tasks import *  # noqa
-from .routes import bp
+from application.extensions import db, cache, moment, celery, mail
+from application.filters import autoversion, current_route
+from application.models import *  # noqa
+from application.tasks import *  # noqa
+from application.routes import bp
 
 
 def create_app(config=None):

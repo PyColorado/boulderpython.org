@@ -2,10 +2,12 @@
 
 [![Build Status](https://travis-ci.org/boulder-python/boulderpython.org.svg?branch=master)](https://travis-ci.org/boulder-python/boulderpython.org)
 [![Coverage Status](https://coveralls.io/repos/github/boulder-python/boulderpython.org/badge.svg?branch=master)](https://coveralls.io/github/boulder-python/boulderpython.org?branch=master)
-[![Docs](http://boulderpythonorg.readthedocs.io/en/latest/?badge=latest)](http://boulderpythonorg.readthedocs.io/en/latest/?badge=latest)
+[![Docs](https://readthedocs.org/projects/boulderpythonorg/badge/?version=latest)](http://boulderpythonorg.readthedocs.io/en/latest/?badge=latest)
 
 Our website grew out of @iandouglas's [Flask + Google App Engine template](https://github.com/iandouglas/flask-gae-skeleton).
 What kind of Python community would we be if our site wasn't also developed using Python?? :)
+
+Official Documentation: [boulderpythonorg.readthedocs.io](https://boulderpythonorg.readthedocs.io)
 
 
 ## A Community in Progress
@@ -48,85 +50,52 @@ highly scalable solutions for web, mobile, IoT, and the cloud.
 
 ## Code of Conduct
 
-Our community has implemented the PyCon ["Code of Conduct"](https://us.pycon.org/2017/about/code-of-conduct/) for ensuring
+Our community has implemented the PyCon ["Code of Conduct"](https://us.pycon.org/2018/about/code-of-conduct/) for ensuring
 all members attending our sessions, meetups, and events feel included and heard. Thanks for your mutual respect to one
 another.
 
 ## Website Contributions
 
-We welcome contributions, changes, and corrections to our website.  Please submit a pull request (with tests) as
-outlined below.
-
-### Google SDK Requirements
-
-You'll need to install the Google Cloud SDK and the app-engine-python component:
-
-```bash
-# Install the Google Cloud SDK
-curl https://sdk.cloud.google.com | bash
-
-# Install the Python App Engine component
-gcloud components install app-engine-python
-```
-
-### virtualenv
-
-I recommend installing an actual virtualenv for your project, but App Engine will also need your external packages
-installed in the /lib/ folder here. Remember that App Engine can only support 100% Python packages. Anything that
-compiles a C/C++ library cannot be used on GAE.
-
-```bash
-# Create new virtualenv
-virtualenv boulder-python
-
-# linux/mac:
-boulder-python/bin/activate
-
-# windows:
-boulder-python\scripts\activate
-
-# install all requirements into your virtualenv
-pip install -r requirements.txt
-
-# install all requirements into your /lib/ folder as well, but only the packages
-# this is necessary because packages need to be sent to App Engine as well
-pip install -r requirements.txt -t lib
-```
+We welcome contributions, changes, and corrections to our website.  Please submit a pull request.
 
 ### Running
 
-As of 2018, the Flask application features a few new integrations. Notably, they're the [Meetup API](https://www.meetup.com/meetup_api/)
-and [MailChimp](https://mailchimp.com/) integrations. We want to keep this project public, so we have to be careful with
+As of 2018, the Flask application features a few new integrations. Notably, they're the [Meetup API](https://www.meetup.com/meetup_api/),
+[Trello](https://trello.com), and [MailChimp](https://mailchimp.com/) integrations. We want to keep this project public, so we have to be careful with
 our API keys. To get around this, we use a simple config file, here's how we set it up:
 
  1. Copy the `local-example.cfg` and fill it with your API Keys and settings.
- 2. Be careful **NOT** to commit this file
+ 2. Be careful **NOT** to commit this file into your fork/repo
 
 To run the application now, use:
 
 ```
-$ APP_CONFIG=local.cfg python run.py
+$ FLASK_CONFIG=local.cfg flask runserver
 ```
 
 
 ### Testing
 
-Please consider developing your project using TDD principles, it will make your life so much easier.
+You can easily run the tests suite from the command line:
 
-You can easily run the tests within PyCharm (my editor of choice), or you can run them from the command line:
+```py.test test```
 
-```python run.py -t```
+pytest has a set of optional arguments that can enable many options and plugins.
 
-The tests require access to the Google App Engine SDK.  You can specify the location of your installed SDK with an
-environment variable:
+Here are some we recommend:
 
-Linux / MacOS:
+    - `-v/--verbose` increases verbosity on py.test output
+    - `-x` exit after first failure
+    - `-rs` enables skipped test report
+    - `--cov` enables code coverage
+    - `--flake8` enables pep8 and pyflakes testing via [flake8](http://flake8.pycqa.org/en/latest/)
 
-```export GOOGLE_APP_ENGINE_SDK=${HOME}/google-cloud-sdk```
+For example, our test run uses:
+```
+$ py.test tests --verbose --cov --cov-report term-missing --flake8 application
+```
 
-Windows:
-
-```set GOOGLE_APP_ENGINE_SDK=C:\Program Files\Google\App Engine```
+Check out pytest's [usage docs](https://docs.pytest.org/en/latest/usage.html).
 
 
 ### Building Static Assets
@@ -151,5 +120,5 @@ Celery requires a task broker. Either RabbitMQ or Redis are good choices.
 
 To run Celery, use the following command:
 ```
-$ APP_CONFIG=local.cfg celery worker -A application.celery --loglevel=info
+$ FLASK_CONFIG=local.cfg celery worker -A application.celery --loglevel=info
 ```

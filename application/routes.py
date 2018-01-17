@@ -17,14 +17,13 @@ from flask import (
     render_template,
     request,
     redirect,
-    send_from_directory
 )
 
-from .models import Status, Submission
-from .tasks import create_hook, send_email
-from .utils import TrelloClient
-from .extensions import cache
-from .forms import SubmissionForm
+from application.models import Status, Submission
+from application.tasks import create_hook, send_email
+from application.utils import TrelloClient
+from application.extensions import cache
+from application.forms import SubmissionForm
 
 
 bp = Blueprint('bp', __name__)
@@ -43,7 +42,7 @@ def index():
     '''
     client = meetup.api.Client(current_app.config.get('MEETUP_KEY'))
     group = client.GetGroup({'urlname': 'BoulderPython'})
-    events = client.GetEvents({'group_urlname': current_app.config['MEETUP_GROUP']}).__dict__['results']  # noqa
+    events = client.GetEvents({'group_urlname': current_app.config['MEETUP_GROUP']}).results
     upcoming = dict(
         **{'date': dt.fromtimestamp(group.next_event['time'] / 1000.00).strftime('%B %d, %Y %-I:%M%p')},  # noqa
         **next((event for event in events if event['id'] == group.next_event['id']), None)

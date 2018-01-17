@@ -11,7 +11,7 @@ from datetime import datetime as dt
 from sqlalchemy import Column, Integer
 from sqlalchemy.ext.declarative import declared_attr
 
-from .extensions import db
+from application.extensions import db
 
 
 class Base(db.Model):
