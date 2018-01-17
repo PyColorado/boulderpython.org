@@ -11,9 +11,9 @@ from flask import current_app, render_template
 from celery.utils.log import get_task_logger
 from python_http_client.exceptions import BadRequestsError
 
-from .utils import TrelloClient
-from .models import Submission, Status
-from .extensions import mail, celery
+from application.utils import TrelloClient
+from application.models import Submission, Status
+from application.extensions import mail, celery
 
 
 def exponential_backoff(task_self):

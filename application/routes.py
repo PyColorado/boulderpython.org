@@ -19,11 +19,11 @@ from flask import (
     redirect,
 )
 
-from .models import Status, Submission
-from .tasks import create_hook, send_email
-from .utils import TrelloClient
-from .extensions import cache
-from .forms import SubmissionForm
+from application.models import Status, Submission
+from application.tasks import create_hook, send_email
+from application.utils import TrelloClient
+from application.extensions import cache
+from application.forms import SubmissionForm
 
 
 bp = Blueprint('bp', __name__)

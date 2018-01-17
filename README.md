@@ -78,16 +78,24 @@ $ FLASK_CONFIG=local.cfg flask runserver
 
 You can easily run the tests suite from the command line:
 
-```flask test```
+```py.test test```
 
-The tests command has a set of optional arguments that can enable py.test options and plugins:
+pytest has a set of optional arguments that can enable many options and plugins.
 
-    - `-v` increases verbosity on py.test output
-    - `-x` exits after first failure
+Here are some we recommend:
+
+    - `-v/--verbose` increases verbosity on py.test output
+    - `-x` exit after first failure
     - `-rs` enables skipped test report
-    - `-cov`  enables code coverage
-    - `-flake8` enables pep8 and pyflakes testing via [flake8](http://flake8.pycqa.org/en/latest/)
+    - `--cov` enables code coverage
+    - `--flake8` enables pep8 and pyflakes testing via [flake8](http://flake8.pycqa.org/en/latest/)
 
+For example, our test run uses:
+```
+$ py.test tests --verbose --cov --cov-report term-missing --flake8 application
+```
+
+Check out pytest's [usage docs](https://docs.pytest.org/en/latest/usage.html).
 
 
 ### Building Static Assets

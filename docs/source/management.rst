@@ -50,29 +50,15 @@ To initialize the database, use ``flask initdb``. Currently there are no optiona
 Running Tests
 ------------------------------
 
-To run the unit tests, use ``flask test``.
+To run the unit tests, use ``pytest``
 
 .. code-block:: bash
 
-    $ flask test --help
-    Usage: flask test [OPTIONS]
+    $ py.test tests --verbose --cov --cov-report term-missing --flake8 application
 
-    Options:
-      -v       Increase verbosity while testing.
-      -x       Exit after first failure.
-      -rs      Enables skipped test report.
-      -cov     Enable code coverage.
-      -flake8  Enable pep8 and pyflakes testing.
-      --help   Show this message and exit.
-
-
-Optional args for test are:
-
-    - ``-v`` increases verbosity on py.test output
-    - ``-x`` exits after first failure
-    - ``-rs`` enables skipped test report
-    - ``-cov``  enables code coverage
-    - ``-flake8`` enables pep8 and pyflakes testing via `flake8`_
+    - ``--verbose`` increases verbosity on py.test output
+    - ``--cov``  enables code coverage
+    - ``--flake8`` enables pep8 and pyflakes testing via `flake8`_
 
 
 .. _flake8: http://flake8.pycqa.org/en/latest/
