@@ -5,8 +5,6 @@
     application routes
 '''
 
-from datetime import datetime as dt
-
 import meetup.api
 from requests.exceptions import HTTPError
 from mailchimp3 import MailChimp
