@@ -54,9 +54,12 @@ def runserver(reload):
 @click.option('-v', 'verbose', flag_value='--verbose', help="Increase verbosity while testing.")
 @click.option('-x', 'x', flag_value='-x', help="Exit after first failure.")
 @click.option('-rs', 'rs', flag_value='-rs', help="Enables skipped test report.")
-@click.option('-cov', 'cov', flag_value='--cov=application', help="Enable code coverage.")
+@click.option('-reports', 'reports', flag_value=['--cov-report', 'term-missing'], help="")
+@click.option('-cov', 'cov', flag_value='--cov', help="Enable code coverage.")
 @click.option('-flake8', 'flake8', flag_value='--flake8', help="Enable pep8 and pyflakes testing.")
 @click.pass_context
 def test(ctx, *args, **kwargs):
+    # since reports requires two words, and pytest wants a list, we need this
+    reports = ctx.params.pop('reports')
     pytest.main(
-        ['tests', '--pyargs', 'application'] + [v for k, v in ctx.__dict__['params'].items() if v])
+        ['tests', '--pyargs', 'application'] + [v for k, v in ctx.params.items() if v] + reports)
