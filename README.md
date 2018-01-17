@@ -1,6 +1,7 @@
 # Boulder Python Website
 
 [![Build Status](https://travis-ci.org/boulder-python/boulderpython.org.svg?branch=master)](https://travis-ci.org/boulder-python/boulderpython.org)
+[![Coverage Status](https://coveralls.io/repos/github/boulder-python/boulderpython.org/badge.svg?branch=master)](https://coveralls.io/github/boulder-python/boulderpython.org?branch=master)
 [![Docs](http://boulderpythonorg.readthedocs.io/en/latest/?badge=latest)](http://boulderpythonorg.readthedocs.io/en/latest/?badge=latest)
 
 Our website grew out of @iandouglas's [Flask + Google App Engine template](https://github.com/iandouglas/flask-gae-skeleton).

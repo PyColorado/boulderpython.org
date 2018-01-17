@@ -1,24 +1,7 @@
 language: python
 python:
   - "3.6"
-# Cache our Gcloud SDK and pip-installed libraries between commands
-cache:
-  directories:
-    - "$HOME/google-cloud-sdk/"
-    - "$HOME/lib"
-env:
-  # Set the App engine install location and add the SDK to our Python path
-  - GOOGLE_APP_ENGINE_SDK=${HOME}/google-cloud-sdk PYTHONPATH=${PYTHONPATH}:${GOOGLE_APP_ENGINE_SDK} CLOUDSDK_CORE_DISABLE_PROMPTS=1
-before_install:
-  # If the SDK is not present, download it.  When it's available, pull it into our path.
-  - if [ ! -f ${GOOGLE_APP_ENGINE_SDK}/path.bash.inc ]; then rm -rf ${GOOGLE_APP_ENGINE_SDK} && curl https://sdk.cloud.google.com | bash; fi
-  - source ${GOOGLE_APP_ENGINE_SDK}/path.bash.inc
 install:
-  # Install the Python dependencies
   - pip install -r requirements.txt
-  # Install and update additional GAE components
-  - gcloud -q components install app-engine-python
-  - gcloud -q components update
 script:
-  # Run the unit tests
-  - ./run.py -t
+  - flask test -v -cov -flake8

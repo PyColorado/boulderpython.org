@@ -5,10 +5,13 @@
     base application config
 """
 
-import os
+import os, pathlib
 
 
 class Config:
+
+    DEBUG = os.environ.get('DEBUG', True)
+
     SITE_NAME = os.environ.get('SITE_NAME', 'boulderpython.org')
     SITE_ADMIN = os.environ.get('SITE_ADMIN', 'hi@boulderpython.com')
     SECRET_KEY = os.environ.get('SECRET_KEY', 'shhh_its_secret')
@@ -81,44 +84,34 @@ class Config:
     MAIL_SUBJECT_PREFIX = '[site.com]'
     MAIL_SENDER = 'admin@site.com'
 
-    @staticmethod
-    def init_app(app):
-        pass
 
+class TestConfig:
+    DEBUG = True
+    TESTING = True
 
-class AppConfig(Config):
-    """
-    production config
-    """
-    @classmethod
-    def init_app(cls, app):
-        """
-        config
-        """
-        Config.init_app(app)
+    TEST_DB_PATH = os.path.join(pathlib.Path(__file__).parent, 'tests/')
+    TEST_DB_FILENAME = 'test.db'
+    TEST_DB = TEST_DB_PATH + TEST_DB_FILENAME
+    SQLALCHEMY_DATABASE_URI = f'sqlite:///{TEST_DB}'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-        # email errors to the administrators
-        import logging
-        from logging.handlers import SMTPHandler
-        credentials = None
-        secure = None
-        if getattr(cls, 'MAIL_USERNAME', None) is not None:
-            credentials = (cls.MAIL_USERNAME, cls.MAIL_PASSWORD)
-            if getattr(cls, 'MAIL_USE_TLS', None):
-                secure = ()
-        mail_handler = SMTPHandler(
-            mailhost=(cls.MAIL_SERVER, cls.MAIL_PORT),
-            fromaddr=cls.MAIL_SENDER,
-            toaddrs=[cls.SITE_ADMIN],
-            subject=cls.MAIL_SUBJECT_PREFIX + ' Application Error',
-            credentials=credentials,
-            secure=secure)
-        mail_handler.setLevel(logging.ERROR)
-        app.logger.addHandler(mail_handler)
+    WTF_CSRF_ENABLED = False
+
+    CELERY_TASK_ALWAYS_EAGER = True
+    CELERY_BROKER_URL = 'amqp://localhost//'
+
+    CACHE_TYPE = 'null'
+
+    SENDGRID_API_KEY = ''
+    SENDGRID_DEFAULT_FROM = 'test@example.com'
+
+    MAILCHIMP_USERNAME = ''
+    MAILCHIMP_API_KEY = ''
+    MAILCHIMP_LIST_ID = ''
 
 
 config = {
-    'production': AppConfig,
-    'testing': AppConfig,
-    'default': AppConfig
+    'production': Config,
+    'testing': TestConfig,
+    'default': Config
 }
