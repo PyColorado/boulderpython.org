@@ -1,0 +1,51 @@
+/**
+ * sponsors styles
+ */
+
+#event-sponsor {
+  padding: 120px 20px;
+  .sponsor-logo-row {
+    margin-top: 60px;
+  }
+  .sponsor-logo {
+    padding: 25px 115px;
+    position: relative;
+    .owl-nav {
+      margin: 0;
+    }
+    .item {
+      img {
+        opacity: .4 !important;
+        transition: all .3s ease;
+      }
+      &:hover img {
+        opacity: 1 !important;
+      }
+    }
+    .owl-prev, .owl-next {
+      position: absolute;
+      top: 0;
+      background: $white;
+      border: 1px solid #E8E8E8;
+      transition: all .3s ease;
+    }
+    .owl-prev:hover, .owl-next:hover {
+      background: $accent1;
+      border-color: transparent;
+    }
+    .owl-prev:hover i, .owl-next:hover i {
+      color: $white;
+    }
+    .owl-prev i, .owl-next i {
+      font-size: 23px;
+      color: $font-dark;
+      line-height: 65px;
+    }
+    .owl-prev {
+      left: 0;
+    }
+    .owl-next {
+      right: 0;
+    }
+  }
+}

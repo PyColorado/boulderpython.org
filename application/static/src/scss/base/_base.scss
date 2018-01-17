@@ -1,0 +1,30 @@
+/**
+ * Basic styles
+ */
+
+
+ul, li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+a {
+  text-decoration: none;
+  outline: none;
+  &:hover, &:active, &:focus {
+    text-decoration: none;
+    outline: none;
+  }
+}
+
+.container {
+  padding: 0 5px;
+}

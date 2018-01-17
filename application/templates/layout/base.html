@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title%}Boulder Python{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico')|autoversion }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')|autoversion }}">
+
+</head>
+<body>
+
+    {% set links = (
+        ('HOME', '/'),
+        ('JOIN US', 'https://www.meetup.com/BoulderPython'),
+        ('SUBMIT A TALK', '/submit'))
+    %}
+
+    <!-- #header -->
+    <header id="header">
+        <div class="container">
+            <div class="row">
+                <!-- .logo -->
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 logo">
+                    <a href="/"><img class="img-responsive" src="{{ url_for('static', filename='img/logo.png') }}"></a>
+                </div>
+                <!-- /.logo -->
+
+                <!-- .mainmenu-container -->
+                <nav class="col-lg-9 col-md-9 col-sm-6 col-xs-6 mainmenu-container">
+                    <button class="nav-toggler">
+                        <div class="menucontainer" id="toggle">
+                            <span class="top"></span>
+                            <span class="middle"></span>
+                            <span class="bottom"></span>
+                        </div>
+                    </button>
+
+                    <div class="navoverlay" id="navoverlay">
+                      <nav class="navoverlay-menu">
+                        <ul>
+                            {% for link in links %}
+                            <li class="{{ current_route(link[1]) }}"><a href="{{ link[1] }}">{{ link[0] }}</a></li>
+                            {% endfor %}
+                        </ul>
+                      </nav>
+                    </div>
+
+                    <ul class="mainmenu clearfix">
+                        {% for link in links %}
+                        <li class="{{ current_route(link[1]) }}"><a href="{{ link[1] }}">{{ link[0] }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+                <!-- /.mainmenu-container -->
+            </div>
+        </div>
+    </header>
+    <!-- /#header -->
+
+    {% block content %}{% endblock %}
+
+    <!-- #subscribe-newsletter -->
+    <section id="subscribe-newsletter">
+        <div class="container">
+            <div class="gradient-overlay">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-10 col-lg-offset-2 col-md-offset-2 col-sm-offset-1">
+                        <div class="text-box col-lg-6 col-md-12 col-sm-12">
+                            <span>Get Our Newsletter!</span>
+                        </div>
+                        <div class="input-box col-lg-6 col-md-12 col-sm-12">
+                            <input id="newsletter-email" type="text" placeholder="Enter Email">
+                            <button id="subscribe" type="submit"><i class="fa fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /#subscribe-newsletter -->
+
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <!-- .footer-widget -->
+                <div class="col-lg-4 col-md-4 col-sm-6 footer-widget about-widget" >
+                    <h3>ABOUT US</h3>
+                    <!-- <img src="img/resources/logo.png" alt="Footer Logo"> -->
+                    <p>We are a group of python developers, scientists, automators, and enthusiasts that gather once a month in Boulder,
+                    Colorado to discuss all things python. We usually meet on the 2nd Tuesday of each month. You can find and engage with
+                    us on&nbsp;<a href='https://www.meetup.com/boulderpython/'>Meetup</a>,&nbsp;<a href='https://twitter.com/boulderpython'>Twitter</a>, and&nbsp;<a href='https://denver-dev-slack.herokuapp.com/'>Slack</a>&nbsp;in the (<a href='https://denver-devs.slack.com/messages/C41FCTDLP/'>#meetup-python</a>) and (<a href='https://denver-devs.slack.com/messages/C040UH1HS/'>#help-python</a>) topics.</p>
+                </div>
+                <!-- /.footer-widget -->
+
+                <!-- .footer-widget -->
+                <div class="col-lg-2 col-md-2 col-sm-6 footer-widget menu-widget">
+                    <h3>QUICK LINKS</h3>
+                    <ul>
+                        <li><a href="https://us.pycon.org/2018/about/code-of-conduct/"><i class="fa fa-angle-right"></i> Code of Conduct</a></li>
+                        <li><a href="https://www.meetup.com/boulderpython/"><i class="fa fa-angle-right"></i> Meetup</a></li>
+                        <li><a href="https://twitter.com/boulderpython"><i class="fa fa-angle-right"></i> Twitter</a></li>
+                        <li><a href="https://github.com/boulder-python"><i class="fa fa-angle-right"></i> GitHub</a></li>
+                        <li><a href="/privacy"><i class="fa fa-angle-right"></i> Privacy</a></li>
+                    </ul>
+                </div>
+                <!-- /.footer-widget -->
+
+                <!-- .footer-widget -->
+                <div class="col-lg-6 col-md-6 col-sm-12 footer-widget twitter-feed">
+                    <h3>TWITTER</h3>
+                    <div class="twitter">
+                        <a class="twitter-timeline" data-lang="en" data-height="280" data-theme="dark" href="https://twitter.com/BoulderPython?ref_src=twsrc%5Etfw">Tweets by BoulderPython</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    </div>
+                </div>
+                <!-- /.footer-widget -->
+            </div>
+        </div>
+    </footer>
+    <!-- /footer -->
+
+
+    <!-- #bottom-bar -->
+    <section id="bottom-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <p>copyright &copy; 1996-{{ moment().format('YYYY') }} Boulder Python</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /#bottom-bar -->
+
+
+    <script src="{{ url_for('static', filename='js/main.js')|autoversion }}"></script>
+    {{ moment.include_moment() }}
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', '{{ config['GOOGLE_ANALYTICS_ID'] }}', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+
+</body>
+</html>

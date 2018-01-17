@@ -1,0 +1,45 @@
+/**
+ * information bar styles
+ */
+
+#information-bar {
+  background: #F6F9F9;
+  .container {
+    padding: 45px 0;
+    background: $white;
+    margin-top: -80px;
+    position: relative;
+    z-index: 999;
+  }
+  .col-lg-3 {
+    border-right: 2px solid #F2F2F2;
+    &:last-child {
+      border: none;
+    }
+    ul {
+      text-align: center;
+      li {
+        display: inline;
+        span {
+          display: inline-block;
+          text-align: left;
+          vertical-align: middle;
+          b {
+            font-size: 20px;
+            color: $font-dark;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+          }
+          &.img-holder {
+            text-align: center;
+            padding: 0 12px;
+            img {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+}

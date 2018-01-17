@@ -1,0 +1,13 @@
+/**
+ * sass mixins
+ */
+
+@mixin horizontal-gradient($left, $right, $stop) {
+  background: -moz-linear-gradient(left, $left 0%, $right 100%, $stop 100%);
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, $left), color-stop(100%, $right), color-stop(100%, $stop));
+  background: -webkit-linear-gradient(left, $left 0%, $right 100%, $stop 100%);
+  background: -o-linear-gradient(left, $left 0%, $right 100%, $stop 100%);
+  background: -ms-linear-gradient(left, $left 0%, $right 100%, $stop 100%);
+  background: linear-gradient(to right, $left 0%, $right 100%, $stop 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$left, endColorstr=$stop, GradientType=1);
+}

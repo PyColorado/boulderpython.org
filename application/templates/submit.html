@@ -1,0 +1,50 @@
+{% extends 'layout/base.html' %}
+
+{% from "macros/_form.html" import render_form, render_input, render_button %}
+
+{% block content %}
+
+<!-- #page-title -->
+<section id="page-title" class="gradient-overlay">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>SUBMIT A TALK</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /#page-title -->
+
+<!-- #single-page -->
+<section id="submit">
+    <div class="container">
+        <div class="row">
+            <!-- .submit-text -->
+            <div class="col-lg-6 col-md-6 col-sm-12 col-lg-offset-0 col-md-offset-0 submit-text">
+                <h3>Want to speak at Boulder Python?</h3>
+                <p>
+                    Boulder Python is a community driven group. Our speakers come from our local Boulder/Denver/Colorado
+                    members and abroad. If you're interested in speaking at Boulder Python, submit your talk below, and
+                    one of our organizers will get in touch.
+                </p>
+
+                <form method="POST" action="{{ url_for('submit') }}">
+                    {{ form.csrf_token }}
+                    {{ render_input(form.email) }} <br>
+                    {{ render_input(form.title) }} <br>
+                    {{ render_input(form.pitch) }} <br>
+                    {{ render_input(form.format) }} <br>
+                    {{ render_input(form.audience) }} <br>
+                    {{ render_input(form.description) }} <br>
+                    {{ render_input(form.notes) }} <br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+            <!-- /.submit-text -->
+        </div>
+    </div>
+</section>
+<!-- /#submit -->
+
+{% endblock %}

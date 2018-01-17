@@ -1,103 +1,50 @@
-#!/usr/bin/env python3.6
-
-
+# -*- coding: utf-8 -*-
 """
-Runs the boulderpython website
+    run.py
+    ~~~~~~
+    application management
 """
 
-
-# stdlib
 import os
-import sys
-import argparse
-import signal
-import time
 
-# 3rd
-import livereload
-from typing import Optional
-import pytest
+import click, livereload
+from sqlalchemy import exc
 
-# local
-from application import app, configure
+from application import create_app
+from application.extensions import db
 
 
-PORT = os.environ.get('PORT') or '9999'
-HOST = os.environ.get('HOST') or 'localhost'
+app = create_app()
 
 
-def main(args: argparse.Namespace) -> int:
-    configure(os.getenv('FLASK_CONFIG') or 'default')
+@app.cli.command('initdb')
+def initdb():
+    '''Creates the database tables.'''
+    try:
+        # Clear out our SQL database
+        click.echo(' * Clearing database...')
+        db.drop_all()
 
-    if args.test is True:
-        pid = os.fork()
-        if pid == 0:
-            run_server(mode='prod')
-            return True
-        else:
-            result = False
-            try:
-                result = pytest.main(['tests'])
-            except:  # trust me this is ok
-                pass
-            os.kill(pid, signal.SIGINT)
-            return result
-    elif (args is not None) and (args.debug or app.debug):
-        run_server(mode='debug')
-    else:
-        run_server(mode='prod')
-    return True
+    except exc.OperationalError as e:
+        click.secho(f'{e}', fg='red')
+
+    except Exception as e:
+        click.secho(f'{e}', fg='red')
+
+    click.echo(' * Creating database tables...')
+    db.create_all()
+
+    # all done
+    click.secho(' * DONE', fg='green')
 
 
-def run_server(mode: Optional[str]='debug') -> None:
-    """
-    Runs the server in either debug or prod mode
-
-    :param mode: mode to run in
-    :return: None
-    """
-    if mode == 'debug':
-        # DEBUG (livereload) MODE
-        configure('testing')
-        app.jinja_env.auto_reload = True
-        app.debug = True
+@app.cli.command('runserver')
+@click.option('--reload', 'reload', is_flag=True, help='run application with livereload')
+def runserver(reload):
+    '''Shortcut to ``flask run``'''
+    if reload:
         server = livereload.Server(app.wsgi_app)
-        server.watch('.', ignore=lambda x: ('log' in x or
-                                            '.idea' in x))
-        server.serve(
-            port=PORT,
-            host=HOST
-        )
-    elif mode == 'prod':
-        # Pseduo Prod Mode
-        pid = os.fork()
-        if pid == 0:
-            while True:
-                try:
-                    time.sleep(1)
-                except KeyboardInterrupt:
-                    os.kill(pid, signal.SIGINT)
-                    break
-        else:
-            os.system(f'gunicorn -b :{PORT} application:app')
-
-
-def get_args():
-    """
-    Get command line arguments
-    :return: arguments
-    """
-    parser = argparse.ArgumentParser(
-        description='Run the Boulder Python Website'
-    )
-    parser.add_argument('-d', '--debug', default=False, action='store_true',
-                        help='Run in DEBUG mode.')
-    parser.add_argument('-t', '--test', default=False, action='store_true',
-                        help='Run in TEST mode.')
-    args = parser.parse_args()
-    return args
-
-
-if __name__ == '__main__':
-    args = get_args()
-    sys.exit(main(args))
+        server.watch('.', ignore=lambda x: ('log' in x or '.idea' in x))
+        server.serve(port=os.environ.get('PORT', '9999'), host=os.environ.get('HOST', 'localhost'))
+        return
+    app.run()
