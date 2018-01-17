@@ -5,8 +5,6 @@
     application routes
 '''
 
-from datetime import datetime as dt
-
 import meetup.api
 from requests.exceptions import HTTPError
 from mailchimp3 import MailChimp
@@ -44,7 +42,6 @@ def index():
     group = client.GetGroup({'urlname': 'BoulderPython'})
     events = client.GetEvents({'group_urlname': current_app.config['MEETUP_GROUP']}).results
     upcoming = dict(
-        **{'date': dt.fromtimestamp(group.next_event['time'] / 1000.00).strftime('%B %d, %Y %I:%M%p')},  # noqa
         **next((event for event in events if event['id'] == group.next_event['id']), None)
     )
 

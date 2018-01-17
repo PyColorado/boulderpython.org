@@ -43,7 +43,7 @@
                             data-easing="easeOutBack">
 
                             <h1>{{ upcoming.name }}</h1>
-                            <h2 style="color:#fff;">{{ upcoming.date }}</h2>
+                            <h2 style="color:#fff;">{{ upcoming.time|convert_ms(upcoming.utc_offset) }}</h2>
                         </div>
                         <div
                             class="caption sfb tp-resizeme input-box"
@@ -113,19 +113,19 @@
                             {% for event in events[:5] %}
                             <li
                                 class="filter"
-                                data-filter="{% if event.id == upcoming.id %}.active-event{% else %}.{{ event.time|convert_ms('%b-%d')|lower }}{% endif %}">
-                                <span>{{ event.time|convert_ms('%B %d') }}</span>
+                                data-filter="{% if event.id == upcoming.id %}.active-event{% else %}.{{ event.time|convert_ms(event.utc_offset, '%b-%d')|lower }}{% endif %}">
+                                <span>{{ event.time|convert_ms(event.utc_offset, '%B %d') }}</span>
                             </li>
                             {% endfor %}
                         </ul>
                     </div>
                     <div class="tab-content-wrap row">
                         {% for event in events[:5] %}
-                        <div class="col-lg-12 col-md-12 col-sm-12 mix {% if event.id == upcoming.id %}active-event{% else %}{{ event.time|convert_ms('%b-%d')|lower }}{% endif %} hvr-float-shadow wow fadeIn" data-wow-delay=".3s">
+                        <div class="col-lg-12 col-md-12 col-sm-12 mix {% if event.id == upcoming.id %}active-event{% else %}{{ event.time|convert_ms(event.utc_offset, '%b-%d')|lower }}{% endif %} hvr-float-shadow wow fadeIn" data-wow-delay=".3s">
                             <div class="content-wrap">
                                 <div class="meta">
                                     <ul>
-                                        <li><span><i class="fa fa-clock-o"></i> {{ event.time|convert_ms('%I:%M%p') }}</span></li>
+                                        <li><span><i class="fa fa-clock-o"></i> {{ event.time|convert_ms(event.utc_offset, '%I:%M%p') }}</span></li>
                                         <li><span><i class="fa fa-map-marker"></i> {{ event.venue.name }}</span></li>
                                     </ul>
                                 </div>

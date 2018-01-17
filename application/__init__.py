@@ -7,6 +7,7 @@
 import os
 from datetime import datetime as dt
 
+import pytz
 from flask import Flask
 
 from config import config
@@ -45,14 +46,20 @@ def register_blueprints(app):
 
 def register_filters(app):
     @app.template_filter('convert_ms')
-    def convert_ms(ms, format='%B %d, %Y %I:%M%p'):
+    def convert_ms(ms, offset=0, format='%B %d, %Y %I:%M%p'):
         sec = ms / 1000.0
 
         if os.name == 'nt':
             # Windows has a "minimum allowed" timestamp: https://stackoverflow.com/a/45372194
             sec = max(sec, 86400)
 
-        return dt.fromtimestamp(sec).strftime(format)
+        timestamp = dt.fromtimestamp(sec, tz=pytz.UTC)
+
+        if offset:
+            offset_in_min = offset // 1000 // 60
+            timestamp = timestamp.astimezone(pytz.FixedOffset(offset_in_min))
+
+        return timestamp.strftime(format)
 
     @app.template_filter('autoversion')
     def autoversion_filter(filename):
