@@ -43,7 +43,7 @@
                             data-easing="easeOutBack">
 
                             <h1>{{ upcoming.name }}</h1>
-                            <h2 style="color:#fff;">{{ upcoming.date }}</h2>
+                            <h2 style="color:#fff;">{{ upcoming.time|convert_ms(upcoming.utc_offset) }}</h2>
                         </div>
                         <div
                             class="caption sfb tp-resizeme input-box"
