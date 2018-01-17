@@ -4,7 +4,7 @@
     ~~~~~~~~~~~
     flask application entrypoint
 """
-
+import os
 from datetime import datetime as dt
 
 from flask import Flask
@@ -45,8 +45,14 @@ def register_blueprints(app):
 
 def register_filters(app):
     @app.template_filter('convert_ms')
-    def convert_ms(ms, format='%B %d, %Y %-I:%M%p'):
-        return dt.fromtimestamp(ms / 1000.00).strftime(format)
+    def convert_ms(ms, format='%B %d, %Y %I:%M%p'):
+        sec = ms / 1000.0
+
+        if os.name == 'nt':
+            # Windows has a "minimum allowed" timestamp: https://stackoverflow.com/a/45372194
+            sec = max(sec, 86400)
+
+        return dt.fromtimestamp(sec).strftime(format)
 
     @app.template_filter('autoversion')
     def autoversion_filter(filename):
