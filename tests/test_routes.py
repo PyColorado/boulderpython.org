@@ -27,7 +27,7 @@ class MockMeetupEvents():
         self.results = [self.events(_) for _ in range(5)]
 
     def events(self, idx):
-        return {k: idx for k in ['id', 'venue', 'time']}
+        return {k: idx for k in ['id', 'venue', 'time', 'utc_offset']}
 
 
 class MockMeetup():
@@ -72,7 +72,7 @@ class TestRoutes:
         app.config.update(self.config)
         mocker.patch('meetup.api.Client', new=MockMeetup)
         resp = client.get('/')
-        assert b'<h2 style="color:#fff;">February 13, 2018 6:30PM</h2>' in resp.data
+        assert b'<h2 style="color:#fff;">February 13, 2018 06:30PM</h2>' in resp.data
         assert resp.status_code == 200
 
     def test_submit(self, client, mocker):
