@@ -62,4 +62,3 @@ class TestUtils:
 
         bad_iterable2 = 5
         assert pluck(bad_iterable2, lambda x: True) is None
-
