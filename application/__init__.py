@@ -29,7 +29,11 @@ def create_app(config=None):
 
 
 def configure(app, config_name):
-    app.config.from_object(config[config_name or 'default'])
+
+    config_name = config_name or 'default'
+    print("Using config name: {}".format(config_name))
+
+    app.config.from_object(config[config_name])
     app.config.from_envvar('FLASK_CONFIG', silent=True)
 
     db.init_app(app)
