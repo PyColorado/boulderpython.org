@@ -40,7 +40,7 @@ def index():
     '''
     client = meetup.api.Client(current_app.config.get('MEETUP_KEY'))
     group = client.GetGroup({'urlname': 'BoulderPython'})
-    events = client.GetEvents({'group_urlname': current_app.config['MEETUP_GROUP']}).results
+    events = client.GetEvents({'group_urlname': 'BoulderPython'}).results
     upcoming = dict(
         **next((event for event in events if event['id'] == group.next_event['id']), None)
     )

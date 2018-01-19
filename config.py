@@ -31,7 +31,6 @@ class Config:
     GOOGLE_ANALYTICS_ID = os.environ.get('GOOGLE_ANALYTICS_ID', 'UA-123456-78')
 
     MEETUP_KEY = os.environ.get('MEETUP_KEY', None)
-    MEETUP_GROUP = os.environ.get('MEETUP_KEY', 'BoulderPython')
 
     MAILCHIMP_USERNAME = os.environ.get('MAILCHIMP_USERNAME', None)
     MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', None)
