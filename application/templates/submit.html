@@ -29,7 +29,7 @@
                     one of our organizers will get in touch.
                 </p>
 
-                <form method="POST" action="{{ url_for('submit') }}">
+                <form method="POST" action="{{ url_for('bp.submit') }}">
                     {{ form.csrf_token }}
                     {{ render_input(form.email) }} <br>
                     {{ render_input(form.title) }} <br>
