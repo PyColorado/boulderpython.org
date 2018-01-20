@@ -12,6 +12,7 @@ var scssFiles = './application/static/src/scss/**/*.scss',
     cssDest = './application/static/css/',
     jsFiles = [
         './application/static/src/js/jquery.min.js',
+        './application/static/src/js/bootstrap.min.js',
         './application/static/src/js/jquery.themepunch.tools.min.js',
         './application/static/src/js/jquery.themepunch.revolution.min.js',
         './application/static/src/js/jquery.mixitup.min.js',
