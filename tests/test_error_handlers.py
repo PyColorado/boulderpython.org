@@ -14,7 +14,6 @@ class TestErrors:
 
     def test_page_not_found(self, client):
         resp = client.get('error')
-        # assert b'<h1>404: NOT FOUND</h1>' in resp.data
         assert resp.status_code == 404
 
     @pytest.mark.skip(reason="no way of currently testing this")

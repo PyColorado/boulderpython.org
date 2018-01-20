@@ -51,6 +51,14 @@ def db(app, request):
     return _db
 
 
+@pytest.fixture(scope='session')
+def celery_config():
+    return {
+        'broker_url': 'amqp://',
+        'result_backend': 'amqp://'
+    }
+
+
 @pytest.fixture(scope='function')
 def session(db, request):
     '''Creates a new database session for a test.'''
