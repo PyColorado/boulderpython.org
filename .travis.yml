@@ -6,3 +6,5 @@ install:
   - pipenv install --dev
 script:
   - pipenv run py.test tests --verbose --cov --cov-report term-missing --flake8 application
+after_success:
+  - coveralls

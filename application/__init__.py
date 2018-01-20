@@ -40,7 +40,7 @@ def configure(app, config_name):
 
 
 def register_blueprints(app):
-    """Register all blueprint modules"""
+    '''Register all blueprint modules'''
     app.register_blueprint(bp)
 
 
