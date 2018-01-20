@@ -1,8 +1,12 @@
 language: python
 python:
   - "3.6"
+services:
+  - rabbitmq
 install:
   - pip install pipenv --upgrade
   - pipenv install --dev
 script:
   - pipenv run py.test tests --verbose --cov --cov-report term-missing --flake8 application
+after_success:
+  - coveralls

@@ -47,4 +47,57 @@
 </section>
 <!-- /#submit -->
 
+
+<!-- Modal -->
+<div id="success-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title">We got it!</h3>
+      </div>
+      <div class="modal-body">
+        <div class="col-lg-4 col-md-3">
+            <img class="img-responsive" src="{{ url_for('static', filename='img/trello.png') }}">
+        </div>
+        <div class="col-lg-8 col-md-9">
+            <p>Thank you for your submission. You can follow our entire review process on Trello.</p>
+
+            <p>View your submission:<br> <span id="submission-trello-url"><a href="" target="_blank"></a></span></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    console.log(getParameterByName('success'))
+
+    if (getParameterByName('success')) {
+        $('#success-modal').modal('show');
+        $('#submission-trello-url').find('a').attr('href', getParameterByName('url'));
+        $('#submission-trello-url').find('a').text(getParameterByName('url'));
+    }
+</script>
 {% endblock %}

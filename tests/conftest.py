@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-'''
+"""
     __init__.py
     ~~~~~~~~~~~
     description
-'''
+"""
 
 import os
 import pytest
@@ -49,6 +49,14 @@ def db(app, request):
 
     request.addfinalizer(teardown)
     return _db
+
+
+@pytest.fixture(scope='session')
+def celery_config():
+    return {
+        'broker_url': 'amqp://',
+        'result_backend': 'amqp://'
+    }
 
 
 @pytest.fixture(scope='function')

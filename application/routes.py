@@ -16,6 +16,7 @@ from flask import (
     render_template,
     request,
     redirect,
+    url_for
 )
 
 from application.models import Status, Submission
@@ -42,8 +43,8 @@ def index():
     '''
     client = meetup.api.Client(current_app.config.get('MEETUP_KEY'))
     try:
-        group = client.GetGroup({'urlname': 'BoulderPython'})
-        events = client.GetEvents({'group_urlname': 'BoulderPython'}).results
+        group = client.GetGroup({'urlname': current_app.config['MEETUP_GROUP']})
+        events = client.GetEvents({'group_urlname': current_app.config['MEETUP_GROUP']}).results
 
         # Success!  Update our cache in case the next call fails
         cached_meetup_response['group'] = group
@@ -67,7 +68,7 @@ def submit():
 
     Returns:
         render_template: if page is being called by GET, or form had errors
-        redirect: when form is sucessfully ingested (this redirects and clears form)
+        redirect: when form is successfully ingested (this redirects and clears form)
 
     Todo:
         * add Title to Submission object (waiting on update to model)
@@ -93,13 +94,13 @@ def submit():
         )
 
         submission = Submission().create(
-            email=form.data['email'], card_id=card.id, card_url=card.url)
+            title=form.data['title'], email=form.data['email'], card_id=card.id, card_url=card.url)
 
         # message Celery to create the webhook
         create_hook.apply_async(args=[submission.id, submission.card_id])
 
-        # reset form by redirecting back
-        return redirect('submit')
+        # reset form by redirecting back and apply url params
+        return redirect(url_for('bp.submit', success=1, id=card.id, url=card.url))
 
     return render_template('submit.html', form=form)
 
