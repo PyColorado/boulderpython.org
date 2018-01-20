@@ -192,6 +192,7 @@ class Submission(Base):
     Todo:
         * Should store name of talk, though if we change on Trello it should update via webhook
     '''
+    title = Column(db.String(255), nullable=False)
     email = Column(db.String(255), nullable=False)
     card_id = Column(db.String(255), nullable=False, unique=True)
     card_url = Column(db.String(255), nullable=False, unique=True)

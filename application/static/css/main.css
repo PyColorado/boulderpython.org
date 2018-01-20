@@ -10,7 +10,7 @@
 /**
  * style imports
  */
-@import url("http://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900");
+@import url("https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900");
 @import url("bootstrap.min.css");
 @import url("font-awesome.min.css");
 @import url("animate.css");
@@ -77,7 +77,7 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 99999;
+    z-index: 10000;
     -webkit-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out; }
     header.header-fixed .mainmenu-container > ul > li {
@@ -1066,6 +1066,15 @@ footer {
     margin-bottom: 45px; }
   #submit .about-text {
     padding: 88px 0; }
+
+#success-modal {
+  z-index: 10001; }
+  #success-modal .modal-header {
+    border-bottom: none;
+    padding: 25px;
+    padding-left: 40px; }
+  #success-modal .modal-footer {
+    border-top: none; }
 
 /**
  * media queries

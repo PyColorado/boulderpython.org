@@ -6,42 +6,14 @@
     tests for application routes and view logic
 """
 
+from unittest import mock
+
 import pytest
 
+from application.models import Submission
 
-class MockMeetupGroup():
-    def __init__(self, *args, **kwargs):
-        self.name = 'Mock Meetup Group'
-        self.link = 'https://www.meetup.com/MeetupGroup/'
-        self.next_event = {
-            'id': 0,
-            'name': 'Monthly Meetup',
-            'venue': 'Galvanize',
-            'yes_rsvp_count': 9,
-            'time': 1518571800000,  # February 13, 2018 6:30PM
-            'utc_offset': -25200000
-        }
-
-
-class MockMeetupEvents():
-    def __init__(self, *args, **kwargs):
-        self.results = [MockMeetupGroup().next_event] + [self.events(_) for _ in range(1, 6)]
-
-    def events(self, idx):
-        return {k: idx for k in ['id', 'venue', 'time', 'utc_offset']}
-
-
-class MockMeetup():
-    api_key = ''
-
-    def __init__(self, *args, **kwargs):
-        return
-
-    def GetGroup(self, *args, **kwargs):
-        return MockMeetupGroup()
-
-    def GetEvents(self, *args, **kwargs):
-        return MockMeetupEvents()
+from tests.mocks.trello import MockTrelloClient
+from tests.mocks.meetup import MockMeetup
 
 
 class MockMailChimpListMember():
@@ -64,20 +36,56 @@ class MockMailChimpListMember():
 @pytest.mark.usefixtures('session')
 class TestRoutes:
 
-    def setup_class(self, *args, **kwargs):
-        self.config = {
-            'MEETUP_GROUP': 'group',
-        }
-
     def test_index(self, app, client, mocker):
-        app.config.update(self.config)
         mocker.patch('meetup.api.Client', new=MockMeetup)
         resp = client.get('/')
         assert b'<h2 style="color:#fff;">February 13, 2018 06:30PM</h2>' in resp.data
         assert resp.status_code == 200
 
-    def test_submit(self, client, mocker):
-        pass
+    def test_submit_get(self, client, mocker):
+        resp = client.get('/submit')
+        assert b'<form method="POST" action="/submit">' in resp.data
+        assert resp.status_code == 200
+
+    def test_submit_post(self, client, mocker):
+        mocker.patch('application.utils.Trello', new=MockTrelloClient)
+        data = dict(
+            email='submit1@example.com',
+            title='foo',
+            pitch='foo',
+            format='IN-DEPTH',
+            audience='INTERMEDIATE',
+            description='foo',
+            notes='foo')
+
+        # https://stackoverflow.com/questions/37579411/testing-a-post-that-uses-flask-wtf-validate-on-submit
+        resp = client.post('/submit', data=data, follow_redirects=True)
+
+        # make sure it's successful
+        assert resp.status_code == 200
+
+        # make sure the object was saved
+        assert Submission().first(email='submit1@example.com')
+
+    def test_submit_redirect(self, client, mocker):
+        mocker.patch('application.utils.Trello', new=MockTrelloClient)
+        with mock.patch('application.routes.url_for') as patched:
+            data = dict(
+                email='submit2@example.com',
+                title='foo',
+                pitch='foo',
+                format='IN-DEPTH',
+                audience='INTERMEDIATE',
+                description='foo',
+                notes='foo')
+
+            client.post('/submit', data=data, follow_redirects=True)
+
+            patched.assert_called_once_with(
+                'bp.submit',
+                id=1,
+                success=1,
+                url='http://mock.trello.com/card/1')
 
     def test_hook_head(self, client, mocker):
         resp = client.head('/trello/hook')

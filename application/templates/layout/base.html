@@ -135,6 +135,7 @@
 
 
     <script src="{{ url_for('static', filename='js/main.js')|autoversion }}"></script>
+    {% block js %}{% endblock %}
     {{ moment.include_moment() }}
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

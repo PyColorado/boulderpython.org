@@ -8,10 +8,7 @@
 import os, pathlib
 
 
-class Config:
-
-    DEBUG = os.environ.get('DEBUG', True)
-
+class BaseConfig:
     SITE_NAME = os.environ.get('SITE_NAME', 'boulderpython.org')
     SITE_ADMIN = os.environ.get('SITE_ADMIN', 'hi@boulderpython.com')
     SECRET_KEY = os.environ.get('SECRET_KEY', 'shhh_its_secret')
@@ -25,10 +22,6 @@ class Config:
 
     SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', None)
     SENDGRID_DEFAULT_FROM = 'Boulder Python <hi@boulderpython.org>'
-
-    CACHE_TYPE = 'simple'
-
-    GOOGLE_ANALYTICS_ID = os.environ.get('GOOGLE_ANALYTICS_ID', 'UA-123456-78')
 
     MEETUP_KEY = os.environ.get('MEETUP_KEY', None)
     MEETUP_GROUP = os.environ.get('MEETUP_KEY', 'BoulderPython')
@@ -75,6 +68,15 @@ class Config:
         }
     }
 
+
+class DefaultConfig(BaseConfig):
+
+    DEBUG = os.environ.get('DEBUG', True)
+
+    CACHE_TYPE = 'simple'
+
+    GOOGLE_ANALYTICS_ID = os.environ.get('GOOGLE_ANALYTICS_ID', 'UA-123456-78')
+
     SSL_DISABLE = True
     MAIL_SERVER = 'smtp.sendgrid.com'
     MAIL_PORT = 587
@@ -85,7 +87,7 @@ class Config:
     MAIL_SENDER = 'admin@site.com'
 
 
-class TestConfig:
+class TestConfig(BaseConfig):
     DEBUG = True
     TESTING = True
 
@@ -93,25 +95,24 @@ class TestConfig:
     TEST_DB_FILENAME = 'test.db'
     TEST_DB = TEST_DB_PATH + TEST_DB_FILENAME
     SQLALCHEMY_DATABASE_URI = f'sqlite:///{TEST_DB}'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     WTF_CSRF_ENABLED = False
 
     CELERY_TASK_ALWAYS_EAGER = True
-    CELERY_BROKER_URL = 'amqp://localhost//'
 
     CACHE_TYPE = 'null'
 
-    SENDGRID_API_KEY = ''
-    SENDGRID_DEFAULT_FROM = 'test@example.com'
-
-    MAILCHIMP_USERNAME = ''
-    MAILCHIMP_API_KEY = ''
-    MAILCHIMP_LIST_ID = ''
+    TRELLO_BOARD = '1'
+    TRELLO_LISTS = {
+        'NEW': {
+            "id": 1,
+            "text": "New"
+        }
+    }
 
 
 config = {
-    'production': Config,
+    'production': DefaultConfig,
     'testing': TestConfig,
-    'default': Config
+    'default': DefaultConfig
 }

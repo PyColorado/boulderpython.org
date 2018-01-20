@@ -62,3 +62,16 @@
     padding: 88px 0;
   }
 }
+
+#success-modal {
+  z-index: 10001;
+  .modal-header {
+    border-bottom: none;
+    padding: 25px;
+    padding-left: 40px;
+
+  }
+  .modal-footer {
+    border-top: none;
+  }
+}
