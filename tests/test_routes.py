@@ -5,6 +5,7 @@
 
     tests for application routes and view logic
 """
+from json import JSONDecodeError
 
 from unittest import mock
 
@@ -14,6 +15,12 @@ from application.models import Submission
 
 from tests.mocks.trello import MockTrelloClient
 from tests.mocks.meetup import MockMeetup
+
+
+class MisbehavedMockMeetup(MockMeetup):
+    def GetEvents(self, *args, **kwargs):
+        # Technically this could happen with GetGroup too, but I've only ever seen it on GetEvents
+        raise JSONDecodeError("Expecting value", '', 0)
 
 
 class MockMailChimpListMember():
@@ -86,6 +93,11 @@ class TestRoutes:
                 id=1,
                 success=1,
                 url='http://mock.trello.com/card/1')
+        # Now patch with the misbehaved client and make sure we still render.
+        mocker.patch('meetup.api.Client', new=MisbehavedMockMeetup)
+        resp = client.get('/')
+        assert b'<h2 style="color:#fff;">February 13, 2018 06:30PM</h2>' in resp.data
+        assert resp.status_code == 200
 
     def test_hook_head(self, client, mocker):
         resp = client.head('/trello/hook')
