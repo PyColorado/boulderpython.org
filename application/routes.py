@@ -4,6 +4,7 @@
     ~~~~~~~~~
     application routes
 '''
+from json import JSONDecodeError
 
 import meetup.api
 from requests.exceptions import HTTPError
@@ -19,12 +20,13 @@ from flask import (
 
 from application.models import Status, Submission
 from application.tasks import create_hook, send_email
-from application.utils import TrelloClient
+from application.utils import TrelloClient, pluck
 from application.extensions import cache
 from application.forms import SubmissionForm
 
 
 bp = Blueprint('bp', __name__)
+cached_meetup_response = {}
 
 
 @cache.cached(timeout=60)
@@ -39,11 +41,20 @@ def index():
         * Meetup occasionally responds with an empty JSON, so we should cache this to avoid that.
     '''
     client = meetup.api.Client(current_app.config.get('MEETUP_KEY'))
-    group = client.GetGroup({'urlname': 'BoulderPython'})
-    events = client.GetEvents({'group_urlname': 'BoulderPython'}).results
-    upcoming = dict(
-        **next((event for event in events if event['id'] == group.next_event['id']), None)
-    )
+    try:
+        group = client.GetGroup({'urlname': 'BoulderPython'})
+        events = client.GetEvents({'group_urlname': 'BoulderPython'}).results
+
+        # Success!  Update our cache in case the next call fails
+        cached_meetup_response['group'] = group
+        cached_meetup_response['events'] = events
+
+    except JSONDecodeError:
+        # Sometimes Meetup misbehaves, just use the cached versions.
+        group = cached_meetup_response['group']
+        events = cached_meetup_response['events']
+
+    upcoming = pluck(events, lambda event: event['id'] == group.next_event['id'])
 
     return render_template('index.html', group=group, upcoming=upcoming, events=events)
 

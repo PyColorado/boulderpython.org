@@ -4,6 +4,7 @@
     ~~~~~~~~
     utility function
 """
+import collections
 
 from flask import current_app as app
 from trello import TrelloClient as Trello
@@ -28,3 +29,20 @@ def TrelloClient():
         newSubmissionsList = board.get_list(app.config['TRELLO_LISTS']['NEW']['id'])
 
         return client, newSubmissionsList
+
+
+def pluck(iterable, test_fn):
+    """ Return the first value from iterable that passes test_fn.
+
+    :param iterable: Any valid Python iterable, including lists of dicts/objects
+    :param test_fn: Lambda or other test function that receives a list entry as its only parameter.
+    :return: First matching list entry or None if no matching entry is found.
+    """
+    if not isinstance(iterable, collections.Iterable):
+        return None
+
+    for item in iterable:
+        if test_fn(item):
+            return item
+
+    return None

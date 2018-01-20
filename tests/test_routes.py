@@ -5,6 +5,7 @@
 
     tests for application routes and view logic
 """
+from json import JSONDecodeError
 
 import pytest
 
@@ -44,6 +45,12 @@ class MockMeetup():
         return MockMeetupEvents()
 
 
+class MisbehavedMockMeetup(MockMeetup):
+    def GetEvents(self, *args, **kwargs):
+        # Technically this could happen with GetGroup too, but I've only ever seen it on GetEvents
+        raise JSONDecodeError("Expecting value", '', 0)
+
+
 class MockMailChimpListMember():
     def create(self):
         return ''
@@ -72,6 +79,12 @@ class TestRoutes:
     def test_index(self, app, client, mocker):
         app.config.update(self.config)
         mocker.patch('meetup.api.Client', new=MockMeetup)
+        resp = client.get('/')
+        assert b'<h2 style="color:#fff;">February 13, 2018 06:30PM</h2>' in resp.data
+        assert resp.status_code == 200
+
+        # Now patch with the misbehaved client and make sure we still render.
+        mocker.patch('meetup.api.Client', new=MisbehavedMockMeetup)
         resp = client.get('/')
         assert b'<h2 style="color:#fff;">February 13, 2018 06:30PM</h2>' in resp.data
         assert resp.status_code == 200
