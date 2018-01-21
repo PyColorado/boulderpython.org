@@ -120,5 +120,5 @@ Celery requires a task broker. Either RabbitMQ or Redis are good choices.
 
 To run Celery, use the following command:
 ```
-$ FLASK_CONFIG=local.cfg celery worker -A application.celery --loglevel=info
+$ FLASK_CONFIG=local.cfg flask celeryd
 ```
