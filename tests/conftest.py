@@ -54,8 +54,8 @@ def db(app, request):
 @pytest.fixture(scope='session')
 def celery_config():
     return {
-        'broker_url': 'amqp://',
-        'result_backend': 'amqp://'
+        'broker_url': 'amqp://localhost',
+        'result_backend': 'amqp://localhost'
     }
 
 

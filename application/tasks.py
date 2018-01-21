@@ -7,13 +7,14 @@
 
 import random
 
+from sendgrid import SendGridAPIClient
 from flask import current_app, render_template
-from celery.utils.log import get_task_logger
-from python_http_client.exceptions import BadRequestsError
+# from celery.utils.log import get_task_logger
+from sendgrid.helpers.mail import Mail, Email, Content
 
 from application.utils import TrelloClient
 from application.models import Submission, Status
-from application.extensions import mail, celery
+from application.extensions import celery
 
 
 def exponential_backoff(task_self):
@@ -47,7 +48,6 @@ def create_hook(_id, card):
 
     Todo:
         * No Exception handling!
-        * `max_retries` was conflicting with the hook param of ``client.create_hook``
         * should this handle submission not found?
     '''
     client, lst = TrelloClient()
@@ -71,15 +71,12 @@ def send_email(self, _id, email):
         email(str): email address of the intended recipient
 
     Todo:
-        * Why is SenGrid throwing a 400?
+        * use send_at to send emails at a updates at reasonable times
         * should this handle submission not found?
-        * add hi@boulderpython.org to CC of email (requires update to extension)
         * add attachment in Scheduled email.
 
-    Raises:
-        BadRequestError: if SendGrid mail send fails with a 400 response
     '''
-    logger = get_task_logger(__name__)
+    # logger = get_task_logger(__name__)
 
     # subject lines for emails based on submission status
     # not the best place for this, I admit.
@@ -91,16 +88,24 @@ def send_email(self, _id, email):
 
     submission = Submission().get_by_id(_id)
 
-    try:
-        mail.send_email(
-            to_email=submission.email,
-            subject=SUBJECTS[submission.status],
-            html=render_template('email/{}.html'.format(Status(submission.status).name.lower()),
-                title=SUBJECTS[submission.status], submission=submission)
-        )
+    sg = SendGridAPIClient(apikey=current_app.config['SENDGRID_API_KEY'])
 
-    # sendgrid is throwing a 400 intermittently, so I'm tossing this in here to test
-    # if it just needs a retry... probably not
-    except BadRequestsError as e:
-        logger.error(e)
-        self.retry(countdown=exponential_backoff(self), exc=e)
+    mail = Mail(
+        Email(current_app.config['SENDGRID_DEFAULT_FROM']),
+        SUBJECTS[submission.status],
+        Email(submission.email),
+        Content("text/html", (
+            render_template(
+                'email/{}.html'.format(Status(submission.status).name.lower()),
+                title=SUBJECTS[submission.status],
+                submission=submission)))
+    )
+
+    mail.personalizations[0].add_cc(Email(current_app.config['SENDGRID_DEFAULT_FROM']))
+    # mail.add_attachment(build_attachment())
+    # mail.send_at = 1443636842
+
+    sg.client.mail.send.post(request_body=mail.get())
+    # logger.error(resp.status_code)
+    # logger.error(resp.body)
+    # logger.error(resp.headers)

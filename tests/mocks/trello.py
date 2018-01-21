@@ -45,3 +45,9 @@ class MockTrelloClient():
 
     def get_board(self, *arg, **kwrags):
         return MockTrelloBoard()
+
+    def __iter__(self):
+        return self, MockTrelloList(1)
+
+    def __next__(self):
+        self.lst = MockTrelloList(1)

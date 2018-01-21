@@ -18,13 +18,13 @@ class BaseConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     CELERY_BROKER_URL = os.environ.get('RABBITMQ_BIGWIG_URL', 'amqp://localhost//')
-    CELERY_RESULT_BACKEND = os.environ.get('RABBITMQ_BIGWIG_URL', 'amqp://localhost//')
+    CELERY_RESULT_BACKEND = os.environ.get('RABBITMQ_BIGWIG_URL', 'rpc')
 
     SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', None)
     SENDGRID_DEFAULT_FROM = 'Boulder Python <hi@boulderpython.org>'
 
     MEETUP_KEY = os.environ.get('MEETUP_KEY', None)
-    MEETUP_GROUP = os.environ.get('MEETUP_KEY', 'BoulderPython')
+    MEETUP_GROUP = os.environ.get('MEETUP_GROUP', 'BoulderPython')
 
     MAILCHIMP_USERNAME = os.environ.get('MAILCHIMP_USERNAME', None)
     MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', None)
@@ -35,7 +35,7 @@ class BaseConfig:
     TRELLO_TOKEN = os.environ.get('TRELLO_TOKEN', None)
     TRELLO_TOKEN_SECRET = os.environ.get('TRELLO_TOKEN_SECRET', None)
     TRELLO_ASSIGNEE = os.environ.get('TRELLO_ASSIGNEE', None)
-    TRELLO_HOOK = os.environ.get('TRELLO_HOOK', 'https://boulderpython.ngrok.io/trello/hook')
+    TRELLO_HOOK = os.environ.get('TRELLO_HOOK', 'https://www.boulderpython.org/trello/hook')
 
     # this is public anyway (used in their URLs)
     TRELLO_BOARD = 'wm8hatnW'
@@ -70,7 +70,6 @@ class BaseConfig:
 
 
 class DefaultConfig(BaseConfig):
-
     DEBUG = os.environ.get('DEBUG', True)
 
     CACHE_TYPE = 'simple'
@@ -112,7 +111,7 @@ class TestConfig(BaseConfig):
 
 
 config = {
+    'default': DefaultConfig,
     'production': DefaultConfig,
-    'testing': TestConfig,
-    'default': DefaultConfig
+    'testing': TestConfig
 }
