@@ -22,3 +22,5 @@ install:
 script:
   # Run the unit tests
   - ./run.py -t
+notifications:
+    slack: pycolorado:S9WVa6L6dH9d0HPNU9bUUMof
