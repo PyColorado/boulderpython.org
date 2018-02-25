@@ -9,7 +9,7 @@
 import pytest
 from flask import render_template_string
 
-from application.filters import autoversion, current_route
+from application.filters import autoversion, current_route, markdown
 
 
 @pytest.mark.usefixtures('session')
@@ -48,3 +48,6 @@ class TestFilters:
         assert render_template_string("{{ time|convert_ms(offset=offset, format='%I:%M%p') }}",
                                       time=time,
                                       offset=utc_offset) == '08:30PM'
+
+    def test_markdown(self, app):
+        assert markdown("*boo!*") == '<p><em>boo!</em></p>\n'

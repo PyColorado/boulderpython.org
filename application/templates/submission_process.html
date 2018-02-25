@@ -1,0 +1,32 @@
+{% extends 'layout/base.html' %}
+
+{% from "macros/_form.html" import render_form, render_input, render_button %}
+
+{% block content %}
+
+<!-- #page-title -->
+<section id="page-title" class="gradient-overlay">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>SUBMISSION PROCESS</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /#page-title -->
+
+<!-- #single-page -->
+<section id="submission-guidelines">
+    <div class="container">
+        {% for card in how_does_this_work_cards %}
+            <h3>{{ card.name }}</h3>
+            {% autoescape false %}
+                {{ card.description|markdown }}
+            {% endautoescape %}
+        {% endfor %}
+    </div>
+</section>
+<!-- /#submit -->
+
+{% endblock %}
