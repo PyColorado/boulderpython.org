@@ -20,7 +20,7 @@
 <section id="submission-process">
     <div class="container">
         {% for card in how_does_this_work_cards %}
-            <h3>{{ card.name }}</h3>
+            <h3><a href="{{ card.url }}">{{ card.name }}</a></h3>
             {% autoescape false %}
                 {{ card.description|markdown }}
             {% endautoescape %}
