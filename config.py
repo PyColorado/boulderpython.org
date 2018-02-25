@@ -51,6 +51,10 @@ class BaseConfig:
         'SCHEDULED': {
             "id": "5a0091836c98d9743f94b365",
             "text": "Scheduled"
+        },
+        'HOWDOESTHISWORK': {
+            "id": "5a932e60fdfdd4f02fa345b8",
+            "text": "How Does this Work?"
         }
     }
 

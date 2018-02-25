@@ -50,3 +50,4 @@ py-trello = {ref = "b929721397077f31a06603d7bb7843526d2a926b", git = "https://gi
 celery = "==4.1.0"
 flask-celery-helper = "*"
 flask-sendgrid = "*"
+"markdown2" = "*"

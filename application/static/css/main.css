@@ -1077,6 +1077,30 @@ footer {
     border-top: none; }
 
 /**
+ * submit page styles
+ */
+#submission-process {
+  overflow: hidden;
+  padding: 120px 0; }
+  #submission-process ul {
+    padding-left: 30px; }
+  #submission-process ul li {
+    color: #374045;
+    list-style-type: circle;
+    margin-bottom: 25px; }
+  #submission-process h3 {
+    font-size: 30px;
+    line-height: 26px;
+    color: #374045;
+    font-weight: 800;
+    margin: 45px 0 25px 0; }
+  #submission-process p {
+    color: #374045;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 15px; }
+
+/**
  * media queries
  */
 @media only screen and (min-width: 992px) and (max-width: 1199px) {

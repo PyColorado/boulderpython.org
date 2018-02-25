@@ -6,6 +6,7 @@
 """
 
 import os, pathlib
+import markdown2
 
 from flask import request
 
@@ -44,3 +45,15 @@ def current_route(value, *args):
     '''
     if value == str(request.url_rule):
         return 'current'
+
+
+def markdown(value):
+    ''' Converts the specified markdown string to HTML
+
+    Args:
+        value (str): Markdown string
+
+    Returns:
+        string: HTML equivalent
+    '''
+    return markdown2.markdown(value)
