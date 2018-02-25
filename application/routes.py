@@ -205,9 +205,12 @@ def privacy():
 def submission_process():
     client, lst = TrelloClient()
     board = client.get_board(current_app.config['TRELLO_BOARD'])
-    how_does_this_work_list = board.get_list(current_app.config['TRELLO_LISTS']['HOWDOESTHISWORK']['id'])
 
-    return render_template('submission_process.html', how_does_this_work_cards=how_does_this_work_list.list_cards())
+    list_id = current_app.config['TRELLO_LISTS']['HOWDOESTHISWORK']['id']
+    how_does_this_work_list = board.get_list(list_id)
+
+    return render_template('submission_process.html',
+                           how_does_this_work_cards=how_does_this_work_list.list_cards())
 
 
 @bp.errorhandler(404)
