@@ -99,3 +99,7 @@ Instance: %s''' % (sys.version,
         user_ns=app.make_shell_context(),
         config=config,
     )
+
+
+if __name__ == '__main__':
+    runserver(['--reload'])

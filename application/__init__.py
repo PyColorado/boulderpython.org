@@ -12,7 +12,7 @@ from flask import Flask
 
 from config import config
 from application.extensions import db, cache, moment, celery
-from application.filters import autoversion, current_route
+from application.filters import autoversion, current_route, markdown
 from application.models import *  # noqa
 from application.tasks import *  # noqa
 from application.routes import bp
@@ -64,5 +64,9 @@ def register_filters(app):
     @app.template_filter('autoversion')
     def autoversion_filter(filename):
         return autoversion(filename)
+
+    @app.template_filter('markdown')
+    def markdown_filter(value):
+        return markdown(value)
 
     app.jinja_env.globals.update(current_route=current_route)
