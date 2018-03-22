@@ -1,1 +1,2 @@
-web: gunicorn application:app --log-file -
+web: gunicorn "application:create_app('production')" --log-file -
+celery: flask celeryd

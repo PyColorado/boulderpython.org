@@ -1,0 +1,35 @@
+{
+  "name": "boulderpython.org",
+  "version": "1.0.0",
+  "description": "Boulder Python website",
+  "main": "index.js",
+  "engines": {
+    "node": "6.9.3"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "gulp build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boulder-python/boulderpython.org.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boulder-python/boulderpython.org/issues"
+  },
+  "homepage": "https://github.com/boulder-python/boulderpython.org#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.9.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-rimraf": "^0.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^3.0.0"
+  }
+}

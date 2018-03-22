@@ -1,0 +1,20 @@
+{% extends 'email/base.html' %}
+
+
+{% set title = 'Talk Submission Accepted' %}
+
+{% set tagline = 'Your Boulder Python submission has been accepted!' %}
+
+{% set body = '
+<p style="margin: 0;">
+  <strong>You\'re cleared for take off!</strong> You\'re speaking at Boulder Python! Next you\'ll receive a
+  calendar invite once you and the organizers have coordinated a date. Thank you again for submitting!
+</p>
+<p style="margin: 0;">
+  <br>
+  Our entire review process is publicly accesible on Trello.
+</p>
+' %}
+
+{% set button_link = submission.card_url %}
+{% set button_text = 'Your Submission' %}

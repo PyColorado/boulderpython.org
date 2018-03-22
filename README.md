@@ -1,9 +1,14 @@
 # Boulder Python Website
 
 [![Build Status](https://travis-ci.org/boulder-python/boulderpython.org.svg?branch=master)](https://travis-ci.org/boulder-python/boulderpython.org)
+[![Coverage Status](https://coveralls.io/repos/github/boulder-python/boulderpython.org/badge.svg?branch=master)](https://coveralls.io/github/boulder-python/boulderpython.org?branch=master)
+[![Docs](https://readthedocs.org/projects/boulderpythonorg/badge/?version=latest)](http://boulderpythonorg.readthedocs.io/en/latest/?badge=latest)
 
 Our website grew out of @iandouglas's [Flask + Google App Engine template](https://github.com/iandouglas/flask-gae-skeleton).
 What kind of Python community would we be if our site wasn't also developed using Python?? :)
+
+Official Documentation: [boulderpythonorg.readthedocs.io](https://boulderpythonorg.readthedocs.io)
+
 
 ## A Community in Progress
 
@@ -13,11 +18,12 @@ us on [Meetup](https://www.meetup.com/boulderpython/), [Twitter](https://twitter
 [Slack](https://denver-dev-slack.herokuapp.com/) (#meetup-python)
 and (#help-python).
 
+
 ### Speak at a Meetup
 
 We're always looking for speakers at our meetups.  Whether you have a short talk, long talk, or just an idea for a talk,
-we'd love to have you.  Submit your talk on [Papercall](https://papercall.io/boulder-python) to get the conversation
-going!
+we'd love to have you.  Submit your talk directly on [boulderpython.org](https://boulderpython.org/submit).
+
 
 ### Organizers
 Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale),
@@ -29,6 +35,7 @@ Zoë Farmer, zoe@dataleek.io, @TheDataLeek on [Twitter](https://twitter.com/TheD
 Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.com/fmdfrank), @frankV on
 [Github](https://github.com/frankv)
 
+
 ### Sponsors
 
 [Galvanize Boulder](https://www.galvanize.com/boulder/campus) hosts our meetups and provides tasty food, beer, and
@@ -37,85 +44,81 @@ refreshments (along with full stack and data science bootcamp programs).  Contac
 [Spigot Labs](http://spigotlabs.com/) - Add RFID to your beer, wine, and food festivals to track tastes and interactions
 between patrons and vendors.
 
-[Cuttlesoft](https://www.cuttlesoft.com/) - Cuttlesoft is a custom software agency. We craft beautifully designed and highly scalable web and mobile applications.
+[Cuttlesoft](https://www.cuttlesoft.com/) - Cuttlesoft is a custom software agency. They craft beautifully designed and
+highly scalable solutions for web, mobile, IoT, and the cloud.
+
 
 ## Code of Conduct
 
-Our community has implemented the PyCon ["Code of Conduct"](https://us.pycon.org/2017/about/code-of-conduct/) for ensuring
+Our community has implemented the PyCon ["Code of Conduct"](https://us.pycon.org/2018/about/code-of-conduct/) for ensuring
 all members attending our sessions, meetups, and events feel included and heard. Thanks for your mutual respect to one
 another.
 
 ## Website Contributions
 
-We welcome contributions, changes, and corrections to our website.  Please submit a pull request (with tests) as
-outlined below.
+We welcome contributions, changes, and corrections to our website.  Please submit a pull request.
 
-### Google SDK Requirements
+### Running
 
-You'll need to install the Google Cloud SDK and the app-engine-python component:
+As of 2018, the Flask application features a few new integrations. Notably, they're the [Meetup API](https://www.meetup.com/meetup_api/),
+[Trello](https://trello.com), and [MailChimp](https://mailchimp.com/) integrations. We want to keep this project public, so we have to be careful with
+our API keys. To get around this, we use a simple config file, here's how we set it up:
 
-```bash
-# Install the Google Cloud SDK
-curl https://sdk.cloud.google.com | bash
+ 1. Copy the `local-example.cfg` and fill it with your API Keys and settings.
+ 2. Be careful **NOT** to commit this file into your fork/repo
 
-# Install the Python App Engine component
-gcloud components install app-engine-python
+To run the application now, use:
+
+```
+$ FLASK_CONFIG=local.cfg flask runserver
 ```
 
-### virtualenv
-
-I recommend installing an actual virtualenv for your project, but App Engine will also need your external packages
-installed in the /lib/ folder here. Remember that App Engine can only support 100% Python packages. Anything that
-compiles a C/C++ library cannot be used on GAE.
-
-```bash
-# Create new virtualenv
-virtualenv boulder-python
-
-# linux/mac:
-boulder-python/bin/activate
-
-# windows:
-boulder-python\scripts\activate
-
-# install all requirements into your virtualenv
-pip install -r requirements.txt
-
-# install all requirements into your /lib/ folder as well, but only the packages
-# this is necessary because packages need to be sent to App Engine as well
-pip install -r requirements.txt -t lib
-```
 
 ### Testing
 
-Please consider developing your project using TDD principles, it will make your life so much easier.
+You can easily run the tests suite from the command line:
 
-You can easily run the tests within PyCharm (my editor of choice), or you can run them from the command line:
+```py.test test```
 
-```python run_tests.py```
+pytest has a set of optional arguments that can enable many options and plugins.
 
-The tests require access to the Google App Engine SDK.  You can specify the location of your installed SDK with an
-environment variable:
+Here are some we recommend:
 
-Linux / MacOS:
+    - `-v/--verbose` increases verbosity on py.test output
+    - `-x` exit after first failure
+    - `-rs` enables skipped test report
+    - `--cov` enables code coverage
+    - `--flake8` enables pep8 and pyflakes testing via [flake8](http://flake8.pycqa.org/en/latest/)
 
-```export GOOGLE_APP_ENGINE_SDK=${HOME}/google-cloud-sdk```
+For example, our test run uses:
+```
+$ py.test tests --verbose --cov --cov-report term-missing --flake8 application
+```
 
-Windows:
+Check out pytest's [usage docs](https://docs.pytest.org/en/latest/usage.html).
 
-```set GOOGLE_APP_ENGINE_SDK=C:\Program Files\Google\App Engine```
 
-### What are the .haml files and .scss? Do I really need them?
+### Building Static Assets
 
-I use HAML as a shortcut to writing properly-formatted HTML. You're welcome to remove them, but once you understand
-the simplicity of HAML, I'm guessing you'll keep HAML around. While it's not very Pythonic, to get HAML working,
-you'll need Ruby installed on your system and a simple "gem install haml" (possibly with sudo) should be all you need.
+With the new redesign, our static asset files (js and css) have changed. We're still using SASS, but now the project
+relies on gulp and npm to build and minify both scss files, but also JavaScript.
 
-Likewise with the .scss files, they allow for writing nested CSS which them compiles down into semantically-correct
-CSS files. You'll need to "gem install sass" (possibly with sudo)
+With npm and gulp installed, simply run:
+```
+$ gulp
+```
 
-I use PyCharm as my preferred Python editor, and the professional edition will detect the HAML and SCSS files and
-prompt you to add "watchers" which will run the HAML/SCSS compilers for you whenever your files get saved. Any manual
-changes you make to the .html or .css files will be lost when the compilers run.
+The default gulp command builds scss and concatenates scripts into `app.css`, and `app.js`, respectively. It will also
+begin the gulp watch command so if you save any changes in your scss and js files, gulp rebuilds them automatically.
 
-The .haml and .scss files are ignored via the app.yaml file so they won't end up on App Engine as part of your deploy.
+
+### Celery
+
+We now use Celery to handle Trello webhooks and send out emails to speakers.
+
+Celery requires a task broker. Either RabbitMQ or Redis are good choices.
+
+To run Celery, use the following command:
+```
+$ FLASK_CONFIG=local.cfg flask celeryd
+```

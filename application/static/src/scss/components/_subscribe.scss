@@ -1,0 +1,60 @@
+/**
+ * subscribe styles
+ */
+
+#subscribe-newsletter {
+  margin-bottom: -70px;
+  + * {
+    padding-top: 160px;
+  }
+  .gradient-overlay {
+    padding: 55px 0;
+    background: #1D2671;
+    background-size: cover;
+  }
+  .text-box {
+    font-size: 24px;
+    font-weight: 800;
+    color: $white;
+    line-height: 70px;
+    text-transform: uppercase;
+    /*text-indent: 25px;*/
+    padding-left: 0;
+    /*background: url(../img/resources/subscribe-icon.png) center left no-repeat;*/
+    span {
+      color: $white;
+    }
+  }
+  .input-box {
+    background: $white;
+    height: 53px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 7px 0;
+    display: block;
+    transition: all .3s ease;
+    border: 2px solid transparent;
+    &:hover {
+      border: 2px solid $accent1;
+    }
+    input {
+      height: 100%;
+      line-height: 49px;
+      width: 90%;
+      border: none;
+      outline: none;
+      background-color: transparent;
+      + button {
+        color: $accent1;
+      }
+    }
+    button {
+      background: none;
+      color: #D3D4D4;
+      outline: none;
+      border: none;
+      line-height: 49px;
+      transition: all .3s ease;
+    }
+  }
+}

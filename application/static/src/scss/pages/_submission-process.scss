@@ -1,0 +1,30 @@
+/**
+ * submit page styles
+ */
+
+
+#submission-process {
+  overflow: hidden;
+  padding: 120px 0;
+  ul {
+    padding-left: 30px;
+  }
+  ul li {
+    color: $font-dark;
+    list-style-type: circle;
+    margin-bottom: 25px;
+  }
+  h3 {
+    font-size: 30px;
+    line-height: 26px;
+    color: $font-dark;
+    font-weight: 800;
+    margin: 45px 0 25px 0;
+  }
+  p {
+    color: $font-dark;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+}

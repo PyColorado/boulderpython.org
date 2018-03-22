@@ -1,0 +1,241 @@
+{% macro render_checkbox(field) %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    <div class="controls">
+        <div class="checkbox">
+          <label for="{{ field.id }}">
+            {{ field }}{{ field.label.text }} {% if field.flags.required %}*{% endif %}
+          </label>
+          <span class="help-inline">{{ field.description }}</span>
+          {% if field.errors -%}
+              {% for error in field.errors -%}
+              <span class="help-block error">{{ error|e }}</span>
+              {%- endfor %}
+          {%- endif %}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_radio(field) %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    {{ field.label(class_="control-label") }} {% if field.flags.required %}*{% endif %}
+    <div class="controls">
+        {% for subfield in field -%}
+            <div class="radio">
+                <label for="{{ subfield.id }}">
+                    {{ subfield }} {{ subfield.label.text }}
+                </label>
+            </div>
+        {%- endfor %}
+        <span class="help-inline">{{ field.description }}</span>
+        {% if field.errors -%}
+            {% for error in field.errors -%}
+            <span class="help-block error">{{ error }}</span>
+            {%- endfor %}
+        {%- endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_datepicker(field) %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+
+    <label class="control-label" for="{{ field.id }}">
+        {{ field.label }} {% if field.flags.required %}*{% endif %}
+    </label>
+    <div class="input-group date" id="{{ field.id }}">
+        {{ field(class="form-control datepicker")|safe }}
+        <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+    </div>
+    <div class="controls">
+        <span class="help-inline">{{ field.description }}</span>
+        {% if field.errors -%}
+            {% for error in field.errors -%}
+            <span class="help-block error">{{ error }}</span>
+            {%- endfor %}
+        {%- endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_textarea(field) %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    <label for="{{ field.id }}">{{ field.label }} {% if field.flags.required %}*{% endif %}</label>
+    <div class="controls">
+        {{ field(id=field.id, class="col-xs-6 form-control", rows="5") }}
+        <span class="help-inline">{{ field.description }}</span>
+        {% if field.errors -%}
+            {% for error in field.errors -%}
+            <span class="help-block error">{{ error }}</span>
+            {%- endfor %}
+        {%- endif %}
+    </div>
+</div>
+&nbsp;
+{% endmacro %}
+
+{% macro render_field(field) %}
+    {% if field.errors %}
+        <div class="form-group has-error">
+            {{ field.label(class="control-label", for=field.name) }} {% if field.flags.required %}*{% endif %}
+                {{ field(**kwargs)|safe }}
+
+            {% for error in field.errors %}
+                <span class="help-block has-error">{{ error|e }}</span>
+            {% endfor %}
+        </div>
+    {% else %}
+
+    <div class="form-group">
+        {{ field.label(class="control-label", for=field.name) }}
+        <span class="{{field.short_name}}_popover"></span>
+        {{ field(**kwargs) }}
+    </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_input(field) %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    <label for="{{ field.id }}">{{ field.label }} {% if field.flags.required %}*{% endif %}</label>
+    {{ field(class="form-control") }}
+    <span class="help-inline">{{ field.description }}</span>
+    {% if field.errors -%}
+        {% for error in field.errors -%}
+        <span class="help-block has-error">{{ error }}</span>
+        {%- endfor %}
+    {%- endif %}
+</div>
+{% endmacro %}
+
+{% macro render_file(field) %}
+<div class="form-group">
+    <label for="{{ field.id }}">{{ field.label }} {% if field.flags.required %}*{% endif %}</label>
+    {{ field() }}
+</div>
+{% endmacro %}
+
+{% macro render_image(field, width="100%", croppable=False, original=None) %}
+<div class="form-group clearfix" {% if croppable %}id="image-cropper"{% endif %}>
+    <div>
+        <label for="{{ field.id }}">{{ field.label }} {% if field.flags.required %}*{% endif %}</label>
+    </div>
+
+    <img src="{{ field.data }}" width="{{ width }}" class="img-responsive img-thumbnail" style="margin-bottom:15px;">
+
+    {% if croppable -%}
+
+        <div class="cropit-image-preview-container cropit-tool">
+            <div class="cropit-image-preview"></div>
+        </div>
+
+        <input type="range" class="cropit-image-zoom-input cropit-tool" />
+        <input type="hidden" name="image-data-xoffset" class="cropit-image-data" />
+        <input type="hidden" name="image-data-yoffset" class="cropit-image-data" />
+        <input type="hidden" name="image-data-zoom" class="cropit-image-data" />
+
+        {{ field(class="cropit-image-input") }}
+
+        {% if not original %}
+        <button class="select-image-btn btn btn-primary" type="button">Choose File</button>
+        {% elif original %}
+        <input type="hidden" name="original-image" class="cropit-image-data" value="{{ original }}" />
+        <input type="hidden" name="recrop-original-image" class="cropit-image-data" />
+
+        <div class="btn-group" role="group" aria-label="">
+          <button type="button" class="btn btn-primary select-image-btn">Choose File</button>
+          <button id="recrop" type="button" class="btn btn-default">&nbsp;<i class="fa fa-crop"></i></button>
+        </div>
+        {% endif %}
+
+    {%- else -%}
+
+        {{ field() }}
+
+    {%- endif %}
+
+    {% if field.errors -%}
+        {% for error in field.errors -%}
+        <span class="help-block error">{{ error }}</span>
+        {%- endfor %}
+    {%- endif %}
+</div>
+{% endmacro %}
+
+{% macro render_selectpickermulti(field) %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    <label for="{{ field.id }}">{{ field.label }} {% if field.flags.required %}*{% endif %}</label>
+    {{ field(class="form-control selectpicker") }}
+    <span class="help-inline">{{ field.description }}</span>
+    {% if field.errors -%}
+        {% for error in field.errors -%}
+        <span class="help-block has-error">{{ error }}</span>
+        {%- endfor %}
+    {%- endif %}
+</div>
+{% endmacro %}
+
+{% macro render_action(field) %}
+<div class="form-group">
+    <div class="form-actions">
+        {{ field(class="btn btn-primary") }}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_button(field) %}
+    <button type="submit" class="btn btn-primary" name="btn" value="{{ field.name }}">
+        {{ field.label.text }}
+    </button>
+{% endmacro %}
+
+{% macro render_hidden(field) %}
+    {{ field(type="hidden") }}
+{% endmacro %}
+
+
+{% macro render_form(url, form, horizontal=False, legend=None, image_width="100%", image_croppable=False, original_image=None, classes=[]) %}
+<form class="{% if horizontal %}form-horizontal{% endif %}{% for class in classes %}{{class}} {% endfor %}" method="POST" action="{{ url }}"
+    {% if form.multipart %}enctype="multipart/form-data"{% endif %} >
+    {{ form.hidden_tag() }}
+    <fieldset>
+        {% if legend %}
+        <legend>{{ legend|safe }}</legend>
+        {% endif %}
+        {% set focus = True %}
+        {% for field in form %}
+            {% if field.type != "HiddenField" and field.type != "CSRFTokenField" %}
+                {% if field.type == "RadioField" %}
+                    {{ render_radio(field) }}
+                {% elif field.type == "BooleanField" %}
+                    {{ render_checkbox(field) }}
+                {% elif field.type == "SubmitField" %}
+                    {{ render_action(field) }}
+                {% elif field.type == "TextAreaField" %}
+                    {{ render_textarea(field) }}
+                {% elif field.type == "DateField" %}
+                    {{ render_datepicker(field) }}
+                {% elif field.type == "FileField" %}
+                    {{ render_file(field) }}
+                {% elif field.type == "ImageField" %}
+                    {{ render_image(field, width=image_width, croppable=image_croppable, original=original_image) }}
+                {% elif field.type == "SelectPickerMulti" %}
+                    {{ render_selectpickermulti(field) }}
+                {% elif field.type == "TextField" %}
+                    {% if focus %}
+                        {{ render_input(field) }}
+                        {% set focus = False %}
+                    {% else %}
+                        {{ render_input(field) }}
+                    {% endif %}
+                {% else %}
+                    {{ render_input(field) }}
+                {% endif %}
+            {% elif field.type == "HiddenField" %}
+                {{ render_hidden(field) }}
+            {% endif %}
+        {% endfor %}
+    </fieldset>
+</form>
+{% endmacro %}

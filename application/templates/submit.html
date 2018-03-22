@@ -1,0 +1,107 @@
+{% extends 'layout/base.html' %}
+
+{% from "macros/_form.html" import render_form, render_input, render_button %}
+
+{% block content %}
+
+<!-- #page-title -->
+<section id="page-title" class="gradient-overlay">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>SUBMIT A TALK</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /#page-title -->
+
+<!-- #single-page -->
+<section id="submit">
+    <div class="container">
+        <div class="row">
+            <!-- .submit-text -->
+            <div class="col-lg-6 col-md-6 col-sm-12 col-lg-offset-0 col-md-offset-0 submit-text">
+                <h3>Want to speak at Boulder Python?</h3>
+                <p>
+                    Boulder Python is a community driven group. Our speakers come from our local Boulder/Denver/Colorado
+                    members and abroad. If you're interested in speaking at Boulder Python, submit your talk below, and
+                    one of our organizers will get in touch.
+                </p>
+                <p>
+                    Please see our full <a href="/submission-process">submission guidelines and process</a> for help
+                    with your submission.
+                </p>
+
+                <form method="POST" action="{{ url_for('bp.submit') }}">
+                    {{ form.csrf_token }}
+                    {{ render_input(form.email) }} <br>
+                    {{ render_input(form.title) }} <br>
+                    {{ render_input(form.pitch) }} <br>
+                    {{ render_input(form.format) }} <br>
+                    {{ render_input(form.audience) }} <br>
+                    {{ render_input(form.description) }} <br>
+                    {{ render_input(form.notes) }} <br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+            <!-- /.submit-text -->
+        </div>
+    </div>
+</section>
+<!-- /#submit -->
+
+
+<!-- Modal -->
+<div id="success-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title">We got it!</h3>
+      </div>
+      <div class="modal-body">
+        <div class="col-lg-4 col-md-3">
+            <img class="img-responsive" src="{{ url_for('static', filename='img/trello.png') }}">
+        </div>
+        <div class="col-lg-8 col-md-9">
+            <p>Thank you for your submission. You can follow our entire review process on Trello.</p>
+
+            <p>View your submission:<br> <span id="submission-trello-url"><a href="" target="_blank"></a></span></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    console.log(getParameterByName('success'))
+
+    if (getParameterByName('success')) {
+        $('#success-modal').modal('show');
+        $('#submission-trello-url').find('a').attr('href', getParameterByName('url'));
+        $('#submission-trello-url').find('a').text(getParameterByName('url'));
+    }
+</script>
+{% endblock %}

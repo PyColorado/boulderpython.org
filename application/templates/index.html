@@ -1,0 +1,194 @@
+    {% extends 'layout/base.html' %}
+
+
+    {% block content %}
+
+    <!-- #banner -->
+    <section id="banner">
+        <div class="banner-container">
+            <div class="banner">
+                <ul>
+
+                    <li
+                        data-transition="fade"
+                        data-slotamount="7"
+                        class="slider-1 text-center gradient-overlay"
+                        data-thumb="{{ url_for('static', filename='img/background/banner-bg-flatirons.jpg') }}"
+                        data-title="EXPERTISE YOU CAN TRUST">
+                        <img
+                            src="{{ url_for('static', filename='img/background/banner-bg-flatirons.jpg') }}"
+                            data-bgposition="center center"
+                            data-kenburns="on"
+                            data-duration="20000"
+                            data-ease="Linear.easeNone"
+                            data-bgfit="100"
+                            data-bgfitend="130"
+                            data-bgpositionend="center center"
+                            alt="slider image">
+                        <div
+                            class="caption sfb tp-resizeme text-center"
+                            data-x="0"
+                            data-y="220"
+                            data-speed="700"
+                            data-start="1000"
+                            data-easing="easeOutBack">
+                        </div>
+
+                        <div
+                            class="caption sfb tp-resizeme"
+                            data-x="0"
+                            data-y="290"
+                            data-speed="700"
+                            data-start="1500"
+                            data-easing="easeOutBack">
+
+                            <h1>{{ upcoming.name }}</h1>
+                            <h2 style="color:#fff;">{{ upcoming.time|convert_ms(upcoming.utc_offset) }}</h2>
+                        </div>
+                        <div
+                            class="caption sfb tp-resizeme input-box"
+                            data-x="0"
+                            data-y="370"
+                            data-speed="700"
+                            data-start="2200"
+                            data-easing="easeOutBack">
+
+                            <ul class="count-down"></ul>
+                        </div>
+
+                        <ul
+                            class="caption sfb tp-resizeme banner-buttons"
+                            data-x="0"
+                            data-y="530"
+                            data-speed="700"
+                            data-start="2500"
+                            data-easing="easeOutBack">
+
+                            <li><a href="{{ '%sevents/%s'|format(group.link, upcoming.id) }}"><button type="button" class="btn btn-default btn-lg btn-block">RSVP NOW</button></a></li>
+
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </section> <!-- /#banner -->
+
+
+    <!-- #information-bar -->
+    <section id="information-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-1 col-lg-3 col-md-3 col-sm-5 col-xs-12">
+                    <ul>
+                        <li><span><b>Venue</b> {{ upcoming.venue.name }}</span></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <ul>
+                        <li><span><b>RSVPs</b> {{ upcoming.yes_rsvp_count }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /#information-bar -->
+
+
+    <!-- #upcoming-event -->
+    <section id="upcoming-event">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 col-md-7 col-sm-7">
+                    <div class="section-title">
+                        <h1>Upcoming Events</h1>
+                        <p>We meet on the second Tuesday of every month. <br>If you'd like to give a talk at a future meetup, please <a href="/submit">submit it</a>!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tab-title-wrap">
+                        <ul class="clearfix">
+                            {% for event in events[:5] %}
+                            <li
+                                class="filter"
+                                data-filter="{% if event.id == upcoming.id %}.active-event{% else %}.{{ event.time|convert_ms(event.utc_offset, '%b-%d')|lower }}{% endif %}">
+                                <span>{{ event.time|convert_ms(event.utc_offset, '%B %d') }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="tab-content-wrap row">
+                        {% for event in events[:5] %}
+                        <div class="col-lg-12 col-md-12 col-sm-12 mix {% if event.id == upcoming.id %}active-event{% else %}{{ event.time|convert_ms(event.utc_offset, '%b-%d')|lower }}{% endif %} hvr-float-shadow wow fadeIn" data-wow-delay=".3s">
+                            <div class="content-wrap">
+                                <div class="meta">
+                                    <ul>
+                                        <li><span><i class="fa fa-clock-o"></i> {{ event.time|convert_ms(event.utc_offset, '%I:%M%p') }}</span></li>
+                                        <li><span><i class="fa fa-map-marker"></i> {{ event.venue.name }}</span></li>
+                                    </ul>
+                                </div>
+                                <h3>{{ event.name }}</h3>
+                                <p>{{ event.description|safe }}</p>
+                                <a class="read-more" href="{{ '%sevents/%s'|format(group.link, event.id) }}">READ MORE <i class="fa fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /#upcoming-event -->
+
+    <!-- #register-now -->
+    <section id="register-now" class="gradient-overlay">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="container">
+                        <div class="row">
+                            <ul class="clearfix">
+                            <div class="col-lg-8 col-sm-12 col-xs-12">
+                                <h1>JOIN <strong>{{ group.members }}</strong> PYTHONISTAS</h1>
+                            </div>
+                            <div class="col-lg-4 col-sm-12 col-xs-12">
+                                <a href="{{ group.link }}?action=join"><button type="button" class="btn btn-default btn-lg btn-block">JOIN US</button></a>
+                            </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /#register-now -->
+
+    <!-- #event-sponsor -->
+    <section id="event-sponsor">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h1>SPONSORS</h1>
+                        <p>Boulder Python is made possible thanks to support from our wonderful sponsors. <br> </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 4em;">
+                <div class="col-lg-4 col-md-4 col-sm-12" style="padding: 20px;">
+                    <a href="https://www.galvanize.com/boulder/campus"><img class="img-responsive" src="{{ url_for('static', filename='img/sponsor-logo/galvanize.png') }}" alt="Galvanize"></a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12" style="padding: 20px;">
+                    <a href="https://www.spigotlabs.com/"><img class="img-responsive" src="{{ url_for('static', filename='img/sponsor-logo/spigot-labs.png') }}" alt="Spigot Labs"></a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12" style="padding: 20px;">
+                    <a href="https://www.cuttlesoft.com"><img class="img-responsive" src="{{ url_for('static', filename='img/sponsor-logo/cuttlesoft.png') }}" alt="Cuttlesoft, Custom Software Developers"></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /#event-sponsor -->
+
+    {% endblock %}
