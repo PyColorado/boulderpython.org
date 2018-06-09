@@ -66,7 +66,7 @@ def extract_card_email(_id):
 
     The Trello card email address allows submitters to directly reply to comment notifications.
     Trello does NOT provide this information via the API.
-    See: https://stackoverflow.com/questions/42247377/trello-api-e-mail-address-of-my-card-returns-null
+    See: https://stackoverflow.com/questions/42247377/trello-api-e-mail-address-of-my-card-returns-null  # noqa: E501
 
     So we have to do good 'ole browser emulation
 
