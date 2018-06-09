@@ -89,6 +89,7 @@ def send_email(self, _id, template_name, template_params=None):
         'new': 'Talk Submission Received',
         'inreview': 'Talk Submission In-Review',
         'scheduled': '🎉 CONGRATS! Talk Submission Accepted 🎉',
+        'comment': 'Reply to Comments'
     }
 
     submission = Submission().get_by_id(_id)

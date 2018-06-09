@@ -160,6 +160,31 @@ def hook(send=False):
             current_app.logger.error(
                 'Submission not found for Card: {}'.format(data['model']['id']))
 
+    # Card was commented on
+    elif action["display"]["translationKey"] == "action_comment_on_card":
+
+        submission = Submission().first(card_id=data['model']['id'])
+
+        if submission:
+            current_app.logger.info(f"Comment received on Submission {submission.id}")
+
+            template_params = {
+                'comment': action["display"]["entities"]['comment']['text'],
+                'name': action["memberCreator"]['fullName']
+            }
+
+            if action['memberCreator']['id'] != current_app.config['TRELLO_ASSIGNEE']:
+                # Only send an email when a comment is left by someone other than the submitter
+                # Organizers themselves should have notifications enabled for the whole board, so
+                # they don't really need to get another email notification.  This also prevents
+                # a noisy email back to the submitter when they reply to a comment by email.
+                send_email.apply_async(args=[submission.id,
+                                             'comment',
+                                             template_params])
+        else:
+            current_app.logger.error(
+                'Submission not found for Card: {}'.format(data['model']['id']))
+
     return '', 200
 
 
