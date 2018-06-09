@@ -198,6 +198,7 @@ class Submission(Base):
     card_url = Column(db.String(255), nullable=False, unique=True)
     status = Column(db.Integer, nullable=False, default=Status.NEW.value)
     hook = Column(db.String(255))
+    card_email = Column(db.String(255))
 
 
 class TrelloList(Base):

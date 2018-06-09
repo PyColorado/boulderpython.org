@@ -37,6 +37,11 @@ class BaseConfig:
     TRELLO_ASSIGNEE = os.environ.get('TRELLO_ASSIGNEE', None)
     TRELLO_HOOK = os.environ.get('TRELLO_HOOK', 'https://www.boulderpython.org/trello/hook')
 
+    # These parameters were added begrudgingly to gain access to the Trello card emails using
+    # browser emulation.  See tasks.extract_card_email
+    TRELLO_USERNAME = os.environ.get('TRELLO_USERNAME', 'hi@boulderpython.org')
+    TRELLO_PASSWORD = os.environ.get('TRELLO_PASSWORD', None)
+
     # this is public anyway (used in their URLs)
     TRELLO_BOARD = 'wm8hatnW'
 

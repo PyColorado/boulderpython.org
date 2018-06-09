@@ -20,7 +20,7 @@ from flask import (
 )
 
 from application.models import Status, Submission, TrelloList
-from application.tasks import create_hook, send_email
+from application.tasks import create_hook, send_email, extract_card_email
 from application.utils import SubmissionsTrelloClient, pluck
 from application.extensions import cache
 from application.forms import SubmissionForm
@@ -98,6 +98,9 @@ def submit():
 
         # message Celery to create the webhook
         create_hook.apply_async(args=[submission.id, submission.card_id])
+
+        # message Celery to fetch the card email address
+        extract_card_email.apply_async(args=[submission.id])
 
         # reset form by redirecting back and apply url params
         return redirect(url_for('bp.submit', success=1, id=card.id, url=card.url))

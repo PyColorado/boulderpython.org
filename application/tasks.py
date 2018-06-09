@@ -7,6 +7,7 @@
 
 import random
 
+import requests
 from sendgrid import SendGridAPIClient
 from flask import current_app, render_template
 # from celery.utils.log import get_task_logger
@@ -57,6 +58,47 @@ def create_hook(_id, card):
 
     # send confirmation email
     send_email.apply_async(args=[submission.id, Status(submission.status).name.lower()])
+
+
+@celery.task
+def extract_card_email(_id):
+    '''Forcibly extract the Trello card email address.
+
+    The Trello card email address allows submitters to directly reply to comment notifications.
+    Trello does NOT provide this information via the API.
+    See: https://stackoverflow.com/questions/42247377/trello-api-e-mail-address-of-my-card-returns-null
+
+    So we have to do good 'ole browser emulation
+
+    Args:
+        _id (int): the submission id
+
+    '''
+    session = requests.Session()
+
+    # Load the login page to capture the dsc cookie
+    session.get('https://trello.com/login')
+
+    # Authenticate using email and password
+    auth_response = session.post('https://trello.com/1/authentication', data={
+        'factors[user]': current_app.config['TRELLO_USERNAME'],
+        'factors[password]': current_app.config['TRELLO_PASSWORD'],
+        'method': 'password'
+    })
+
+    # Perform authorization step
+    session.post('https://trello.com/1/authorization/session', data={
+        'authentication': auth_response.json()['code'],
+        'dsc': session.cookies['dsc']
+    })
+
+    # Fetch the card JSON
+    submission = Submission().get_by_id(_id)
+    response = session.get(submission.card_url + '.json')
+
+    # Extract the special email and save it to our database record
+    submission.card_email = response.json()['email']
+    Submission().save(submission)
 
 
 @celery.task(bind=True)
@@ -115,6 +157,12 @@ def send_email(self, _id, template_name, template_params=None):
     )
 
     mail.personalizations[0].add_cc(Email(current_app.config['SENDGRID_DEFAULT_FROM']))
+
+    if template_name == 'comment' and submission.card_email:
+        # Add the card itself as the reply-to address.  When the user replies, it will create a
+        # comment on the card via the Organizers account
+        mail.reply_to = Email(submission.card_email)
+
     # mail.add_attachment(build_attachment())
     # mail.send_at = 1443636842
 
