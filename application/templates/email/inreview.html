@@ -5,15 +5,15 @@
 
 {% set tagline = 'Talk Submission is now In-Review.' %}
 
-{% set body = '
+{% block body %}
 <p style="margin: 0;">
-  <strong>Your seat was just upgraded!</strong> You\'re a little closer to giving your talk at Boulder Python! We just want you to know, we really appreciate your submission. The organizers are grateful for your contribution and will be getting back to you ASAP!
+  <strong>Your seat was just upgraded!</strong> You're a little closer to giving your talk at Boulder Python! We just want you to know, we really appreciate your submission. The organizers are grateful for your contribution and will be getting back to you ASAP!
 </p>
 <p style="margin: 0;">
   <br>
-  Stay informed! Our entire review process is publicly accesible on Trello.
+  Stay informed! Our entire review process is publicly accessible on Trello.
 </p>
-' %}
+{% endblock %}
 
 {% set button_link = submission.card_url %}
 {% set button_text = 'Your Submission' %}
