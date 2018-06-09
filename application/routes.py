@@ -141,7 +141,7 @@ def hook(send=False):
                     and action["data"]["listBefore"]["id"] == lists["NEW"] \
                     and submission.status == Status.NEW.value:
                 Submission().update(submission, status=Status.INREVIEW.value)
-                current_app.logger.info("Submission {submission.id} is now IN-REVIEW")
+                current_app.logger.info(f"Submission {submission.id} is now IN-REVIEW")
                 send = True
 
             # if card moved from IN-REVIEW to SCHEDULED
@@ -149,12 +149,13 @@ def hook(send=False):
                     and action["data"]["listBefore"]["id"] == lists["REVIEW"] \
                     and submission.status == Status.INREVIEW.value:
                 Submission().update(submission, status=Status.SCHEDULED.value)
-                current_app.logger.info("Submission {submission.id} is now SCHEDULED")
+                current_app.logger.info(f"Submission {submission.id} is now SCHEDULED")
                 send = True
 
             # if the card has been updated, send an email
             if send:
-                send_email.apply_async(args=[submission.id, submission.email])
+                send_email.apply_async(args=[submission.id,
+                                             Status(submission.status).name.lower()])
         else:
             current_app.logger.error(
                 'Submission not found for Card: {}'.format(data['model']['id']))
