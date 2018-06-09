@@ -84,7 +84,8 @@ class TestModels:
             'title': 'title',
             'email': 'email',
             'card_id': 'card_id',
-            'card_url': 'card_url'
+            'card_url': 'card_url',
+            'card_email': 'card_email'
         })
 
         assert Submission().get_by_id(sub1.id)
@@ -105,7 +106,8 @@ class TestModels:
             'type': 'Submission',
             'email': sub1.email,
             'hook': sub1.hook,
-            'status': sub1.status
+            'status': sub1.status,
+            'card_email': sub1.card_email
         }
 
         with pytest.raises(ValueError):

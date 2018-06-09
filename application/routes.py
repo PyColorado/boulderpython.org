@@ -109,7 +109,7 @@ def submit():
 
 
 @bp.route('/trello/hook', methods=['GET', 'POST'])
-def hook(send=False):
+def hook():
     '''Trello hook endpoint. Submission cards are fit with a webhook back to our application.
 
     A great tool for testing this locally is ngrok. Remember to update the value of
@@ -128,67 +128,75 @@ def hook(send=False):
     data = request.get_json()
     action = data["action"]
 
+    # if card has moved
+    if action["display"]["translationKey"] == "action_move_card_from_list_to_list":
+        handle_submission_state_changed(data, action)
+
+    # Card was commented on
+    elif action["display"]["translationKey"] == "action_comment_on_card":
+        handle_comment_received(data, action)
+
+    return '', 200
+
+
+def handle_submission_state_changed(data, action):
+
+    send = False
     lists = {}
 
     # Create a lookup table by symbolic list name
     for local_list in TrelloList().all():
         lists[local_list.list_symbolic_name] = local_list.list_id
 
-    # if card has moved
-    if action["display"]["translationKey"] == "action_move_card_from_list_to_list":
+    submission = Submission().first(card_id=data['model']['id'])
+    if submission:
+        # if card moved from NEW to IN-REVIEW
+        if action["data"]["listAfter"]["id"] == lists["REVIEW"] \
+                and action["data"]["listBefore"]["id"] == lists["NEW"] \
+                and submission.status == Status.NEW.value:
+            Submission().update(submission, status=Status.INREVIEW.value)
+            current_app.logger.info(f"Submission {submission.id} is now IN-REVIEW")
+            send = True
 
-        submission = Submission().first(card_id=data['model']['id'])
-        if submission:
-            # if card moved from NEW to IN-REVIEW
-            if action["data"]["listAfter"]["id"] == lists["REVIEW"] \
-                    and action["data"]["listBefore"]["id"] == lists["NEW"] \
-                    and submission.status == Status.NEW.value:
-                Submission().update(submission, status=Status.INREVIEW.value)
-                current_app.logger.info(f"Submission {submission.id} is now IN-REVIEW")
-                send = True
+        # if card moved from IN-REVIEW to SCHEDULED
+        elif action["data"]["listAfter"]["id"] == lists["SCHEDULED"] \
+                and action["data"]["listBefore"]["id"] == lists["REVIEW"] \
+                and submission.status == Status.INREVIEW.value:
+            Submission().update(submission, status=Status.SCHEDULED.value)
+            current_app.logger.info(f"Submission {submission.id} is now SCHEDULED")
+            send = True
 
-            # if card moved from IN-REVIEW to SCHEDULED
-            elif action["data"]["listAfter"]["id"] == lists["SCHEDULED"] \
-                    and action["data"]["listBefore"]["id"] == lists["REVIEW"] \
-                    and submission.status == Status.INREVIEW.value:
-                Submission().update(submission, status=Status.SCHEDULED.value)
-                current_app.logger.info(f"Submission {submission.id} is now SCHEDULED")
-                send = True
+        # if the card has been updated, send an email
+        if send:
+            send_email.apply_async(args=[submission.id,
+                                         Status(submission.status).name.lower()])
+    else:
+        current_app.logger.error(
+            'Submission not found for Card: {}'.format(data['model']['id']))
 
-            # if the card has been updated, send an email
-            if send:
-                send_email.apply_async(args=[submission.id,
-                                             Status(submission.status).name.lower()])
-        else:
-            current_app.logger.error(
-                'Submission not found for Card: {}'.format(data['model']['id']))
 
-    # Card was commented on
-    elif action["display"]["translationKey"] == "action_comment_on_card":
+def handle_comment_received(data, action):
+    submission = Submission().first(card_id=data['model']['id'])
 
-        submission = Submission().first(card_id=data['model']['id'])
+    if submission:
+        current_app.logger.info(f"Comment received on Submission {submission.id}")
 
-        if submission:
-            current_app.logger.info(f"Comment received on Submission {submission.id}")
+        template_params = {
+            'comment': action["display"]["entities"]['comment']['text'],
+            'name': action["memberCreator"]['fullName']
+        }
 
-            template_params = {
-                'comment': action["display"]["entities"]['comment']['text'],
-                'name': action["memberCreator"]['fullName']
-            }
-
-            if action['memberCreator']['id'] != current_app.config['TRELLO_ASSIGNEE']:
-                # Only send an email when a comment is left by someone other than the submitter
-                # Organizers themselves should have notifications enabled for the whole board, so
-                # they don't really need to get another email notification.  This also prevents
-                # a noisy email back to the submitter when they reply to a comment by email.
-                send_email.apply_async(args=[submission.id,
-                                             'comment',
-                                             template_params])
-        else:
-            current_app.logger.error(
-                'Submission not found for Card: {}'.format(data['model']['id']))
-
-    return '', 200
+        if action['memberCreator']['id'] != current_app.config['TRELLO_ASSIGNEE']:
+            # Only send an email when a comment is left by someone other than the submitter
+            # Organizers themselves should have notifications enabled for the whole board, so
+            # they don't really need to get another email notification.  This also prevents
+            # a noisy email back to the submitter when they reply to a comment by email.
+            send_email.apply_async(args=[submission.id,
+                                         'comment',
+                                         template_params])
+    else:
+        current_app.logger.error(
+            'Submission not found for Card: {}'.format(data['model']['id']))
 
 
 @bp.route('/robots.txt')
