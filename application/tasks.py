@@ -12,7 +12,7 @@ from flask import current_app, render_template
 # from celery.utils.log import get_task_logger
 from sendgrid.helpers.mail import Mail, Email, Content
 
-from application.utils import TrelloClient
+from application.utils import SubmissionsTrelloClient
 from application.models import Submission, Status
 from application.extensions import celery
 
@@ -50,7 +50,7 @@ def create_hook(_id, card):
         * No Exception handling!
         * should this handle submission not found?
     '''
-    client, lst = TrelloClient()
+    client = SubmissionsTrelloClient()
     submission = Submission().get_by_id(_id)
     webhook = client.create_hook(current_app.config['TRELLO_HOOK'], card)
     Submission().update(submission, hook=webhook.id)

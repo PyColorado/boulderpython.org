@@ -39,36 +39,60 @@ class BaseConfig:
 
     # this is public anyway (used in their URLs)
     TRELLO_BOARD = 'wm8hatnW'
-    TRELLO_LISTS = {
-        'NEW': {
-            "id": "5a0091836c98d9743f94b363",
-            "text": "New"
-        },
-        'REVIEW': {
-            "id": "5a0091836c98d9743f94b364",
-            "text": "In Review"
-        },
-        'SCHEDULED': {
-            "id": "5a0091836c98d9743f94b365",
-            "text": "Scheduled"
-        },
-        'HOWDOESTHISWORK': {
-            "id": "5a932e60fdfdd4f02fa345b8",
-            "text": "How Does this Work?"
-        }
-    }
 
-    TRELLO_LABELS = {
+    # Order is important here!!  When initializing a new board, lists will be arranged according
+    # to the order they're listed here.
+    DEFAULT_TRELLO_LISTS = [
+        {
+            'name': 'HOWDOESTHISWORK',
+            'default_caption': 'How Does this Work?',
+        },
+        {
+            'name': 'NEW',
+            'default_caption': 'New',
+        },
+        {
+            'name': 'REVIEW',
+            'default_caption': 'In Review',
+        },
+        {
+            'name': 'SCHEDULED',
+            'default_caption': 'Scheduled',
+        }
+    ]
+
+    DEFAULT_TRELLO_LABELS = {
         "FORMAT": {
-            "IN-DEPTH": "5a0094fca8e476f047706616",
-            "LIGHTNING": "5a00950b73846ef08844501e",
-            "DEMO": "5a0095201f007932c3ea53d0",
-            "BEGINNER": "5a0095307b5c511544f1447b"
+            "IN-DEPTH": {
+                'default_color': 'blue',
+                'default_caption': 'In Depth (20-30 minutes)'
+            },
+            "LIGHTNING": {
+                'default_color': 'sky',
+                'default_caption': 'Lightning Talk (5-10 minutes)'
+            },
+            "DEMO": {
+                'default_color': 'lime',
+                'default_caption': 'Short Demo (15-20 minutes)'
+            },
+            "BEGINNER": {
+                'default_color': 'pink',
+                'default_caption': 'Beginner Track (20 minutes)'
+            },
         },
         "AUDIENCE": {
-            "BEGINNER": "5a0091839ae3d60b0c9e04af",
-            "INTERMEDIATE": "5a0091839ae3d60b0c9e04b1",
-            "ADVANCED": "5a0091839ae3d60b0c9e04b0"
+            "BEGINNER": {
+                'default_color': 'green',
+                'default_caption': 'Beginner'
+            },
+            "INTERMEDIATE": {
+                'default_color': 'yellow',
+                'default_caption': 'Intermediate'
+            },
+            "ADVANCED": {
+                'default_color': 'red',
+                'default_caption': 'Advanced'
+            },
         }
     }
 

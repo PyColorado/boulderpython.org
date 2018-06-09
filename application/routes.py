@@ -19,9 +19,9 @@ from flask import (
     url_for
 )
 
-from application.models import Status, Submission
+from application.models import Status, Submission, TrelloList
 from application.tasks import create_hook, send_email
-from application.utils import TrelloClient, pluck
+from application.utils import SubmissionsTrelloClient, pluck
 from application.extensions import cache
 from application.forms import SubmissionForm
 
@@ -75,19 +75,19 @@ def submit():
         * need simple notification for successful form POST, currently no feedback
     '''
     form = SubmissionForm()
-    labels = current_app.config['TRELLO_LABELS']
 
     if form.validate_on_submit():
-        client, lst = TrelloClient()
+        client = SubmissionsTrelloClient()
+        labels = client.labels
 
-        card = lst.add_card(
+        card = client.new_submissions_list.add_card(
             name=form.data['title'],
             desc="#DESCRIPTION \n{} \n\n#NOTES \n{}".format(
                 form.data['description'],
                 form.data['notes']),
             labels=[
-                labels['FORMAT'][form.data['format']],
-                labels['AUDIENCE'][form.data['audience']]
+                labels[form.data['format']],
+                labels[form.data['audience']]
             ],
             position='top',
             assign=[current_app.config['TRELLO_ASSIGNEE']]
@@ -124,7 +124,12 @@ def hook(send=False):
 
     data = request.get_json()
     action = data["action"]
-    lists = current_app.config["TRELLO_LISTS"]
+
+    lists = {}
+
+    # Create a lookup table by symbolic list name
+    for local_list in TrelloList().all():
+        lists[local_list.list_symbolic_name] = local_list.list_id
 
     # if card has moved
     if action["display"]["translationKey"] == "action_move_card_from_list_to_list":
@@ -132,16 +137,16 @@ def hook(send=False):
         submission = Submission().first(card_id=data['model']['id'])
         if submission:
             # if card moved from NEW to IN-REVIEW
-            if action["data"]["listAfter"]["id"] == lists["REVIEW"]["id"] \
-                    and action["data"]["listBefore"]["id"] == lists["NEW"]["id"] \
+            if action["data"]["listAfter"]["id"] == lists["REVIEW"] \
+                    and action["data"]["listBefore"]["id"] == lists["NEW"] \
                     and submission.status == Status.NEW.value:
                 Submission().update(submission, status=Status.INREVIEW.value)
                 current_app.logger.info("Submission {submission.id} is now IN-REVIEW")
                 send = True
 
             # if card moved from IN-REVIEW to SCHEDULED
-            elif action["data"]["listAfter"]["id"] == lists["SCHEDULED"]["id"] \
-                    and action["data"]["listBefore"]["id"] == lists["REVIEW"]["id"] \
+            elif action["data"]["listAfter"]["id"] == lists["SCHEDULED"] \
+                    and action["data"]["listBefore"]["id"] == lists["REVIEW"] \
                     and submission.status == Status.INREVIEW.value:
                 Submission().update(submission, status=Status.SCHEDULED.value)
                 current_app.logger.info("Submission {submission.id} is now SCHEDULED")
@@ -203,11 +208,9 @@ def privacy():
 
 @bp.route('/submission-process', methods=['GET'])
 def submission_process():
-    client, lst = TrelloClient()
-    board = client.get_board(current_app.config['TRELLO_BOARD'])
-
-    list_id = current_app.config['TRELLO_LISTS']['HOWDOESTHISWORK']['id']
-    how_does_this_work_list = board.get_list(list_id)
+    client = SubmissionsTrelloClient()
+    list_id = TrelloList().first(list_symbolic_name='HOWDOESTHISWORK').list_id
+    how_does_this_work_list = client.board.get_list(list_id)
 
     return render_template('submission_process.html',
                            how_does_this_work_cards=how_does_this_work_list.list_cards())

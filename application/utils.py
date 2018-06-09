@@ -5,30 +5,61 @@
     utility function
 """
 import collections
+import functools
 
 from flask import current_app as app
+
+from application import TrelloList
 from trello import TrelloClient as Trello
 
 
-def TrelloClient():
-    '''Return an instance of the Trello client and the new submissions list
+class SubmissionsTrelloClient(Trello):
+    '''Wrap the base Trello client with one that understands the business logic of the Submissions
+    app.'''
+    def __init__(self):
+        with app.app_context():
+            super().__init__(
+                api_key=app.config['TRELLO_API_KEY'],
+                api_secret=app.config['TRELLO_API_SECRET'],
+                token=app.config['TRELLO_TOKEN'],
+                token_secret=app.config['TRELLO_TOKEN_SECRET']
+            )
 
-    Returns:
-        TrelloClient:   an instance of the Trello API client
-        TrelloList:     the new submissions list from our Trello board
-    '''
-    with app.app_context():
-        client = Trello(
-            api_key=app.config['TRELLO_API_KEY'],
-            api_secret=app.config['TRELLO_API_SECRET'],
-            token=app.config['TRELLO_TOKEN'],
-            token_secret=app.config['TRELLO_TOKEN_SECRET']
-        )
+    @property
+    @functools.lru_cache()
+    def board(self):
+        with app.app_context():
+            return self.get_board(app.config['TRELLO_BOARD'])
 
-        board = client.get_board(app.config['TRELLO_BOARD'])
-        newSubmissionsList = board.get_list(app.config['TRELLO_LISTS']['NEW']['id'])
+    @property
+    @functools.lru_cache()
+    def new_submissions_list(self):
+        list_id = TrelloList().first(list_symbolic_name='NEW').list_id
+        return self.board.get_list(list_id)
 
-        return client, newSubmissionsList
+    @property
+    @functools.lru_cache()
+    def labels(self):
+
+        with app.app_context():
+            # Build a map of known label captions to common label names
+            known_label_captions = {
+                options['default_caption']: common_name
+                for label_group in app.config['DEFAULT_TRELLO_LABELS'].values()
+                for common_name, options in label_group.items()
+            }
+
+        # Iterate over the Trello labels, matching them by caption, and mapping common label name
+        # to Trello label ID
+        labels_by_common_name = {}
+
+        for trello_label in self.board.get_labels():
+            common_name = known_label_captions.get(trello_label.name, None)
+
+            if common_name:
+                labels_by_common_name[common_name] = trello_label.id
+
+        return labels_by_common_name
 
 
 def pluck(iterable, test_fn):
