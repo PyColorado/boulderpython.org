@@ -1,13 +1,9 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [dev-packages]
-
-livereload = "*"
 pytest = "*"
 pytest-cov = "*"
 "pytest-pep8" = "*"
@@ -19,27 +15,13 @@ sphinx = "*"
 sphinxcontrib-napoleon = "*"
 sphinx-rtd-theme = "*"
 ipython = "*"
-
+livereload = "*"
+click = "*"
 
 [packages]
-
-astroid = "==1.5.3"
-click = "==6.7"
 flask = "*"
 flask-moment = "*"
-gevent = "==1.2.2"
-greenlet = "==0.4.12"
 gunicorn = "*"
-isort = "==4.2.15"
-itsdangerous = "==0.24"
-"jinja2" = "==2.9.6"
-lazy-object-proxy = "==1.3.1"
-markupsafe = "==1.0"
-mccabe = "==0.6.1"
-pyparsing = "==2.2.0"
-tornado = "==4.5.2"
-werkzeug = "==0.12.2"
-wrapt = "==1.10.11"
 meetup-api = "*"
 "mailchimp3" = "*"
 flask-caching = "*"
@@ -47,7 +29,8 @@ flask-wtf = "*"
 flask-sqlalchemy = "*"
 "psycopg2" = "*"
 py-trello = {ref = "b929721397077f31a06603d7bb7843526d2a926b", git = "https://github.com/boulder-python/py-trello.git", editable = true}
-celery = "==4.1.0"
+celery = "*"
 flask-celery-helper = "*"
 flask-sendgrid = "*"
 "markdown2" = "*"
+flask-migrate = "*"
