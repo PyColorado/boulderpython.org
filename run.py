@@ -54,7 +54,7 @@ def runserver(reload):
 
 @app.cli.command('celeryd')
 def celeryd():
-    celery_args = ['celery', 'worker', '-l', 'info', '-E']
+    celery_args = ['celery', 'worker', '-l', 'info', '-E', '-c', '4']
     with app.app_context():
         return celery_main(celery_args)
 
