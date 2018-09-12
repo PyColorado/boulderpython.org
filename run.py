@@ -7,7 +7,7 @@
 
 import os, sys
 
-import click, livereload
+import click
 from sqlalchemy import exc
 from flask.cli import with_appcontext
 from celery.bin.celery import main as celery_main
@@ -45,6 +45,7 @@ def initdb():
 def runserver(reload):
     '''Shortcut to ``flask run``'''
     if reload:
+        import livereload
         server = livereload.Server(app.wsgi_app)
         server.watch('.', ignore=lambda x: ('log' in x))
         server.serve(port=os.environ.get('PORT', '9999'), host=os.environ.get('HOST', 'localhost'))
