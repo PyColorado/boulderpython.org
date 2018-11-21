@@ -13,31 +13,9 @@ from flask.cli import with_appcontext
 from celery.bin.celery import main as celery_main
 
 from application import create_app
-from application.extensions import db
 
 
 app = create_app()
-
-
-@app.cli.command('initdb')
-def initdb():
-    '''Creates the database tables.'''
-    try:
-        # Clear out our SQL database
-        click.echo(' * Clearing database...')
-        db.drop_all()
-
-    except exc.OperationalError as e:
-        click.secho(f'{e}', fg='red')
-
-    except Exception as e:
-        click.secho(f'{e}', fg='red')
-
-    click.echo(' * Creating database tables...')
-    db.create_all()
-
-    # all done
-    click.secho(' * DONE', fg='green')
 
 
 @app.cli.command('runserver')

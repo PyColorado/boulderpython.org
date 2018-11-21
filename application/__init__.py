@@ -5,13 +5,12 @@
     flask application entrypoint
 """
 import os
-from datetime import datetime as dt
 
 import pytz
 from flask import Flask
 
 from config import config
-from application.extensions import db, cache, moment, celery
+from application.extensions import db, migrate, cache, moment, celery
 from application.filters import autoversion, current_route, markdown
 from application.models import *  # noqa
 from application.tasks import *  # noqa
@@ -33,6 +32,7 @@ def configure(app, config_name):
     app.config.from_envvar('FLASK_CONFIG', silent=True)
 
     db.init_app(app)
+    migrate.init_app(app)
     cache.init_app(app)
     moment.init_app(app)
     celery.init_app(app)
