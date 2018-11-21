@@ -7,7 +7,8 @@
 
 import os, sys
 
-import click, livereload
+import click
+from sqlalchemy import exc
 from flask.cli import with_appcontext
 from celery.bin.celery import main as celery_main
 
@@ -22,6 +23,7 @@ app = create_app()
 def runserver(reload):
     '''Shortcut to ``flask run``'''
     if reload:
+        import livereload
         server = livereload.Server(app.wsgi_app)
         server.watch('.', ignore=lambda x: ('log' in x))
         server.serve(port=os.environ.get('PORT', '9999'), host=os.environ.get('HOST', 'localhost'))
@@ -31,7 +33,7 @@ def runserver(reload):
 
 @app.cli.command('celeryd')
 def celeryd():
-    celery_args = ['celery', 'worker', '-l', 'info', '-E']
+    celery_args = ['celery', 'worker', '-l', 'info', '-E', '-c', '2']
     with app.app_context():
         return celery_main(celery_args)
 
