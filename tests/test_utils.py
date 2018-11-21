@@ -9,15 +9,17 @@
 import pytest
 
 from tests.mocks.trello import MockTrelloClient
-from application.utils import TrelloClient, pluck
+from application.utils import pluck
 
 
 @pytest.mark.usefixtures('session')
 class TestUtils:
 
     def test_trello_client(self, app, mocker):
-        mocker.patch('application.utils.Trello', new=MockTrelloClient)
-        client, lst = TrelloClient()
+        SubmissionsTrelloClient = mocker.patch('application.utils.SubmissionsTrelloClient',
+                                               new=MockTrelloClient)
+        client = SubmissionsTrelloClient()
+        lst = client.board.get_list(1)
         assert lst['id'] == 1
 
     def test_pluck(self, *args, **kwargs):

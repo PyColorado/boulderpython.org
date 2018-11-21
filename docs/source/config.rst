@@ -79,8 +79,6 @@ environment variables because they're already public and not really a risk.
 
     - ``TRELLO_HOOK``: this is just a URL pointing back to your app's root URL plus the Trello hook path; example: https://boulderpython.ngrok.io/trello/hook
     - ``TRELLO_BOARD``: the ID of your "Submissions" board
-    - ``TRELLO_LISTS``: dictionary containing the names and IDs of the lists on our **board**.
-    - ``TRELLO_LABELS``: dictionary containing the IDs of the labels on our **board** and **lists**.
 
 TRELLO_LISTS
     On our Submissions board there are 4 lists, and they correspond to the 4 queues of our submission process:
@@ -90,24 +88,7 @@ TRELLO_LISTS
         #. **Scheduled**
         #. **Archived**
 
-    Here's an example of how our lists are configured in ``config.py``:
-
-    .. code-block:: python
-
-        TRELLO_LISTS = {
-            'NEW': {
-                "id": "5a0091836c98d9743f94b363",
-                "text": "New"
-            },
-            'REVIEW': {
-                "id": "5a0091836c98d9743f94b364",
-                "text": "In Review"
-            },
-            'SCHEDULED': {
-                "id": "5a0091836c98d9743f94b365",
-                "text": "Scheduled"
-            }
-        }
+    To initialize these lists on a freshly created board, run ``flask initlists``.
 
 TRELLO_LABELS
     Our card lists have a set of labels that correspond to both the format and audience of each talk submission. We configured
@@ -124,23 +105,7 @@ TRELLO_LABELS
         #. **INTERMEDIATE**
         #. **ADVANCED**
 
-    Here's an example of how our labels are configured in ``config.py``:
-
-    .. code-block:: python
-
-        TRELLO_LABELS = {
-            "FORMAT": {
-                "IN-DEPTH": "5a0094fca8e476f047706616",
-                "LIGHTNING": "5a00950b73846ef08844501e",
-                "DEMO": "5a0095201f007932c3ea53d0",
-                "BEGINNER": "5a0095307b5c511544f1447b"
-            },
-            "AUDIENCE": {
-                "BEGINNER": "5a0091839ae3d60b0c9e04af",
-                "INTERMEDIATE": "5a0091839ae3d60b0c9e04b1",
-                "ADVANCED": "5a0091839ae3d60b0c9e04b0"
-            }
-        }
+    To initialize these labels on a freshly created board, run ``flask initlabels``.
 
 .. note:: See the selectbox options in ``forms.py`` to see how these are related in the Submission form.
 

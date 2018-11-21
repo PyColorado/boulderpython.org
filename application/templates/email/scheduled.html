@@ -5,16 +5,16 @@
 
 {% set tagline = 'Your Boulder Python submission has been accepted!' %}
 
-{% set body = '
+{% block body %}
 <p style="margin: 0;">
-  <strong>You\'re cleared for take off!</strong> You\'re speaking at Boulder Python! Next you\'ll receive a
+  <strong>You're cleared for take off!</strong> You're speaking at Boulder Python! Next you'll receive a
   calendar invite once you and the organizers have coordinated a date. Thank you again for submitting!
 </p>
 <p style="margin: 0;">
   <br>
-  Our entire review process is publicly accesible on Trello.
+  Our entire review process is publicly accessible on Trello.
 </p>
-' %}
+{% endblock %}
 
 {% set button_link = submission.card_url %}
 {% set button_text = 'Your Submission' %}

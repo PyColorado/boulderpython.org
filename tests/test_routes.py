@@ -55,7 +55,7 @@ class TestRoutes:
         assert resp.status_code == 200
 
     def test_submit_post(self, client, mocker):
-        mocker.patch('application.utils.Trello', new=MockTrelloClient)
+        mocker.patch('application.routes.SubmissionsTrelloClient', new=MockTrelloClient)
         data = dict(
             email='submit1@example.com',
             title='foo',
@@ -75,7 +75,7 @@ class TestRoutes:
         assert Submission().first(email='submit1@example.com')
 
     def test_submit_redirect(self, client, mocker):
-        mocker.patch('application.utils.Trello', new=MockTrelloClient)
+        mocker.patch('application.routes.SubmissionsTrelloClient', new=MockTrelloClient)
         with mock.patch('application.routes.url_for') as patched:
             data = dict(
                 email='submit2@example.com',

@@ -12,32 +12,111 @@ from sqlalchemy import exc
 from flask.cli import with_appcontext
 from celery.bin.celery import main as celery_main
 
-from application import create_app
+from application import create_app, TrelloList
 from application.extensions import db
-
+from application.utils import SubmissionsTrelloClient
+from trello import ResourceUnavailable
 
 app = create_app()
 
 
-@app.cli.command('initdb')
-def initdb():
-    '''Creates the database tables.'''
-    try:
-        # Clear out our SQL database
-        click.echo(' * Clearing database...')
-        db.drop_all()
+@app.cli.command('initlists')
+def init_lists():
+    '''Populates a Trello board with the default lists.'''
+    client = SubmissionsTrelloClient()
+    board = client.board
 
-    except exc.OperationalError as e:
-        click.secho(f'{e}', fg='red')
+    if not board:
+        click.secho('TRELLO_BOARD must be specified in the app configuration.', fg='red')
+        sys.exit(1)
 
-    except Exception as e:
-        click.secho(f'{e}', fg='red')
+    # We iterate the list in reverse order because by default the Trello client inserts new lists
+    # at the beginning.  So in a sense, we need to create them from right-to-left.
+    for default_list_options in reversed(app.config['DEFAULT_TRELLO_LISTS']):
 
-    click.echo(' * Creating database tables...')
-    db.create_all()
+        default_list_name = default_list_options['name']
+        default_list_caption = default_list_options['default_caption']
+
+        # Verity that this list is already in our database and that it points to a valid list on
+        # the trello board.
+        local_list = None
+        matching_lists = TrelloList().find(list_symbolic_name=default_list_name).all()
+
+        if matching_lists:
+            local_list = matching_lists[0]
+
+            # Verify that this list ID is on the trello board
+            try:
+                trello_list = board.get_list(local_list.list_id)
+
+                # Reopen the list if it was accidentally closed.
+                if trello_list.closed:
+                    trello_list.open()
+
+            except ResourceUnavailable:
+                trello_list = None
+
+            if trello_list:
+                # All good.
+                click.echo(f' * "{default_list_name}" list present in both database and Trello.')
+                continue
+
+        # No entry or a mismatched ID in the database.  See if the list already exists on the
+        # board (with the default caption).
+        for existing_list in board.open_lists():
+            if existing_list.name == default_list_caption:
+                # There it is!
+                click.echo(f' * Found existing Trello list for "{default_list_name}"...')
+                trello_list = existing_list
+                break
+        else:
+            # No matching trello list found.  Create it.
+            click.echo(f' * Creating Trello list for "{default_list_name}"...')
+            trello_list = board.add_list(default_list_caption)
+
+        if local_list:
+            # Just need to update the local entry.
+            click.echo(f' * Updating list ID in database for "{default_list_name}"...')
+
+            local_list.list_id = trello_list.id
+            TrelloList().save(local_list)
+        else:
+            # Need to create a new local entry.
+            click.echo(f' * Adding list ID to database for "{default_list_name}"...')
+
+            TrelloList().create(list_symbolic_name=default_list_name,
+                                list_id=trello_list.id)
 
     # all done
     click.secho(' * DONE', fg='green')
+
+
+@app.cli.command('initlabels')
+def init_labels():
+    '''Populates a Trello board with the default labels.'''
+    client = SubmissionsTrelloClient()
+    board = client.board
+    all_label_names = set(map(lambda x: x.name, board.get_labels()))
+
+    for default_labels_by_category in app.config['DEFAULT_TRELLO_LABELS'].values():
+        for label in default_labels_by_category.values():
+            default_caption = label['default_caption']
+
+            if default_caption not in all_label_names:
+                click.echo(f' * Adding label "{default_caption}"...')
+                board.add_label(default_caption, label['default_color'])
+            else:
+                click.echo(f' * "{default_caption}" label already exists...')
+
+    # all done
+    click.secho(' * DONE', fg='green')
+
+
+@app.cli.command('initboard')
+def init_board():
+    '''Populates a Trello board with the default lists and labels.'''
+    init_lists()
+    init_labels()
 
 
 @app.cli.command('runserver')
@@ -55,7 +134,12 @@ def runserver(reload):
 
 @app.cli.command('celeryd')
 def celeryd():
-    celery_args = ['celery', 'worker', '-l', 'info', '-E', '-c', '2', '--without-gossip', '--without-mingle', '--without-heartbeat']
+    celery_args = ['celery', 'worker', '-l', 'info', '-E', '-c', '2']
+
+    if os.name == 'nt':
+        # Run "solo" in Windows
+        celery_args += ['-P', 'solo']
+
     with app.app_context():
         return celery_main(celery_args)
 

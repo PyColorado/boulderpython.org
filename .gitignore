@@ -153,3 +153,4 @@ venv.bak/
 appengine-generated/
 node_modules/
 application/local.cfg
+dump.sql
