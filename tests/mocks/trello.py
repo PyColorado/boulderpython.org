@@ -4,6 +4,7 @@
     ~~~~~~~~~
     a Trello mock for testing
 """
+from flask import current_app as app
 
 
 class MockTrelloCard():
@@ -12,6 +13,12 @@ class MockTrelloCard():
 
     def __init__(self):
         return
+
+
+class MockTrelloLabel():
+    def __init__(self, _id, name, *args, **kwargs):
+        self.id = _id
+        self.name = name
 
 
 class MockTrelloList():
@@ -43,11 +50,25 @@ class MockTrelloClient():
     def __init__(self, *args, **kwargs):
         return
 
-    def get_board(self, *arg, **kwrags):
+    @property
+    def board(self):
+        return self.get_board(1)
+
+    def get_board(self, board_id):
         return MockTrelloBoard()
 
-    def __iter__(self):
-        return self, MockTrelloList(1)
+    @property
+    def new_submissions_list(self):
+        return self.board.get_list(1)
 
-    def __next__(self):
-        self.lst = MockTrelloList(1)
+    @property
+    def labels(self):
+        label_idx = 0
+        labels = {}
+
+        for label_group in app.config['DEFAULT_TRELLO_LABELS'].values():
+            for label_name in label_group:
+                labels[label_name] = label_idx
+                label_idx += 1
+
+        return labels

@@ -58,8 +58,6 @@ Celery
     - ``TRELLO_ASSIGNEE``
     - ``TRELLO_HOOK``
     - ``TRELLO_BOARD``
-    - ``TRELLO_LISTS``
-    - ``TRELLO_LABELS``
 
 
 Build Static Assets

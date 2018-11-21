@@ -5,17 +5,17 @@
 
 {% set tagline = 'Talk submission has been received.' %}
 
-{% set body = '
+{% block body %}
 <p style="margin: 0;">
   <strong>Thanks!</strong> Your talk submission to Boulder Python has been received. We really appreciate that you took
   the time to submit and the organizers will be getting back to you ASAP!
 </p>
 <p style="margin: 0;">
   <br>
-  Our entire review process is publicly accesible on Trello. You can see your (anonymous) submission along with
+  Our entire review process is publicly accessible on Trello. You can see your (anonymous) submission along with
   all others, including past talks.
 </p>
-' %}
+{% endblock %}
 
 {% set button_link = submission.card_url %}
 {% set button_text = 'Your Submission' %}

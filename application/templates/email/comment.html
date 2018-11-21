@@ -1,0 +1,26 @@
+{% extends 'email/base.html' %}
+
+
+{% set title = 'New Comment Posted' %}
+
+{% set tagline = 'Your Boulder Python submission has received a new comment' %}
+
+{% block body %}
+<p style="margin: 0;">
+  <strong>Let's chat!</strong> The Boulder Python Organizers have added a comment to your
+  submission.  See below and reply directly to this email to respond. Thank you again for submitting!
+</p>
+<p style="margin: 10px 0 0 0;">
+    <strong>{{ name }} said:</strong>
+</p>
+<p style="margin: 10px;">
+    <em>{{ comment }}</em>
+</p>
+<p style="margin: 0;">
+  <br>
+  Our entire review process is publicly accessible on Trello.
+</p>
+{% endblock %}
+
+{% set button_link = submission.card_url %}
+{% set button_text = 'Your Submission' %}
