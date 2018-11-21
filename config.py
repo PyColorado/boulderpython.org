@@ -17,8 +17,8 @@ class BaseConfig:
         'DATABASE_URL', 'postgresql+psycopg2://localhost/boulderpython')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    CELERY_BROKER_URL = os.environ.get('RABBITMQ_BIGWIG_URL', 'amqp://localhost//')
-    CELERY_RESULT_BACKEND = os.environ.get('RABBITMQ_BIGWIG_URL', 'rpc')
+    CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://localhost//')
+    CELERY_RESULT_BACKEND = os.environ.get('CLOUDAMQP_URL', 'rpc')
 
     SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', None)
     SENDGRID_DEFAULT_FROM = 'Boulder Python <hi@boulderpython.org>'

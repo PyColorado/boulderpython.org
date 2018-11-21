@@ -1,6 +1,10 @@
 language: python
 python:
   - "3.6"
+branches:
+  only:
+  - master
+  - develop
 services:
   - rabbitmq
 install:
@@ -11,4 +15,9 @@ script:
 after_success:
   - coveralls
 notifications:
-    slack: pycolorado:S9WVa6L6dH9d0HPNU9bUUMof
+  slack:
+    secure: iWoiWPEXtnAWH9lU1LfP/bQEssZCyjHWJ2ky21HuYThs62tjwAKAP1y9b+jmDX/3NDtW/Z1x+0hB0hC9aXBJPBVejsAiI3qzJgrOT/BSWgCssu5gR0oNcdsn5zwQZlqhtt6YtGjMGYnyLyln1Hgh7wFsTJmt1Hb/CbUeAoEevcejKqDtorCXhi3Lq8oACnpg25CEetr0qRvL1V67HawZaD0/cnSqOqAepjRRLCwoQ1yWniEmsXtDSSZIKBcuEawHAHSdewqZq9/9aeBNZo2Mt78ZkcMCyp/NHluKwY1MEkUoGsFXCCTEzvBiD9uPxdTb52lzdjmAVo4seYDPnyFVh4sdKp+P0avrm6ct1Cm36YPFL9+PKMRhegjgOfIQo3E01FQFrBFSVdaWtAq7+zTPOK9+ms0JRSUsbISENkMUqP+JfaCCL66ziM0GAOYZ8UFQQwt9PjQv/o//DTLKFU4jy2fkbji6lYGsZnN1Gv6+ARDoxTUMJcPmnqRhTbidTPQbea/i2AMZ/U4saplEYP7klbYeIPm+83FElESRohvqjobXG9zakxG1WkCHykJv8BCv2V7HB+EGLqLdB1cv1WsOD3zZdfzZjNdzDy9JuejvNWir2MP9m4hKd8Cw/Jgwg+jWGkbyO+2UfbUE6IbrccHK899eW01/PWQhP9261jfFZV8=
+branches:
+  only:
+  - master
+  - develop
