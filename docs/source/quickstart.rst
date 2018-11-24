@@ -6,6 +6,7 @@ Quick Start
 We suggest you follow the process of:
 
     #. Configuration
+    #. Install Python Dependencies
     #. Build Static Assets
     #. Run Application
     #. Run Celery
@@ -58,6 +59,22 @@ Celery
     - ``TRELLO_ASSIGNEE``
     - ``TRELLO_HOOK``
     - ``TRELLO_BOARD``
+
+
+Install Python Dependencies
+---------------------------
+
+Install python dependencies using ``pipenv``:
+
+.. code-block:: bash
+
+    $ pipenv sync -d
+
+Initialize pre-commit hooks for auto-Black'ing (you should already have ``pre-commit`` installed in your system python):
+
+.. code-block:: bash
+
+    $ pre-commit install
 
 
 Build Static Assets

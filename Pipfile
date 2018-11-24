@@ -17,6 +17,7 @@ sphinx-rtd-theme = "*"
 ipython = "*"
 livereload = "*"
 click = "*"
+black = "==18.9b0"
 
 [packages]
 flask = "*"
