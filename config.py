@@ -29,6 +29,8 @@ class BaseConfig:
     MAILCHIMP_API_KEY = os.environ.get("MAILCHIMP_API_KEY", None)
     MAILCHIMP_LIST_ID = os.environ.get("MAILCHIMP_LIST_ID", None)
 
+    BUGSNAG_API_KEY = os.environ.get("BUGSNAG_API_KEY", None)
+
     TRELLO_API_KEY = os.environ.get("TRELLO_API_KEY", None)
     TRELLO_API_SECRET = os.environ.get("TRELLO_API_SECRET", None)
     TRELLO_TOKEN = os.environ.get("TRELLO_TOKEN", None)
