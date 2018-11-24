@@ -12,10 +12,10 @@ from application import create_app
 from application.extensions import db as _db
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def app(request):
-    '''Session-wide test `Flask` application.'''
-    app = create_app('testing')
+    """Session-wide test `Flask` application."""
+    app = create_app("testing")
 
     # Establish an application context before running the tests.
     ctx = app.app_context()
@@ -30,19 +30,19 @@ def app(request):
 
 @pytest.fixture
 def client(app):
-    '''return an instance of the application's test client'''
+    """return an instance of the application's test client"""
     return app.test_client()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def db(app, request):
-    '''Session-wide test database.'''
-    if os.path.exists(app.config['TEST_DB']):
-        os.unlink(app.config['TEST_DB'])
+    """Session-wide test database."""
+    if os.path.exists(app.config["TEST_DB"]):
+        os.unlink(app.config["TEST_DB"])
 
     def teardown():
         _db.drop_all()
-        os.unlink(app.config['TEST_DB'])
+        os.unlink(app.config["TEST_DB"])
 
     _db.app = app
     _db.create_all()
@@ -51,17 +51,14 @@ def db(app, request):
     return _db
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def celery_config():
-    return {
-        'broker_url': 'amqp://localhost',
-        'result_backend': 'amqp://localhost'
-    }
+    return {"broker_url": "amqp://localhost", "result_backend": "amqp://localhost"}
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def session(db, request):
-    '''Creates a new database session for a test.'''
+    """Creates a new database session for a test."""
     connection = db.engine.connect()
     transaction = connection.begin()
 

@@ -20,22 +20,22 @@ from trello import ResourceUnavailable
 app = create_app()
 
 
-@app.cli.command('initlists')
+@app.cli.command("initlists")
 def init_lists():
-    '''Populates a Trello board with the default lists.'''
+    """Populates a Trello board with the default lists."""
     client = SubmissionsTrelloClient()
     board = client.board
 
     if not board:
-        click.secho('TRELLO_BOARD must be specified in the app configuration.', fg='red')
+        click.secho("TRELLO_BOARD must be specified in the app configuration.", fg="red")
         sys.exit(1)
 
     # We iterate the list in reverse order because by default the Trello client inserts new lists
     # at the beginning.  So in a sense, we need to create them from right-to-left.
-    for default_list_options in reversed(app.config['DEFAULT_TRELLO_LISTS']):
+    for default_list_options in reversed(app.config["DEFAULT_TRELLO_LISTS"]):
 
-        default_list_name = default_list_options['name']
-        default_list_caption = default_list_options['default_caption']
+        default_list_name = default_list_options["name"]
+        default_list_caption = default_list_options["default_caption"]
 
         # Verity that this list is already in our database and that it points to a valid list on
         # the trello board.
@@ -84,71 +84,71 @@ def init_lists():
             # Need to create a new local entry.
             click.echo(f' * Adding list ID to database for "{default_list_name}"...')
 
-            TrelloList().create(list_symbolic_name=default_list_name,
-                                list_id=trello_list.id)
+            TrelloList().create(list_symbolic_name=default_list_name, list_id=trello_list.id)
 
     # all done
-    click.secho(' * DONE', fg='green')
+    click.secho(" * DONE", fg="green")
 
 
-@app.cli.command('initlabels')
+@app.cli.command("initlabels")
 def init_labels():
-    '''Populates a Trello board with the default labels.'''
+    """Populates a Trello board with the default labels."""
     client = SubmissionsTrelloClient()
     board = client.board
     all_label_names = set(map(lambda x: x.name, board.get_labels()))
 
-    for default_labels_by_category in app.config['DEFAULT_TRELLO_LABELS'].values():
+    for default_labels_by_category in app.config["DEFAULT_TRELLO_LABELS"].values():
         for label in default_labels_by_category.values():
-            default_caption = label['default_caption']
+            default_caption = label["default_caption"]
 
             if default_caption not in all_label_names:
                 click.echo(f' * Adding label "{default_caption}"...')
-                board.add_label(default_caption, label['default_color'])
+                board.add_label(default_caption, label["default_color"])
             else:
                 click.echo(f' * "{default_caption}" label already exists...')
 
     # all done
-    click.secho(' * DONE', fg='green')
+    click.secho(" * DONE", fg="green")
 
 
-@app.cli.command('initboard')
+@app.cli.command("initboard")
 def init_board():
-    '''Populates a Trello board with the default lists and labels.'''
+    """Populates a Trello board with the default lists and labels."""
     init_lists()
     init_labels()
 
 
-@app.cli.command('runserver')
-@click.option('--reload', 'reload', is_flag=True, help='run application with livereload')
+@app.cli.command("runserver")
+@click.option("--reload", "reload", is_flag=True, help="run application with livereload")
 def runserver(reload):
-    '''Shortcut to ``flask run``'''
+    """Shortcut to ``flask run``"""
     if reload:
         import livereload
+
         server = livereload.Server(app.wsgi_app)
-        server.watch('.', ignore=lambda x: ('log' in x))
-        server.serve(port=os.environ.get('PORT', '9999'), host=os.environ.get('HOST', 'localhost'))
+        server.watch(".", ignore=lambda x: ("log" in x))
+        server.serve(port=os.environ.get("PORT", "9999"), host=os.environ.get("HOST", "localhost"))
         return
     app.run()
 
 
-@app.cli.command('celeryd')
+@app.cli.command("celeryd")
 def celeryd():
-    celery_args = ['celery', 'worker', '-l', 'info', '-E', '-c', '2']
+    celery_args = ["celery", "worker", "-l", "info", "-E", "-c", "2"]
 
-    if os.name == 'nt':
+    if os.name == "nt":
         # Run "solo" in Windows
-        celery_args += ['-P', 'solo']
+        celery_args += ["-P", "solo"]
 
     with app.app_context():
         return celery_main(celery_args)
 
 
-@app.cli.command('ishell')
-@click.argument('ipython_args', nargs=-1, type=click.UNPROCESSED)
+@app.cli.command("ishell")
+@click.argument("ipython_args", nargs=-1, type=click.UNPROCESSED)
 @with_appcontext
 def shell(ipython_args):
-    '''Runs an iPython shell in the app context.
+    """Runs an iPython shell in the app context.
 
     Runs an interactive Python shell in the context of a given Flask application. The application
     will populate the default namespace of this shell according to it's configuration. This is
@@ -156,7 +156,7 @@ def shell(ipython_args):
     the application.
 
     Stolen from: https://github.com/ei-grad/flask-shell-ipython/blob/master/flask_shell_ipython.py
-    '''
+    """
     import IPython
     from IPython.terminal.ipapp import load_default_config
     from traitlets.config.loader import Config
@@ -164,27 +164,25 @@ def shell(ipython_args):
 
     app = _app_ctx_stack.top.app
 
-    if 'IPYTHON_CONFIG' in app.config:
-        config = Config(app.config['IPYTHON_CONFIG'])
+    if "IPYTHON_CONFIG" in app.config:
+        config = Config(app.config["IPYTHON_CONFIG"])
     else:
         config = load_default_config()
 
-    config.TerminalInteractiveShell.banner1 = '''Python %s on %s
+    config.TerminalInteractiveShell.banner1 = """Python %s on %s
 IPython: %s
 App: %s%s
-Instance: %s''' % (sys.version,
-                   sys.platform,
-                   IPython.__version__,
-                   app.import_name,
-                   app.debug and ' [debug]' or '',
-                   app.instance_path)
-
-    IPython.start_ipython(
-        argv=ipython_args,
-        user_ns=app.make_shell_context(),
-        config=config,
+Instance: %s""" % (
+        sys.version,
+        sys.platform,
+        IPython.__version__,
+        app.import_name,
+        app.debug and " [debug]" or "",
+        app.instance_path,
     )
 
+    IPython.start_ipython(argv=ipython_args, user_ns=app.make_shell_context(), config=config)
 
-if __name__ == '__main__':
-    runserver(['--reload'])
+
+if __name__ == "__main__":
+    runserver(["--reload"])

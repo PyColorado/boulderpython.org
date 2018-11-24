@@ -10,6 +10,7 @@ import random
 import requests
 from sendgrid import SendGridAPIClient
 from flask import current_app, render_template
+
 # from celery.utils.log import get_task_logger
 from sendgrid.helpers.mail import Mail, Email, Content
 
@@ -19,7 +20,7 @@ from application.extensions import celery
 
 
 def exponential_backoff(task_self):
-    '''Exponentially increase delay of task retry.
+    """Exponentially increase delay of task retry.
 
     Helper function that can be used in task ``eta`` or ``self.retry`` for bound tasks.
     It begins with 60 seconds, but exponentially increases the delay so that tasks
@@ -31,7 +32,7 @@ def exponential_backoff(task_self):
     Todo:
         * maybe it's best left to task max_retries but need a way to cancel after n failuers
 
-    '''
+    """
     minutes = task_self.default_retry_delay / 60
     rand = random.uniform(minutes, minutes * 1.3)
     return int(rand ** task_self.request.retries) * 60
@@ -39,7 +40,7 @@ def exponential_backoff(task_self):
 
 @celery.task
 def create_hook(_id, card):
-    '''Create Webhook for Trello Card.
+    """Create Webhook for Trello Card.
 
     When a card is created after a submission, we need to fix it with a webhook back to  our app.
 
@@ -50,10 +51,10 @@ def create_hook(_id, card):
     Todo:
         * No Exception handling!
         * should this handle submission not found?
-    '''
+    """
     client = SubmissionsTrelloClient()
     submission = Submission().get_by_id(_id)
-    webhook = client.create_hook(current_app.config['TRELLO_HOOK'], card)
+    webhook = client.create_hook(current_app.config["TRELLO_HOOK"], card)
     Submission().update(submission, hook=webhook.id)
 
     # send confirmation email
@@ -62,7 +63,7 @@ def create_hook(_id, card):
 
 @celery.task
 def extract_card_email(_id):
-    '''Forcibly extract the Trello card email address.
+    """Forcibly extract the Trello card email address.
 
     The Trello card email address allows submitters to directly reply to comment notifications.
     Trello does NOT provide this information via the API.
@@ -73,37 +74,40 @@ def extract_card_email(_id):
     Args:
         _id (int): the submission id
 
-    '''
+    """
     session = requests.Session()
 
     # Load the login page to capture the dsc cookie
-    session.get('https://trello.com/login')
+    session.get("https://trello.com/login")
 
     # Authenticate using email and password
-    auth_response = session.post('https://trello.com/1/authentication', data={
-        'factors[user]': current_app.config['TRELLO_USERNAME'],
-        'factors[password]': current_app.config['TRELLO_PASSWORD'],
-        'method': 'password'
-    })
+    auth_response = session.post(
+        "https://trello.com/1/authentication",
+        data={
+            "factors[user]": current_app.config["TRELLO_USERNAME"],
+            "factors[password]": current_app.config["TRELLO_PASSWORD"],
+            "method": "password",
+        },
+    )
 
     # Perform authorization step
-    session.post('https://trello.com/1/authorization/session', data={
-        'authentication': auth_response.json()['code'],
-        'dsc': session.cookies['dsc']
-    })
+    session.post(
+        "https://trello.com/1/authorization/session",
+        data={"authentication": auth_response.json()["code"], "dsc": session.cookies["dsc"]},
+    )
 
     # Fetch the card JSON
     submission = Submission().get_by_id(_id)
-    response = session.get(submission.card_url + '.json')
+    response = session.get(submission.card_url + ".json")
 
     # Extract the special email and save it to our database record
-    submission.card_email = response.json()['email']
+    submission.card_email = response.json()["email"]
     Submission().save(submission)
 
 
 @celery.task(bind=True)
 def send_email(self, _id, template_name, template_params=None):
-    '''Sends an email
+    """Sends an email
 
     Currently configured to send emails for updates to submission statuses
 
@@ -119,7 +123,7 @@ def send_email(self, _id, template_name, template_params=None):
         * should this handle submission not found?
         * add attachment in Scheduled email.
 
-    '''
+    """
     if not template_params:
         template_params = {}
 
@@ -128,37 +132,35 @@ def send_email(self, _id, template_name, template_params=None):
     # subject lines for emails based on submission status
     # not the best place for this, I admit.
     SUBJECTS = {
-        'new': 'Talk Submission Received',
-        'inreview': 'Talk Submission In-Review',
-        'scheduled': '🎉 CONGRATS! Talk Submission Accepted 🎉',
-        'comment': 'Reply to Comments'
+        "new": "Talk Submission Received",
+        "inreview": "Talk Submission In-Review",
+        "scheduled": "🎉 CONGRATS! Talk Submission Accepted 🎉",
+        "comment": "Reply to Comments",
     }
 
     submission = Submission().get_by_id(_id)
 
-    sg = SendGridAPIClient(apikey=current_app.config['SENDGRID_API_KEY'])
+    sg = SendGridAPIClient(apikey=current_app.config["SENDGRID_API_KEY"])
 
     if not template_name:
         # No template specified, use the submission status to determine what we're sending
         template_name = Status(submission.status).name.lower()
 
-    template = f'email/{template_name}.html'
+    template = f"email/{template_name}.html"
 
     mail = Mail(
-        Email(current_app.config['SENDGRID_DEFAULT_FROM']),
+        Email(current_app.config["SENDGRID_DEFAULT_FROM"]),
         SUBJECTS[template_name],
         Email(submission.email),
-        Content("text/html", (
-            render_template(
-                template,
-                title=SUBJECTS[template_name],
-                submission=submission,
-                **template_params)))
+        Content(
+            "text/html",
+            (render_template(template, title=SUBJECTS[template_name], submission=submission, **template_params)),
+        ),
     )
 
-    mail.personalizations[0].add_cc(Email(current_app.config['SENDGRID_DEFAULT_FROM']))
+    mail.personalizations[0].add_cc(Email(current_app.config["SENDGRID_DEFAULT_FROM"]))
 
-    if template_name == 'comment' and submission.card_email:
+    if template_name == "comment" and submission.card_email:
         # Add the card itself as the reply-to address.  When the user replies, it will create a
         # comment on the card via the Organizers account
         mail.reply_to = Email(submission.card_email)

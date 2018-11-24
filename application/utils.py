@@ -14,27 +14,28 @@ from trello import TrelloClient as Trello
 
 
 class SubmissionsTrelloClient(Trello):
-    '''Wrap the base Trello client with one that understands the business logic of the Submissions
-    app.'''
+    """Wrap the base Trello client with one that understands the business logic of the Submissions
+    app."""
+
     def __init__(self):
         with app.app_context():
             super().__init__(
-                api_key=app.config['TRELLO_API_KEY'],
-                api_secret=app.config['TRELLO_API_SECRET'],
-                token=app.config['TRELLO_TOKEN'],
-                token_secret=app.config['TRELLO_TOKEN_SECRET']
+                api_key=app.config["TRELLO_API_KEY"],
+                api_secret=app.config["TRELLO_API_SECRET"],
+                token=app.config["TRELLO_TOKEN"],
+                token_secret=app.config["TRELLO_TOKEN_SECRET"],
             )
 
     @property
     @functools.lru_cache()
     def board(self):
         with app.app_context():
-            return self.get_board(app.config['TRELLO_BOARD'])
+            return self.get_board(app.config["TRELLO_BOARD"])
 
     @property
     @functools.lru_cache()
     def new_submissions_list(self):
-        list_id = TrelloList().first(list_symbolic_name='NEW').list_id
+        list_id = TrelloList().first(list_symbolic_name="NEW").list_id
         return self.board.get_list(list_id)
 
     @property
@@ -44,8 +45,8 @@ class SubmissionsTrelloClient(Trello):
         with app.app_context():
             # Build a map of known label captions to common label names
             known_label_captions = {
-                options['default_caption']: common_name
-                for label_group in app.config['DEFAULT_TRELLO_LABELS'].values()
+                options["default_caption"]: common_name
+                for label_group in app.config["DEFAULT_TRELLO_LABELS"].values()
                 for common_name, options in label_group.items()
             }
 

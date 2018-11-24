@@ -10,6 +10,7 @@ from flask_migrate import Migrate
 from flask_moment import Moment
 from flask_caching import Cache
 from flask_celery import Celery
+
 # from flask_sendgrid import SendGrid
 
 

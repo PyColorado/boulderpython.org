@@ -14,9 +14,8 @@ import pytest
 # from tests.mocks.trello import MockTrelloClient
 
 
-@pytest.mark.usefixtures('session')
+@pytest.mark.usefixtures("session")
 class TestTasks:
-
     def test_create_hook(self, app, celery_worker, mocker):
         pass
         # with app.test_request_context():
