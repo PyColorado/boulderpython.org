@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e21ef0ec1f2d091321f9f890588a35f842182201527334dd3abf40e8a29006f3"
+            "sha256": "3a216613bb1bd9f7c5802155f73bcc7ddac446672f8d17c0d476eb939450ff06"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -33,6 +33,18 @@
                 "sha256:ed65448da5877b5558f19d2f7f11f8355ea76b3e63e1c0a6059f47cfae5f1c84"
             ],
             "version": "==3.5.0.4"
+        },
+        "bugsnag": {
+            "extras": [
+                "flask"
+            ],
+            "hashes": [
+                "sha256:5b90bd3493a807645498350cd0a6f1fbb7416d3845345e794ec483bc65cd17a8",
+                "sha256:5d42206e52707c6ea0a87a95ca8c9d840bcde5367099054aa84ecdc3f04cdd60",
+                "sha256:9cf1ffc0b1da604821aa2f0689bda758004c7a231adfdd846dda59a4c3c41ec0"
+            ],
+            "index": "pypi",
+            "version": "==3.4.3"
         },
         "celery": {
             "hashes": [
@@ -304,6 +316,13 @@
                 "sha256:6849544be74ec3638e84d90bc1cf2e1e9224cc10d96cd4383ec3f69e9bce077b"
             ],
             "version": "==1.1.4"
+        },
+        "webob": {
+            "hashes": [
+                "sha256:a48315158db05df0c47fbdd061b57ba0ba85bdd0b6ea9dca87511b4b7c798e99",
+                "sha256:fc8c466af474e2e2775f1aef7afb902ed8b82e597eb0b13624818a34e8bfe720"
+            ],
+            "version": "==1.8.4"
         },
         "werkzeug": {
             "hashes": [

@@ -35,3 +35,4 @@ flask-sendgrid = "*"
 "markdown2" = "*"
 flask-migrate = "*"
 psycopg2-binary = "*"
+bugsnag = {extras = ["flask"],version = "*"}

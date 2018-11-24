@@ -5,7 +5,8 @@
     Jinja template filters
 """
 
-import os, pathlib
+import os
+import pathlib
 import markdown2
 
 from flask import request
