@@ -36,3 +36,4 @@ flask-sendgrid = "*"
 flask-migrate = "*"
 psycopg2-binary = "*"
 bugsnag = {extras = ["flask"],version = "*"}
+blinker = "*"
