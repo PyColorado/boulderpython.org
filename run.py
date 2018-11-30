@@ -134,7 +134,18 @@ def runserver(reload):
 
 @app.cli.command("celeryd")
 def celeryd():
-    celery_args = ["celery", "worker", "-l", "info", "-E", "-c", "2"]
+    celery_args = [
+        "celery",
+        "worker",
+        "-l",
+        "info",
+        "-E",
+        "-c",
+        "2",
+        "--without-gossip",
+        "--without-mingle",
+        "--without-heartbeat",
+    ]
 
     if os.name == "nt":
         # Run "solo" in Windows
