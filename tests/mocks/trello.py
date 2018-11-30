@@ -7,21 +7,21 @@
 from flask import current_app as app
 
 
-class MockTrelloCard():
+class MockTrelloCard:
     id = 1
-    url = 'http://mock.trello.com/card/1'
+    url = "http://mock.trello.com/card/1"
 
     def __init__(self):
         return
 
 
-class MockTrelloLabel():
+class MockTrelloLabel:
     def __init__(self, _id, name, *args, **kwargs):
         self.id = _id
         self.name = name
 
 
-class MockTrelloList():
+class MockTrelloList:
     id = None
 
     def __init__(self, _id, *args, **kwargs):
@@ -35,10 +35,10 @@ class MockTrelloList():
         return MockTrelloCard
 
     def __repr__(self):
-        return {'id': self._id}
+        return {"id": self._id}
 
 
-class MockTrelloBoard():
+class MockTrelloBoard:
     def __init__(self, *args, **kwargs):
         return
 
@@ -46,7 +46,7 @@ class MockTrelloBoard():
         return MockTrelloList(_id)
 
 
-class MockTrelloClient():
+class MockTrelloClient:
     def __init__(self, *args, **kwargs):
         return
 
@@ -66,7 +66,7 @@ class MockTrelloClient():
         label_idx = 0
         labels = {}
 
-        for label_group in app.config['DEFAULT_TRELLO_LABELS'].values():
+        for label_group in app.config["DEFAULT_TRELLO_LABELS"].values():
             for label_name in label_group:
                 labels[label_name] = label_idx
                 label_idx += 1

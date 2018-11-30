@@ -8,6 +8,7 @@ import os
 
 import pytz
 from flask import Flask
+import bugsnag.flask
 
 from config import config
 from application.extensions import db, migrate, cache, moment, celery
@@ -28,28 +29,34 @@ def create_app(config=None):
 
 
 def configure(app, config_name):
-    app.config.from_object(config[config_name or 'default'])
-    app.config.from_envvar('FLASK_CONFIG', silent=True)
+    selected_config = config[config_name or "default"]
+    app.config.from_object(selected_config)
+    app.config.from_envvar("FLASK_CONFIG", silent=True)
 
     db.init_app(app)
     migrate.init_app(app)
     cache.init_app(app)
     moment.init_app(app)
     celery.init_app(app)
-    # mail.init_app(app)
+
+    if selected_config.BUGSNAG_API_KEY:
+        # Configure Bugsnag
+        bugsnag.configure(api_key=selected_config.BUGSNAG_API_KEY, auto_capture_sessions=True)
+
+        bugsnag.flask.handle_exceptions(app)
 
 
 def register_blueprints(app):
-    '''Register all blueprint modules'''
+    """Register all blueprint modules"""
     app.register_blueprint(bp)
 
 
 def register_filters(app):
-    @app.template_filter('convert_ms')
-    def convert_ms(ms, offset=0, format='%B %d, %Y %I:%M%p'):
+    @app.template_filter("convert_ms")
+    def convert_ms(ms, offset=0, format="%B %d, %Y %I:%M%p"):
         sec = ms / 1000.0
 
-        if os.name == 'nt':
+        if os.name == "nt":
             # Windows has a "minimum allowed" timestamp: https://stackoverflow.com/a/45372194
             sec = max(sec, 86400)
 
@@ -61,11 +68,11 @@ def register_filters(app):
 
         return timestamp.strftime(format)
 
-    @app.template_filter('autoversion')
+    @app.template_filter("autoversion")
     def autoversion_filter(filename):
         return autoversion(filename)
 
-    @app.template_filter('markdown')
+    @app.template_filter("markdown")
     def markdown_filter(value):
         return markdown(value)
 

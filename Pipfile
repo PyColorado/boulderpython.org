@@ -17,6 +17,7 @@ sphinx-rtd-theme = "*"
 ipython = "*"
 livereload = "*"
 click = "*"
+black = "==18.9b0"
 
 [packages]
 flask = "*"
@@ -27,10 +28,11 @@ meetup-api = "*"
 flask-caching = "*"
 flask-wtf = "*"
 flask-sqlalchemy = "*"
-"psycopg2" = "*"
-py-trello = {ref = "b929721397077f31a06603d7bb7843526d2a926b", git = "https://github.com/boulder-python/py-trello.git", editable = true}
+py-trello = {ref = "b929721397077f31a06603d7bb7843526d2a926b",git = "https://github.com/boulder-python/py-trello.git",editable = true}
 celery = "*"
 flask-celery-helper = "*"
 flask-sendgrid = "*"
 "markdown2" = "*"
 flask-migrate = "*"
+psycopg2-binary = "*"
+bugsnag = {extras = ["flask"],version = "*"}
