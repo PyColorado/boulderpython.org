@@ -11,3 +11,12 @@
   background: linear-gradient(to right, $left 0%, $right 100%, $stop 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$left, endColorstr=$stop, GradientType=1);
 }
+
+@mixin horizontal-gradient-image($left, $right, $stop) {
+  background-image: -moz-linear-gradient(left, $left 0%, $right 100%, $stop 100%);
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0%, $left), color-stop(100%, $right), color-stop(100%, $stop));
+  background-image: -webkit-linear-gradient(left, $left 0%, $right 100%, $stop 100%);
+  background-image: -o-linear-gradient(left, $left 0%, $right 100%, $stop 100%);
+  background-image: -ms-linear-gradient(left, $left 0%, $right 100%, $stop 100%);
+  background-image: linear-gradient(to right, $left 0%, $right 100%, $stop 100%);
+}

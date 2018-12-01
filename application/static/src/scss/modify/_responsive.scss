@@ -196,6 +196,9 @@
       font-size: 15px;
       line-height: 50px;
     }
+    h1 {
+      padding-top: 10vh;
+    }
   }
   #information-bar .col-lg-3 ul li span {
     text-align: center;
@@ -426,17 +429,20 @@
     }
   }
   #banner {
+    height: 75vh;
+
+    &:before {
+      bottom: 0vh;
+    }
+
     .input-box ul li span input {
       width: 100px;
       font-size: 15px;
       height: 20px;
     }
-    ul.count-down li span i {
-      width: 20px;
-      height: 30px;
-      font-size: 10px;
-      line-height: 30px;
-      margin-bottom: 5px;
+
+    h1 {
+      padding-top: 10vh;
     }
   }
   nav.mainmenu-container .nav-toggler {
@@ -447,6 +453,7 @@
     width: 100%;
     margin-bottom: 26px;
     border: none;
+
     &:last-child {
       margin-bottom: 0;
     }
