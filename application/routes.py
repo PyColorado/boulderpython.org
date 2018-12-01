@@ -61,10 +61,6 @@ def submit():
     Returns:
         render_template: if page is being called by GET, or form had errors
         redirect: when form is successfully ingested (this redirects and clears form)
-
-    Todo:
-        * add Title to Submission object (waiting on update to model)
-        * need simple notification for successful form POST, currently no feedback
     """
     form = SubmissionForm()
 
@@ -74,14 +70,18 @@ def submit():
 
         card = client.new_submissions_list.add_card(
             name=form.data["title"],
-            desc="#DESCRIPTION \n{} \n\n#NOTES \n{}".format(form.data["description"], form.data["notes"]),
+            desc="#DESCRIPTION \n{}\n".format(form.data["description"]),
             labels=[labels[form.data["format"]], labels[form.data["audience"]]],
             position="top",
             assign=[current_app.config["TRELLO_ASSIGNEE"]],
         )
 
         submission = Submission().create(
-            title=form.data["title"], email=form.data["email"], card_id=card.id, card_url=card.url
+            title=form.data["title"],
+            email=form.data["email"],
+            card_id=card.id,
+            card_url=card.url,
+            notes=form.data["notes"],
         )
 
         # message Celery to create the webhook
@@ -106,7 +106,7 @@ def hook():
 
     Todo:
         * handle due date updated, this should send a calendar invite
-        * handle card moved to Archive list, hsould update submission status
+        * handle card moved to Archive list, should update submission status
     """
 
     # this needs to be here so Trello can validate the URL
