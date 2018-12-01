@@ -56,7 +56,7 @@ another.
 
 ## Website Contributions
 
-We welcome contributions, changes, and corrections to our website.  Please submit a pull request.
+We welcome contributions, changes, and corrections to our website. Please submit a pull request.
 
 ### Running
 
@@ -121,4 +121,12 @@ Celery requires a task broker. Either RabbitMQ or Redis are good choices.
 To run Celery, use the following command:
 ```
 $ FLASK_CONFIG=local.cfg flask celeryd
+```
+
+
+### Pre-Commit Hooks
+
+Initialize pre-commit hooks for auto-Black'ing (you should already have ``pre-commit`` installed in your system python):
+```
+$ pre-commit install
 ```
