@@ -120,7 +120,7 @@ header {
     transform: translateY(-11px) translateX(0) rotate(-45deg);
     background: #ffffff; }
   .menucontainer span {
-    background: #ffffff;
+    background: #FF8625;
     border: none;
     height: 5px;
     width: 100%;
@@ -482,8 +482,48 @@ footer {
  * banner styles
  */
 #banner {
-  background: #C33764;
-  background-size: cover; }
+  background: -moz-linear-gradient(left, #C33764 0%, #1D2671 100%, #7db9e8 100%);
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #C33764), color-stop(100%, #1D2671), color-stop(100%, #7db9e8));
+  background: -webkit-linear-gradient(left, #C33764 0%, #1D2671 100%, #7db9e8 100%);
+  background: -o-linear-gradient(left, #C33764 0%, #1D2671 100%, #7db9e8 100%);
+  background: -ms-linear-gradient(left, #C33764 0%, #1D2671 100%, #7db9e8 100%);
+  background: linear-gradient(to right, #C33764 0%, #1D2671 100%, #7db9e8 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$left, endColorstr=$stop, GradientType=1);
+  background: url(../img/background/banner-bg-flatirons-sm.jpg) no-repeat center center;
+  background-size: cover;
+  min-height: 60vh; }
+  #banner:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 40vh;
+    background-image: -moz-linear-gradient(left, #C33764 0%, #1D2671 100%, #7db9e8 100%);
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(0%, #C33764), color-stop(100%, #1D2671), color-stop(100%, #7db9e8));
+    background-image: -webkit-linear-gradient(left, #C33764 0%, #1D2671 100%, #7db9e8 100%);
+    background-image: -o-linear-gradient(left, #C33764 0%, #1D2671 100%, #7db9e8 100%);
+    background-image: -ms-linear-gradient(left, #C33764 0%, #1D2671 100%, #7db9e8 100%);
+    background-image: linear-gradient(to right, #C33764 0%, #1D2671 100%, #7db9e8 100%);
+    opacity: 0.7; }
+  #banner button {
+    padding: 0 43px;
+    line-height: 44px;
+    border: 2px solid #FF8625;
+    background: #FF8625;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 5px;
+    margin-top: 45px;
+    transition: all ease-in-out 300ms; }
+    #banner button:hover {
+      background: #f16b00;
+      border: 2px solid #f16b00;
+      transform: translate(0, -5px); }
+    #banner button:before {
+      background: #ffffff;
+      border-radius: 5px; }
   #banner .banner-container {
     width: 100%;
     position: relative;
@@ -525,76 +565,17 @@ footer {
     line-height: 40px;
     color: #ffffff;
     padding: 0 30px;
-    margin-bottom: 25px; }
+    margin-bottom: 25px;
+    text-align: center; }
   #banner h1 {
     font-weight: 900;
     font-size: 48px;
     color: #ffffff;
     text-transform: uppercase;
-    line-height: 55px;
-    margin-bottom: 35px; }
-  #banner ul.count-down {
-    margin-bottom: 50px; }
-    #banner ul.count-down li {
-      display: inline; }
-      #banner ul.count-down li span {
-        display: inline-block;
-        color: #ffffff;
-        font-weight: 800;
-        margin-right: 15px; }
-        #banner ul.count-down li span i {
-          display: block;
-          background: url(../img/resources/counter-number-bg.png) no-repeat center center;
-          background-size: 100% 100%;
-          width: 75px;
-          height: 90px;
-          margin-bottom: 15px;
-          font-size: 24px;
-          line-height: 90px; }
-  #banner ul.banner-buttons li {
-    display: inline; }
-    #banner ul.banner-buttons li a {
-      display: inline-block;
-      border: 2px solid transparent;
-      line-height: 44px;
-      margin-right: 15px;
-      border-radius: 5px;
-      font-size: 12px;
-      font-weight: 800;
-      color: #ffffff;
-      padding: 0 43px;
-      text-transform: uppercase;
-      transition: all .3s ease; }
-      #banner ul.banner-buttons li a.bordered {
-        border-color: #ffffff; }
-        #banner ul.banner-buttons li a.bordered:before {
-          background: #ffffff;
-          border-radius: 5px; }
-        #banner ul.banner-buttons li a.bordered:hover {
-          border-color: #FF8625;
-          color: #FF8625; }
-      #banner ul.banner-buttons li a.colored {
-        background: #FF8625; }
-        #banner ul.banner-buttons li a.colored:before {
-          background: #ffffff;
-          border-radius: 5px; }
-        #banner ul.banner-buttons li a.colored:hover {
-          color: #FF8625; }
-    #banner ul.banner-buttons li button {
-      padding: 0 43px;
-      line-height: 44px;
-      border: 2px solid #FF8625;
-      background: #FF8625;
-      color: #ffffff;
-      text-transform: uppercase;
-      font-weight: 600;
-      border-radius: 5px;
-      margin-right: 20px; }
-      #banner ul.banner-buttons li button:hover {
-        color: #FF8625; }
-      #banner ul.banner-buttons li button:before {
-        background: #ffffff;
-        border-radius: 5px; }
+    text-align: center;
+    padding-top: 20vh; }
+  #banner h2 {
+    text-align: center; }
   #banner .input-box ul {
     margin-bottom: 40px; }
     #banner .input-box ul li {
@@ -615,16 +596,19 @@ footer {
     color: #ffffff;
     font-size: 16px;
     line-height: 27px; }
+  #banner a {
+    text-align: center; }
 
 /**
  * information bar styles
  */
 #information-bar {
-  background: #F6F9F9; }
+  background: transparent; }
   #information-bar .container {
     padding: 45px 0;
     background: #ffffff;
     margin-top: -80px;
+    margin-bottom: -60px;
     position: relative;
     z-index: 999; }
   #information-bar .col-lg-3 {
@@ -657,6 +641,8 @@ footer {
 #upcoming-event {
   background: #F6F9F9;
   padding: 80px 0; }
+  #upcoming-event .container {
+    margin-top: 50px; }
   #upcoming-event form {
     background: none;
     border: 1px solid #E1E1E1;
@@ -1247,6 +1233,8 @@ footer {
     height: 50px;
     font-size: 15px;
     line-height: 50px; }
+  #banner h1 {
+    padding-top: 10vh; }
   #information-bar .col-lg-3 ul li span {
     text-align: center; }
     #information-bar .col-lg-3 ul li span.img-holder img {
@@ -1419,16 +1407,16 @@ footer {
     width: 100%; }
   header .container {
     text-align: center; }
-  #banner .input-box ul li span input {
-    width: 100px;
-    font-size: 15px;
-    height: 20px; }
-  #banner ul.count-down li span i {
-    width: 20px;
-    height: 30px;
-    font-size: 10px;
-    line-height: 30px;
-    margin-bottom: 5px; }
+  #banner {
+    height: 75vh; }
+    #banner:before {
+      bottom: 0vh; }
+    #banner .input-box ul li span input {
+      width: 100px;
+      font-size: 15px;
+      height: 20px; }
+    #banner h1 {
+      padding-top: 10vh; }
   nav.mainmenu-container .nav-toggler {
     top: 20px; }
   #information-bar .col-lg-3 {

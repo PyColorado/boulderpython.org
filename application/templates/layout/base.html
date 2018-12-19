@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title%}Boulder Python{% endblock %}</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico')|autoversion }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')|autoversion }}">
@@ -13,8 +14,9 @@
     {% set links = (
         ('HOME', '/'),
         ('JOIN US', 'https://www.meetup.com/BoulderPython'),
-        ('SUBMIT A TALK', '/submit'))
-    %}
+        ('SUBMIT A TALK', '/submit'),
+        ('UPCOMING TALKS', 'https://trello.com/b/wm8hatnW/submissions')
+    )%}
 
     <!-- #header -->
     <header id="header">

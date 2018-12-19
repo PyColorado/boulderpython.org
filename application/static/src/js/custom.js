@@ -76,95 +76,6 @@
 		}
 	}
 
-	// revolution slider
-	function RevolutionSliderActiver () {
-		var banner = $('#banner .banner');
-		if (banner.length) {
-			banner.revolution({
-				delay:5000,
-				startwidth:1170,
-				startheight:820,
-				startWithSlide:0,
-
-				fullScreenAlignForce:"on",
-				autoHeight:"off",
-				minHeight:"off",
-
-				shuffle:"off",
-
-				onHoverStop:"on",
-
-
-				hideThumbsOnMobile:"off",
-				hideNavDelayOnMobile:1500,
-				hideBulletsOnMobile:"off",
-				hideArrowsOnMobile:"off",
-				hideThumbsUnderResoluition:0,
-
-				hideThumbs:1,
-				hideTimerBar:"on",
-
-				keyboardNavigation:"on",
-
-				navigationType:"bullet",
-				navigationArrows: "nexttobullets",
-				navigationStyle:"preview4",
-
-				navigationHAlign:"center",
-				navigationVAlign:"bottom",
-				navigationHOffset:30,
-				navigationVOffset:30,
-
-				soloArrowLeftHalign:"left",
-				soloArrowLeftValign:"center",
-				soloArrowLeftHOffset:20,
-				soloArrowLeftVOffset:0,
-
-				soloArrowRightHalign:"right",
-				soloArrowRightValign:"center",
-				soloArrowRightHOffset:20,
-				soloArrowRightVOffset:0,
-
-
-				touchenabled:"on",
-				swipe_velocity:"0.7",
-				swipe_max_touches:"1",
-				swipe_min_touches:"1",
-				drag_block_vertical:"false",
-
-				parallax:"mouse",
-				parallaxBgFreeze:"on",
-				parallaxLevels:[10,7,4,3,2,5,4,3,2,1],
-				parallaxDisableOnMobile:"off",
-
-				stopAtSlide:-1,
-				stopAfterLoops:-1,
-				hideCaptionAtLimit:0,
-				hideAllCaptionAtLilmit:0,
-				hideSliderAtLimit:0,
-
-				dottedOverlay:"none",
-
-				spinner: 'spinner0',
-
-				lazyType: "smart",
-
-				fullWidth:"on",
-				forceFullWidth:"on",
-				fullScreen:"off",
-				fullScreenOffsetContainer:"#banner",
-				fullScreenOffset:"0px",
-
-				panZoomDisableOnMobile:"off",
-
-				simplifyAll:"off",
-
-				shadow:0
-
-			});
-		};
-	}
-
 	// wow activator
 	function wowActivator () {
 		var wow = new WOW ({
@@ -217,7 +128,6 @@
 		SmoothMenuScroll();
 		UpcomingEventFilter();
 		DeadMenuConfig();
-		RevolutionSliderActiver();
 		wowActivator();
 		mobileMenuConfig();
 		NewsletterSubscribe();

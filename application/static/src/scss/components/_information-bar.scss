@@ -3,11 +3,12 @@
  */
 
 #information-bar {
-  background: #F6F9F9;
+  background: transparent;
   .container {
     padding: 45px 0;
     background: $white;
     margin-top: -80px;
+    margin-bottom: -60px;
     position: relative;
     z-index: 999;
   }

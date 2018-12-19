@@ -186,6 +186,7 @@ class Submission(Base):
         card_id  (str): the Trello Card ID
         card_url (str): the Trello Card URL
         status   (int): the submission status, Int maps to the Status enum class.
+        notes    (str): the talk notes (omitted from the Trello Card)
         hook     (str): the ID for the Trello Card's webhook
 
     Todo:
@@ -197,6 +198,7 @@ class Submission(Base):
     card_id = Column(db.String(255), nullable=False, unique=True)
     card_url = Column(db.String(255), nullable=False, unique=True)
     status = Column(db.Integer, nullable=False, default=Status.NEW.value)
+    notes = Column(db.Text)
     hook = Column(db.String(255))
     card_email = Column(db.String(255))
 
@@ -207,14 +209,8 @@ class TrelloList(Base):
     Maps a trello list by symbolic name to its ID on this particular Trello board
 
     Attributes:
-        email    (str): email of the submitter
-        card_id  (str): the Trello Card ID
-        card_url (str): the Trello Card URL
-        status   (int): the submission status, Int maps to the Status enum class.
-        hook     (str): the ID for the Trello Card's webhook
-
-    Todo:
-        * Should store name of talk, though if we change on Trello it should update via webhook
+        list_symbolic_name      (str): symbolic name of list
+        list_id                 (str): the Trello List ID
     """
 
     list_symbolic_name = Column(db.String(255), nullable=False, unique=True)

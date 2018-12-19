@@ -3,24 +3,66 @@
  */
 
 #banner {
-  background: $left;
+  @include horizontal-gradient($left, $right, $stop);
+  background: url(../img/background/banner-bg-flatirons-sm.jpg) no-repeat center center;
   background-size: cover;
+  min-height: 60vh;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 40vh;
+    @include horizontal-gradient-image($left, $right, $stop);
+    opacity: 0.7;
+  }
+
+  button {
+    padding: 0 43px;
+    line-height: 44px;
+    border: 2px solid $accent1;
+    background: $accent1;
+    color: $white;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 5px;
+    margin-top: 45px;
+    transition: all ease-in-out 300ms;
+
+    &:hover {
+      background: darken($accent1, 10%);
+      border: 2px solid darken($accent1, 10%);
+      transform: translate(0, -5px);
+    }
+
+    &:before {
+      background: $white;
+      border-radius: 5px;
+    }
+  }
+
   .banner-container {
     width: 100%;
     position: relative;
     padding: 0;
+
     .banner {
       width: 100%;
       position: relative;
     }
   }
+
   .caption {
     width: 100%;
     z-index: 9999;
   }
+
   .tp-bullets {
     display: none;
   }
+
   .slotholder {
     position: relative;
     &:before {
@@ -36,6 +78,7 @@
       @include horizontal-gradient($left, $right, $stop);
     }
   }
+
   .date {
     background: url(../img/resources/date-bg.png) no-repeat center center;
     background-size: 100% 100%;
@@ -47,94 +90,22 @@
     color: $white;
     padding: 0 30px;
     margin-bottom: 25px;
+    text-align: center;
   }
+
   h1 {
     font-weight: 900;
     font-size: 48px;
     color: $white;
     text-transform: uppercase;
-    line-height: 55px;
-    margin-bottom: 35px;
+    text-align: center;
+    padding-top: 20vh;
   }
-  ul {
-    &.count-down {
-      margin-bottom: 50px;
-      li {
-        display: inline;
-        span {
-          display: inline-block;
-          color: $white;
-          font-weight: 800;
-          margin-right: 15px;
-          i {
-            display: block;
-            background: url(../img/resources/counter-number-bg.png) no-repeat center center;
-            background-size: 100% 100%;
-            width: 75px;
-            height: 90px;
-            margin-bottom: 15px;
-            font-size: 24px;
-            line-height: 90px;
-          }
-        }
-      }
-    }
-    &.banner-buttons li {
-      display: inline;
-      a {
-        display: inline-block;
-        border: 2px solid transparent;
-        line-height: 44px;
-        margin-right: 15px;
-        border-radius: 5px;
-        font-size: 12px;
-        font-weight: 800;
-        color: $white;
-        padding: 0 43px;
-        text-transform: uppercase;
-        transition: all .3s ease;
-        &.bordered {
-          border-color: $white;
-          &:before {
-            background: $white;
-            border-radius: 5px;
-          }
-          &:hover {
-            border-color: $accent1;
-            color: $accent1;
-          }
-        }
-        &.colored {
-          background: $accent1;
-          &:before {
-            background: $white;
-            border-radius: 5px;
-          }
-          &:hover {
-            color: $accent1;
-          }
-        }
-      }
-      button {
-        padding: 0 43px;
-        line-height: 44px;
-        border: 2px solid $accent1;
-        background: $accent1;
-        color: $white;
-        text-transform: uppercase;
-        font-weight: 600;
-        border-radius: 5px;
-        margin-right: 20px;
-        &:hover {
-          color: $accent1;
-        }
-        &:before {
-          background: $white;
-          border-radius: 5px;
-        }
-      }
-    }
+
+  h2 {
+    text-align: center;
   }
+
   .input-box ul {
     margin-bottom: 40px;
     li {
@@ -155,9 +126,14 @@
       }
     }
   }
+
   p {
     color: $white;
     font-size: 16px;
     line-height: 27px;
+  }
+
+  a {
+    text-align: center;
   }
 }

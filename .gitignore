@@ -1,5 +1,6 @@
 # ignore cache files
 .cache/
+.sass-cache/
 
 # ignore ghostdriver log
 ghostdriver.log

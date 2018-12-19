@@ -42,7 +42,9 @@ class TestModels:
             sub1 = Submission().create(**{"title": "title", "email": "email", "card_id": "card_id"})
 
     def test_submission_status_default(self):
-        sub1 = Submission().create(**{"title": "title", "email": "email", "card_id": "card_id", "card_url": "card_url"})
+        sub1 = Submission().create(
+            **{"title": "title", "email": "email", "card_id": "card_id", "card_url": "card_url", "notes": "notes"}
+        )
 
         assert sub1.status == Status.NEW.value
 
@@ -55,6 +57,7 @@ class TestModels:
                 "card_id": "card_id",
                 "card_url": "card_url",
                 "card_email": "card_email",
+                "notes": "notes",
             }
         )
 
@@ -78,6 +81,7 @@ class TestModels:
             "hook": sub1.hook,
             "status": sub1.status,
             "card_email": sub1.card_email,
+            "notes": sub1.notes,
         }
 
         with pytest.raises(ValueError):
