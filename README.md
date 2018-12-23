@@ -35,6 +35,8 @@ Zoë Farmer, zoe@dataleek.io, @TheDataLeek on [Twitter](https://twitter.com/TheD
 Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.com/fmdfrank), @frankV on
 [Github](https://github.com/frankv)
 
+Joe Mann, joe@codinghipster.com, @codinghipster on [Github](https://github.com/codinghipster)
+
 
 ### Sponsors
 
