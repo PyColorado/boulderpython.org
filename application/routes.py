@@ -6,7 +6,7 @@
 """
 from json import JSONDecodeError
 
-import meetup.api
+import requests
 from requests.exceptions import HTTPError
 from mailchimp3 import MailChimp
 from flask import Blueprint, current_app, jsonify, render_template, request, redirect, url_for
@@ -28,15 +28,10 @@ def index():
     """Application index.
 
     Home page for web application. Pulls data from Meetup.
-
-    Todo:
-        * move Meetup Client to `utils` and have it return a tuple
-        * Meetup occasionally responds with an empty JSON, so we should cache this to avoid that.
     """
-    client = meetup.api.Client(current_app.config.get("MEETUP_KEY"))
     try:
-        group = client.GetGroup({"urlname": current_app.config["MEETUP_GROUP"]})
-        events = client.GetEvents({"group_urlname": current_app.config["MEETUP_GROUP"]}).results
+        group = requests.get(f"https://api.meetup.com/{current_app.config['MEETUP_GROUP']}").json()
+        events = requests.get(f"https://api.meetup.com/{current_app.config['MEETUP_GROUP']}/events").json()
 
         # Success!  Update our cache in case the next call fails
         cached_meetup_response["group"] = group
@@ -47,9 +42,7 @@ def index():
         group = cached_meetup_response["group"]
         events = cached_meetup_response["events"]
 
-    upcoming = pluck(events, lambda event: event["id"] == group.next_event["id"])
-
-    return render_template("index.html", group=group, upcoming=upcoming, events=events)
+    return render_template("index.html", group=group, upcoming=events[0], events=events)
 
 
 @bp.route("/submit", methods=["GET", "POST"])
