@@ -26,14 +26,6 @@ we'd love to have you.  Submit your talk directly on [boulderpython.org](https:/
 
 
 ### Organizers
-Scott Vitale, scott@spigotlabs.com, @svvitale on [Twitter](https://twitter.com/svvitale),
-[Github](https://github.com/svvitale)
-
-Zoë Farmer, zoe@dataleek.io, @TheDataLeek on [Twitter](https://twitter.com/TheDataLeek),
-[Github](https://github.com/thedataleek)
-
-Frank Valcarcel, frank@cuttlesoft.com, @fmdfrank on [Twitter](https://twitter.com/fmdfrank), @frankV on
-[Github](https://github.com/frankv)
 
 Joe Mann, joe@codinghipster.com, @codinghipster on [Github](https://github.com/codinghipster)
 
