@@ -9,6 +9,7 @@ from json import JSONDecodeError
 import requests
 from requests.exceptions import HTTPError
 from mailchimp3 import MailChimp
+from mailchimp3.helpers import get_subscriber_hash
 from flask import Blueprint, current_app, jsonify, render_template, request, redirect, url_for
 
 from application.models import Status, Submission, TrelloList
@@ -42,9 +43,9 @@ def index():
         group = cached_meetup_response["group"]
         events = cached_meetup_response["events"]
 
-    if len(events) > 0:
+    try:
         upcoming = events[0]
-    else:
+    except IndexError:
         upcoming = None
 
     return render_template("index.html", group=group, upcoming=upcoming, events=events)
@@ -72,14 +73,24 @@ def submit():
 
         card = client.new_submissions_list.add_card(
             name=form.data["title"],
-            desc="#DESCRIPTION \n{} \n\n#NOTES \n{}".format(form.data["description"], form.data["notes"]),
+            desc=f"""#DESCRIPTION
+{form.data['description']}
+
+#PITCH
+{form.data['pitch']}""",
             labels=[labels[form.data["format"]], labels[form.data["audience"]]],
-            position="top",
+            position="bottom",
             assign=[current_app.config["TRELLO_ASSIGNEE"]],
         )
 
         submission = Submission().create(
-            title=form.data["title"], email=form.data["email"], card_id=card.id, card_url=card.url
+            title=form.data["title"],
+            email=form.data["email"],
+            card_id=card.id,
+            card_url=card.url,
+            description=form.data["description"],
+            pitch=form.data["pitch"],
+            notes=form.data["notes"],
         )
 
         # message Celery to create the webhook
@@ -192,13 +203,20 @@ def robots():
 
 @bp.route("/subscribe", methods=["GET", "POST"])
 def subscribe():
-    """Subscribe email address to the Boulder Python newsletter"""
+    """Subscribe email address to the newsletter"""
     data = request.get_json()
     try:
-        client = MailChimp(current_app.config.get("MAILCHIMP_USERNAME"), current_app.config.get("MAILCHIMP_API_KEY"))
+        client = MailChimp(current_app.config.get("MAILCHIMP_API_KEY"))
 
-        client.lists.members.create(
-            current_app.config.get("MAILCHIMP_LIST_ID"), {"email_address": data["email"], "status": "subscribed"}
+        subscribe_data = {"email_address": data["email"], "status_if_new": "subscribed"}
+
+        interest_ids = current_app.config.get("MAILCHIMP_INTEREST_IDS", []).split(",")
+
+        if interest_ids:
+            subscribe_data["interests"] = {interest_id: True for interest_id in interest_ids}
+
+        client.lists.members.create_or_update(
+            current_app.config.get("MAILCHIMP_LIST_ID"), get_subscriber_hash(data["email"]), data=subscribe_data
         )
 
         return jsonify({"result": "subscribed"})

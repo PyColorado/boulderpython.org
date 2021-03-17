@@ -54,7 +54,7 @@ def create_hook(_id, card):
     """
     client = SubmissionsTrelloClient()
     submission = Submission().get_by_id(_id)
-    webhook = client.create_hook(current_app.config["TRELLO_HOOK"], card)
+    webhook = client.create_hook(current_app.config["TRELLO_HOOK"], card, token=current_app.config["TRELLO_API_TOKEN"])
     Submission().update(submission, hook=webhook.id)
 
     # send confirmation email

@@ -55,6 +55,9 @@ class TestModels:
                 "card_id": "card_id",
                 "card_url": "card_url",
                 "card_email": "card_email",
+                "description": "description",
+                "notes": "notes",
+                "pitch": "pitch",
             }
         )
 
@@ -78,6 +81,9 @@ class TestModels:
             "hook": sub1.hook,
             "status": sub1.status,
             "card_email": sub1.card_email,
+            "description": sub1.description,
+            "notes": sub1.notes,
+            "pitch": sub1.pitch,
         }
 
         with pytest.raises(ValueError):

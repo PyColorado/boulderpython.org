@@ -51,10 +51,10 @@ Our newsletter lives on `MailChimp`_. So we integrate a simple subscribe with ou
 
 To enable this, update these 3 config values:
 
-    - ``MAILCHIMP_USERNAME``: your MailChimp account's username
     - ``MAILCHIMP_API_KEY``: your MailChimp API Key
     - ``MAILCHIMP_LIST_ID``: the MailChimp list you wish to add new subscribers to
-
+    - ``MAILCHIMP_INTEREST_IDS``: the MailChimp groups you wish to add new
+    subscribers to, as a comma-separated list of group/interest IDs
 
 .. _TrelloConfig:
 

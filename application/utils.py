@@ -21,9 +21,7 @@ class SubmissionsTrelloClient(Trello):
         with app.app_context():
             super().__init__(
                 api_key=app.config["TRELLO_API_KEY"],
-                api_secret=app.config["TRELLO_API_SECRET"],
-                token=app.config["TRELLO_TOKEN"],
-                token_secret=app.config["TRELLO_TOKEN_SECRET"],
+                token=app.config["TRELLO_API_TOKEN"],
             )
 
     @property

@@ -47,9 +47,9 @@ Celery
     - ``MEETUP_GROUP``
 
 :ref:`MailChimpConfig`
-    -  ``MAILCHIMP_USERNAME``
     -  ``MAILCHIMP_API_KEY``
     -  ``MAILCHIMP_LIST_ID``
+    -  ``MAILCHIMP_INTEREST_IDS``
 
 :ref:`TrelloConfig`
     - ``TRELLO_API_KEY``

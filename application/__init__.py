@@ -5,11 +5,15 @@
     flask application entrypoint
 """
 import os
+import copy
 
 import pytz
 from flask import Flask
+from flask_talisman import Talisman, GOOGLE_CSP_POLICY
 import bugsnag.flask
+import dotenv
 
+dotenv.load_dotenv()
 from config import config
 from application.extensions import db, migrate, cache, moment, celery
 from application.filters import autoversion, current_route, markdown
@@ -39,9 +43,30 @@ def configure(app, config_name):
     moment.init_app(app)
     celery.init_app(app)
 
-    if selected_config.BUGSNAG_API_KEY:
+    if app.config["SSL_ENABLE"]:
+        # Force https
+        csp = copy.deepcopy(GOOGLE_CSP_POLICY)
+        csp["style-src"] += " 'unsafe-inline'"
+        csp["style-src"] += " platform.twitter.com"
+        csp["style-src"] += " *.twimg.com"
+        csp["frame-src"] += " *.twitter.com"
+        csp["script-src"] += " *.google.com"
+        csp["script-src"] += " platform.twitter.com"
+        csp["script-src"] += " cdnjs.cloudflare.com"
+        csp["script-src"] += " cdn.syndication.twimg.com"
+        csp["script-src"] += " *.gstatic.com"
+        csp["script-src"] += " 'unsafe-inline' 'unsafe-eval'"
+        csp["default-src"] += " *.google-analytics.com"
+        csp["img-src"] = csp["default-src"]
+        csp["img-src"] += " *.twitter.com"
+        csp["img-src"] += " *.twimg.com"
+        csp["img-src"] += " data:"
+
+        Talisman(app, content_security_policy=csp)
+
+    if app.config["BUGSNAG_API_KEY"]:
         # Configure Bugsnag
-        bugsnag.configure(api_key=selected_config.BUGSNAG_API_KEY, auto_capture_sessions=True)
+        bugsnag.configure(api_key=app.config["BUGSNAG_API_KEY"], auto_capture_sessions=True)
 
         bugsnag.flask.handle_exceptions(app)
 

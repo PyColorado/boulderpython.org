@@ -6,6 +6,7 @@
 """
 
 import os, pathlib
+from uuid import uuid4
 
 
 class BaseConfig:
@@ -22,7 +23,6 @@ class BaseConfig:
     SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", None)
     SENDGRID_DEFAULT_FROM = "Boulder Python <hi@boulderpython.org>"
 
-    MEETUP_KEY = os.environ.get("MEETUP_KEY", None)
     MEETUP_GROUP = os.environ.get("MEETUP_GROUP", "BoulderPython")
 
     MAILCHIMP_USERNAME = os.environ.get("MAILCHIMP_USERNAME", None)
@@ -32,9 +32,8 @@ class BaseConfig:
     BUGSNAG_API_KEY = os.environ.get("BUGSNAG_API_KEY", None)
 
     TRELLO_API_KEY = os.environ.get("TRELLO_API_KEY", None)
-    TRELLO_API_SECRET = os.environ.get("TRELLO_API_SECRET", None)
-    TRELLO_TOKEN = os.environ.get("TRELLO_TOKEN", None)
-    TRELLO_TOKEN_SECRET = os.environ.get("TRELLO_TOKEN_SECRET", None)
+    TRELLO_API_TOKEN = os.environ.get("TRELLO_API_TOKEN", None)
+
     TRELLO_ASSIGNEE = os.environ.get("TRELLO_ASSIGNEE", None)
     TRELLO_HOOK = os.environ.get("TRELLO_HOOK", "https://www.boulderpython.org/trello/hook")
 
@@ -71,13 +70,13 @@ class BaseConfig:
 
 
 class DefaultConfig(BaseConfig):
-    DEBUG = os.environ.get("DEBUG", True)
+    DEBUG = os.environ.get("DEBUG", "true").lower() == "true"
 
     CACHE_TYPE = "simple"
 
     GOOGLE_ANALYTICS_ID = os.environ.get("GOOGLE_ANALYTICS_ID", "UA-123456-78")
 
-    SSL_DISABLE = True
+    SSL_ENABLE = True
     MAIL_SERVER = "smtp.sendgrid.com"
     MAIL_PORT = 587
     MAIL_USE_TLS = True
@@ -91,6 +90,7 @@ class TestConfig(BaseConfig):
     DEBUG = True
     TESTING = True
 
+    SSL_ENABLE = False
     TEST_DB_PATH = os.path.join(pathlib.Path(__file__).parent, "tests/")
     TEST_DB_FILENAME = "test.db"
     TEST_DB = TEST_DB_PATH + TEST_DB_FILENAME

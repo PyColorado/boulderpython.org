@@ -1,0 +1,19 @@
+-e git+https://github.com/boulder-python/py-trello.git@b929721397077f31a06603d7bb7843526d2a926b#egg=py_trello
+blinker
+bugsnag[flask]
+celery
+flask
+flask-caching
+flask-celery-helper
+flask-migrate
+flask-moment
+flask-sendgrid
+flask-sqlalchemy
+flask-talisman
+flask-wtf
+gunicorn
+mailchimp3
+markdown2
+psycopg2-binary
+python-dotenv
+sendgrid

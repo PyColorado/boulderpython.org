@@ -155,3 +155,4 @@ node_modules/
 application/local.cfg
 dump.sql
 .pytest_cache/
+.vscode/

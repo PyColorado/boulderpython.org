@@ -193,6 +193,9 @@ class Submission(Base):
     """
 
     title = Column(db.String(255), nullable=False)
+    description = Column(db.String(4096), nullable=True)
+    pitch = Column(db.String(4096), nullable=True)
+    notes = Column(db.String(4096), nullable=True)
     email = Column(db.String(255), nullable=False)
     card_id = Column(db.String(255), nullable=False, unique=True)
     card_url = Column(db.String(255), nullable=False, unique=True)

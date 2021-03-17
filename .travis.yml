@@ -8,10 +8,9 @@ branches:
 services:
   - rabbitmq
 install:
-  - pip install pipenv --upgrade
-  - pipenv install --dev
+  - pip install -r requirements.txt -r requirements-dev.txt
 script:
-  - pipenv run py.test tests --verbose --cov --cov-report term-missing --flake8 application
+  - py.test tests --verbose --cov --cov-report term-missing --flake8 application
 after_success:
   - coveralls
 notifications:
