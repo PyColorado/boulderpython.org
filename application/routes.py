@@ -42,7 +42,12 @@ def index():
         group = cached_meetup_response["group"]
         events = cached_meetup_response["events"]
 
-    return render_template("index.html", group=group, upcoming=events[0], events=events)
+    if len(events) > 0:
+        upcoming = events[0]
+    else:
+        upcoming = None
+
+    return render_template("index.html", group=group, upcoming=upcoming, events=events)
 
 
 @bp.route("/submit", methods=["GET", "POST"])
